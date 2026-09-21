@@ -48,7 +48,6 @@ function Layout() {
       <main style={{ paddingTop: '64px' }}>
         <Routes>
           <Route path="/about"     element={<About />} />
-          <Route path="/roadmap"   element={<Roadmap />} />
           <Route path="/products"  element={<Products />} />
           <Route path="/community" element={<Community />} />
           <Route path="/blog"      element={<Blog />} />
@@ -80,6 +79,7 @@ export default function App() {
           {/* Standalone pages — include their own Navbar/Footer */}
           <Route path="/" element={<Home />} />
           <Route path="/features" element={<Features />} />
+          <Route path="/roadmap" element={<Roadmap />} />
           {/* All other routes go through the full Layout */}
           <Route path="/*" element={<Layout />} />
         </Routes>
