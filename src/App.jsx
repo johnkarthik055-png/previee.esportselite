@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { AuthProvider } from './context/AuthContext'
 import Navbar     from './components/Navbar'
@@ -75,7 +75,7 @@ function Layout() {
 export default function App() {
   return (
     <AuthProvider>
-      <HashRouter>
+      <BrowserRouter>
         <Routes>
           {/* Standalone pages — include their own Navbar/Footer */}
           <Route path="/" element={<Home />} />
@@ -83,7 +83,7 @@ export default function App() {
           {/* All other routes go through the full Layout */}
           <Route path="/*" element={<Layout />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </AuthProvider>
   )
 }
