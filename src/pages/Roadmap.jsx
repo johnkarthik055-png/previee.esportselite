@@ -500,13 +500,7 @@ export default function RoadmapPage() {
       </section>
 
       {/* ══ FOUNDATION / PREREQUISITES ══ */}
-      <section style={{ position:'relative', overflow:'hidden', padding:'100px 0 80px', background:'#FFFFFF' }}>
-        {/* Background image */}
-        <div style={{ position:'absolute', inset:0, zIndex:0 }}>
-          <img src="/foundation-bg.png" alt=""
-            style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center' }}
-            onError={e => { e.target.style.display='none' }} />
-        </div>
+      <section style={{ position:'relative', overflow:'hidden', padding:'100px 0 80px', background:'#F7F9FC' }}>
         {/* Top fade */}
         <div style={{ position:'absolute', top:0, left:0, right:0, height:80, background:'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex:1, pointerEvents:'none' }} />
         {/* Bottom fade */}
@@ -623,13 +617,9 @@ export default function RoadmapPage() {
         {/* Roadmap container */}
         <div style={{ position:'relative',width:'100%',height:'clamp(440px,38vw,600px)',borderRadius:20,overflow:'hidden' }}>
           {/* Environment background */}
-          <div style={{ position:'absolute',inset:0,background:'linear-gradient(135deg,#D8E8FF 0%,#EAE4FF 40%,#FFE0E5 100%)',borderRadius:20 }}>
-            <img src="/roadmap-environment.png" alt=""
-              style={{ width:'100%',height:'100%',objectFit:'cover',borderRadius:20 }}
-              onError={e => { e.target.style.display='none' }} />
-          </div>
+          <div style={{ position:'absolute',inset:0,background:'linear-gradient(135deg,#EEF4FF 0%,#F7F0FF 40%,#FFF0F2 100%)',borderRadius:20 }} />
           {/* Overlay for readability */}
-          <div style={{ position:'absolute',inset:0,background:'rgba(255,255,255,0.55)',borderRadius:20 }} />
+          <div style={{ position:'absolute',inset:0,background:'rgba(255,255,255,0.85)',borderRadius:20 }} />
           {/* Side annotations */}
           <div style={{ position:'absolute',left:20,top:'55%',transform:'translateY(-50%)',fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:8,letterSpacing:'0.28em',color:'#B0BBC8',writingMode:'vertical-rl',textTransform:'uppercase',userSelect:'none' }}>LEARN PRACTICE IMPROVE</div>
           <div style={{ position:'absolute',right:20,top:'35%',transform:'translateY(-50%)',fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:8,letterSpacing:'0.28em',color:'#B0BBC8',writingMode:'vertical-rl',textTransform:'uppercase',userSelect:'none' }}>SAME PLAYERS DIFFERENT RESULTS</div>
@@ -962,15 +952,9 @@ export default function RoadmapPage() {
       </Wrap>
 
       {/* ══ ELITE CTA ══ */}
-      <section style={{ position:'relative',minHeight:380,overflow:'hidden' }}>
-        <div style={{ position:'absolute',inset:0,background:'linear-gradient(135deg,#07111F 0%,#0B1220 60%,#1A0808 100%)',zIndex:0 }}>
-          <img src="/elite-cta.png" alt=""
-            style={{ width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0 }}
-            onError={e => { e.target.style.display='none' }} />
-        </div>
-        <div style={{ position:'absolute',inset:0,background:'rgba(7,17,31,0.72)',zIndex:1 }} />
-        <div style={{ position:'absolute',bottom:-100,left:-100,width:600,height:600,background:'radial-gradient(circle,rgba(23,105,255,0.22) 0%,transparent 70%)',zIndex:1 }} />
-        <div style={{ position:'absolute',top:-100,right:-100,width:600,height:600,background:'radial-gradient(circle,rgba(255,24,56,0.22) 0%,transparent 70%)',zIndex:1 }} />
+      <section style={{ position:'relative',minHeight:380,overflow:'hidden',background:'#080D15' }}>
+        <div style={{ position:'absolute',bottom:-100,left:-100,width:600,height:600,background:'radial-gradient(circle,rgba(23,105,255,0.20) 0%,transparent 70%)',zIndex:1 }} />
+        <div style={{ position:'absolute',top:-100,right:-100,width:600,height:600,background:'radial-gradient(circle,rgba(255,24,56,0.20) 0%,transparent 70%)',zIndex:1 }} />
 
         <div style={{ position:'relative',zIndex:2,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:380,padding:'80px clamp(20px,5vw,64px)',textAlign:'center' }}>
           <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once:true,amount:0.3 }}
