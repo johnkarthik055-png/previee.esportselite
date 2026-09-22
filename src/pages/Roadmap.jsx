@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BarChart2, Target, Users, Zap, Gamepad2, Crosshair, Brain, Trophy } from 'lucide-react'
+import { BarChart2, Target, Users, Zap, Gamepad2, Crosshair, Brain, Trophy, Settings, Move, Calendar, Check } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
@@ -499,47 +499,112 @@ export default function RoadmapPage() {
         </div>
       </section>
 
-      {/* ══ PREREQUISITES ══ */}
-      <Wrap bg="#F7F9FC" py="120px 0">
-        <FadeUp>
-          <div style={{ textAlign:'center',marginBottom:56 }}>
-            <Eyebrow center color="#6D7B90">BEFORE YOU START</Eyebrow>
-            <h2 style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(32px,5vw,58px)',lineHeight:0.92,color:'#0B1220',margin:'0 0 16px' }}>
-              BUILD THE{' '}
-              <GradSpan g="linear-gradient(90deg,#1769FF,#3D8BFF)">FOUNDATION</GradSpan>{' '}
-              <GradSpan g="linear-gradient(90deg,#FF5060,#FF1838)">FIRST</GradSpan>
-            </h2>
-            <p style={{ fontFamily:'Inter,sans-serif',fontSize:16,color:'#536174',maxWidth:680,margin:'0 auto' }}>
-              Elite performance starts with fundamentals. Make sure your setup, mechanics and habits are ready before chasing advanced skills.
-            </p>
-          </div>
-        </FadeUp>
-        <div className="prereq-grid">
-          {PREREQS.map((p, i) => {
-            const Icon = ICONS[i]
-            return (
-              <motion.div key={p.n}
-                initial={{ opacity:0,y:28 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true,amount:0.15 }}
-                transition={{ duration:0.5,delay:i*0.08,ease:[0.22,1,0.36,1] }}
-                whileHover={{ y:-4,borderColor:'#1769FF44',transition:{ duration:0.2 } }}
-                style={{ background:'#FFFFFF',borderRadius:14,border:'1px solid #DCE4EF',padding:'28px 24px',boxShadow:'0 4px 20px rgba(7,17,31,0.05)' }}
+      {/* ══ FOUNDATION / PREREQUISITES ══ */}
+      <section style={{ position:'relative', overflow:'hidden', padding:'100px 0 80px', background:'#FFFFFF' }}>
+        {/* Background image */}
+        <div style={{ position:'absolute', inset:0, zIndex:0 }}>
+          <img src="/foundation-bg.png" alt=""
+            style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center' }}
+            onError={e => { e.target.style.display='none' }} />
+        </div>
+        {/* Top fade */}
+        <div style={{ position:'absolute', top:0, left:0, right:0, height:80, background:'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex:1, pointerEvents:'none' }} />
+        {/* Bottom fade */}
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, height:80, background:'linear-gradient(to top, #FFFFFF 0%, transparent 100%)', zIndex:1, pointerEvents:'none' }} />
+
+        {/* Left vertical text */}
+        <div style={{ position:'absolute', left:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:2 }}>
+          TRAIN · ANALYZE · DOMINATE
+        </div>
+        {/* Right vertical text */}
+        <div style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:2 }}>
+          BETTER PLAYER · BETTER PERSON
+        </div>
+
+        {/* Content */}
+        <div style={{ position:'relative', zIndex:2, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
+
+          {/* Center text */}
+          <FadeUp>
+            <div style={{ textAlign:'center', marginBottom:48 }}>
+              {/* Eyebrow row */}
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:20 }}>
+                <div style={{ width:60, height:1, background:'linear-gradient(to right, #1769FF, #7047FF)' }} />
+                <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#60708A', textTransform:'uppercase', whiteSpace:'nowrap' }}>BEFORE YOU START</span>
+                <div style={{ width:60, height:1, background:'linear-gradient(to left, #FF2448, #7047FF)' }} />
+              </div>
+              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,5.5vw,72px)', lineHeight:0.92, color:'#080D16', margin:'0 0 16px' }}>
+                BUILD THE{' '}
+                <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>FOUNDATION</span>
+                {' '}
+                <span style={{ background:'linear-gradient(90deg,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>FIRST</span>
+              </h2>
+              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#526078', maxWidth:700, margin:'16px auto 0' }}>
+                Elite performance starts with fundamentals. Make sure your setup, mechanics and habits are ready before chasing advanced skills.
+              </p>
+            </div>
+          </FadeUp>
+
+          {/* 6-card grid */}
+          <div className="prereq-grid">
+            {[
+              { n:'01', color:'#1769FF', accent:'#1769FF', title:'DEVICE & SETTINGS',   Icon:Settings, bullets:['Stable FPS','Correct sensitivity','Gyroscope setup','Comfortable controls'] },
+              { n:'02', color:'#4A90FF', accent:'#4A90FF', title:'CONTROL & MOVEMENT',  Icon:Move,     bullets:['Movement basics','Camera control','Peeking','Positioning'] },
+              { n:'03', color:'#7047FF', accent:'#7047FF', title:'AIM FUNDAMENTALS',    Icon:Target,   bullets:['Crosshair placement','ADS control','Tracking','Flick control'] },
+              { n:'04', color:'#9B3FFF', accent:'#9B3FFF', title:'RECOIL CONTROL',      Icon:Zap,      bullets:['Weapon familiarity','Spray control','Burst discipline','Vertical recoil'] },
+              { n:'05', color:'#C62DCE', accent:'#C62DCE', title:'GAME ROUTINE',        Icon:Calendar, bullets:['Consistent practice','Warm-up routine','Review sessions','Recovery'] },
+              { n:'06', color:'#FF2448', accent:'#FF2448', title:'MENTAL DISCIPLINE',   Icon:Brain,    bullets:['Patience','Decision making','Composure','Learning mindset'] },
+            ].map((card, i) => (
+              <motion.div key={card.n}
+                initial={{ opacity:0, y:30 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.15 }}
+                transition={{ duration:0.5, delay:i*0.08, ease:[0.22,1,0.36,1] }}
+                whileHover={{ y:-4, boxShadow:'0 16px 48px rgba(7,17,31,0.13)', transition:{ duration:0.25 } }}
+                style={{
+                  background:'#FFFFFF', borderRadius:16, border:'1px solid #E8EEF5',
+                  boxShadow:'0 4px 24px rgba(7,17,31,0.07)',
+                  padding:'28px', position:'relative', overflow:'hidden', minHeight:280,
+                }}
               >
-                <div style={{ marginBottom:14 }}><Icon /></div>
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:10,color:'#1769FF',letterSpacing:'0.22em',marginBottom:6 }}>{p.n}</div>
-                <div style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:18,color:'#0B1220',letterSpacing:'0.02em',marginBottom:14 }}>{p.title}</div>
-                <div style={{ display:'flex',flexDirection:'column',gap:8 }}>
-                  {p.bullets.map(b => (
-                    <div key={b} style={{ display:'flex',alignItems:'center',gap:8 }}>
-                      <div style={{ width:16,height:16,borderRadius:'50%',background:'#1769FF12',border:'1px solid #1769FF55',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:9,color:'#1769FF',fontWeight:700 }}>✓</div>
-                      <span style={{ fontFamily:'Inter,sans-serif',fontSize:13,color:'#536174' }}>{b}</span>
+                {/* Top accent bar */}
+                <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:card.color, borderRadius:'3px 3px 0 0' }} />
+                {/* Large faded number */}
+                <div style={{ position:'absolute', top:16, left:20, fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:42, color:card.color, opacity:0.25, letterSpacing:'-0.02em', lineHeight:1, userSelect:'none' }}>{card.n}</div>
+                {/* Icon */}
+                <div style={{ marginTop:32, marginBottom:12 }}>
+                  <card.Icon size={28} strokeWidth={1.8} color={card.accent} />
+                </div>
+                {/* Title */}
+                <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:22, color:'#080D16', marginTop:8, letterSpacing:'0.01em' }}>{card.title}</div>
+                {/* Bullets */}
+                <div style={{ display:'flex', flexDirection:'column', gap:6, marginTop:12 }}>
+                  {card.bullets.map(b => (
+                    <div key={b} style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <Check size={13} color="#1769FF" strokeWidth={2.5} style={{ flexShrink:0 }} />
+                      <span style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#526078' }}>{b}</span>
                     </div>
                   ))}
                 </div>
+                {/* Learn more */}
+                <div style={{ marginTop:16, fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.08em', color:card.accent, cursor:'pointer', transition:'opacity 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.opacity = '0.6' }}
+                  onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}>
+                  LEARN MORE →
+                </div>
               </motion.div>
-            )
-          })}
+            ))}
+          </div>
+
+          {/* Bottom tagline */}
+          <FadeUp delay={0.2}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:56 }}>
+              <div style={{ width:80, height:1, background:'#DCE4EF' }} />
+              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.3em', color:'#9BAABB', textTransform:'uppercase', whiteSpace:'nowrap' }}>SMALL HABITS. BIGGER RESULTS.</span>
+              <div style={{ width:80, height:1, background:'#DCE4EF' }} />
+            </div>
+          </FadeUp>
+
         </div>
-      </Wrap>
+      </section>
 
       {/* ══ 10-STAGE ROADMAP ══ */}
       <Wrap bg="#FFFFFF" py="120px 0 80px">
