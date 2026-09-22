@@ -271,7 +271,7 @@ export default function RoadmapPage() {
       <Navbar activePage="roadmap" />
 
       {/* ══ HERO ══ */}
-      <section style={{ background:'#FFFFFF', minHeight:820, position:'relative', overflow:'hidden' }}>
+      <section style={{ background:'#FFFFFF', minHeight:820, position:'relative', overflow:'hidden', paddingBottom:0 }}>
 
         {/* ── RIGHT: full-bleed artwork ── */}
         <div style={{ position:'absolute', top:0, right:0, width:'58%', height:'100%', zIndex:0 }}>
@@ -290,6 +290,8 @@ export default function RoadmapPage() {
           />
           {/* White fade — left edge of artwork blends into page */}
           <div style={{ position:'absolute', top:0, left:0, width:320, height:'100%', background:'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.95) 30%, rgba(255,255,255,0.60) 65%, transparent 100%)', zIndex:1 }} />
+          {/* Bottom fade — artwork blends into next section */}
+          <div style={{ position:'absolute', bottom:0, left:0, right:0, height:200, background:'linear-gradient(to bottom, transparent 0%, #FFFFFF 100%)', zIndex:2, pointerEvents:'none' }} />
         </div>
 
         {/* ── LEFT: content column ── */}
@@ -378,6 +380,9 @@ export default function RoadmapPage() {
           </div>
         </motion.div>
 
+        {/* Section-level bottom fade over everything */}
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, height:120, background:'linear-gradient(to bottom, transparent 0%, #FFFFFF 100%)', zIndex:3, pointerEvents:'none' }} />
+
         <style>{`
           @media (max-width: 900px) {
             .hero-left-col { width: 100% !important; padding-top: 100px !important; padding-bottom: 60px !important; }
@@ -386,25 +391,33 @@ export default function RoadmapPage() {
       </section>
 
       {/* ══ PLAYER PROGRESSION ══ */}
-      <section style={{ position:'relative', overflow:'hidden', padding:'100px 0', background:'#FFFFFF' }}>
-        {/* Background image */}
-        <div style={{ position:'absolute', inset:0, zIndex:0 }}>
-          <img src="/progression-bg.png" alt=""
-            style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center' }}
-            onError={e => { e.target.style.display='none' }} />
-        </div>
+      <section style={{ position:'relative', overflow:'hidden', padding:'80px 0 100px', background:'#FFFFFF' }}>
+        {/* CSS-only decorative elements — no image dependency */}
+
+        {/* Dot grid */}
+        <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle, #DCE4EF 1px, transparent 1px)', backgroundSize:'28px 28px', opacity:0.4, pointerEvents:'none', zIndex:0 }} />
+
+        {/* Top-left blue shard */}
+        <div style={{ position:'absolute', top:-20, left:0, width:200, height:300, clipPath:'polygon(0 0, 60% 0, 40% 100%, 0 100%)', background:'linear-gradient(135deg, #1769FF 0%, rgba(23,105,255,0.05) 100%)', opacity:0.12, zIndex:0, pointerEvents:'none' }} />
+
+        {/* Bottom-right red shard */}
+        <div style={{ position:'absolute', bottom:-20, right:0, width:200, height:300, clipPath:'polygon(40% 0, 100% 0, 100% 100%, 60% 100%)', background:'linear-gradient(225deg, #FF2448 0%, rgba(255,36,72,0.05) 100%)', opacity:0.12, zIndex:0, pointerEvents:'none' }} />
+
+        {/* + crosshairs */}
+        <div style={{ position:'absolute', top:24, left:24, color:'#1769FF', fontSize:18, opacity:0.4, userSelect:'none', zIndex:1 }}>+</div>
+        <div style={{ position:'absolute', top:24, right:24, color:'#FF2448', fontSize:18, opacity:0.4, userSelect:'none', zIndex:1 }}>+</div>
 
         {/* Left vertical text */}
-        <div style={{ position:'absolute', left:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:1 }}>
+        <div style={{ position:'absolute', left:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', opacity:0.6, zIndex:1 }}>
           TRAIN · ANALYZE · DOMINATE
         </div>
         {/* Right vertical text */}
-        <div style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:1 }}>
+        <div style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', opacity:0.6, zIndex:1 }}>
           BETTER PLAYER · BETTER PERSON
         </div>
 
         {/* Content */}
-        <div style={{ position:'relative', zIndex:1, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
+        <div style={{ position:'relative', zIndex:2, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
 
           {/* Eyebrow row */}
           <FadeUp>
