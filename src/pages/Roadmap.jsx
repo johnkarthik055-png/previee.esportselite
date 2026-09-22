@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BarChart2, Target, Users, Zap } from 'lucide-react'
+import { BarChart2, Target, Users, Zap, Gamepad2, Crosshair, Brain, Trophy } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
@@ -386,43 +386,105 @@ export default function RoadmapPage() {
       </section>
 
       {/* ══ PLAYER PROGRESSION ══ */}
-      <Wrap bg="#FFFFFF" py="120px 0 100px">
-        <FadeUp>
-          <div style={{ textAlign:'center',marginBottom:56 }}>
-            <Eyebrow center color="#6D7B90">PLAYER PROGRESSION</Eyebrow>
-            <h2 style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(32px,5vw,58px)',lineHeight:0.92,color:'#0B1220',margin:'0 0 16px' }}>
-              FROM PLAYER TO <GradSpan>COMPETITOR</GradSpan>
-            </h2>
-            <p style={{ fontFamily:'Inter,sans-serif',fontSize:16,color:'#536174',margin:0 }}>A structured path. Real improvement. Measurable results.</p>
-          </div>
-        </FadeUp>
-
-        <div style={{ display:'flex',alignItems:'center',justifyContent:'center',gap:0,flexWrap:'wrap' }}>
-          {PROGRESSION.map((p, i) => (
-            <div key={p.label} style={{ display:'flex',alignItems:'center' }}>
-              <motion.div
-                initial={{ opacity:0,y:36 }} whileInView={{ opacity:1,y:0 }} viewport={{ once:true,amount:0.2 }}
-                transition={{ duration:0.55,delay:i*0.1,ease:[0.22,1,0.36,1] }}
-                whileHover={{ y:-6,transition:{ duration:0.2 } }}
-                style={{
-                  background:'#FFFFFF',borderRadius:14,border:'1px solid #DCE4EF',
-                  padding:'28px 24px',textAlign:'center',
-                  width:'clamp(160px,17vw,288px)',minHeight:170,flexShrink:0,
-                  boxShadow:'0 12px 40px rgba(7,17,31,0.05)',position:'relative',overflow:'hidden',
-                }}
-              >
-                <div style={{ position:'absolute',top:0,left:0,right:0,height:3,background:p.color,borderRadius:'3px 3px 0 0' }} />
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:11,color:p.color,letterSpacing:'0.22em',marginBottom:8 }}>{p.n}</div>
-                <div style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:22,color:'#0B1220',letterSpacing:'0.03em',marginBottom:10 }}>{p.label}</div>
-                <div style={{ fontFamily:'Inter,sans-serif',fontSize:14,lineHeight:1.55,color:'#536174' }}>{p.desc}</div>
-              </motion.div>
-              {i < PROGRESSION.length - 1 && (
-                <div style={{ padding:'0 12px',fontSize:18,fontWeight:700,background:GRAD,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',flexShrink:0 }}>→</div>
-              )}
-            </div>
-          ))}
+      <section style={{ position:'relative', overflow:'hidden', padding:'100px 0', background:'#FFFFFF' }}>
+        {/* Background image */}
+        <div style={{ position:'absolute', inset:0, zIndex:0 }}>
+          <img src="/progression-bg.png" alt=""
+            style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center' }}
+            onError={e => { e.target.style.display='none' }} />
         </div>
-      </Wrap>
+
+        {/* Left vertical text */}
+        <div style={{ position:'absolute', left:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:1 }}>
+          TRAIN · ANALYZE · DOMINATE
+        </div>
+        {/* Right vertical text */}
+        <div style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:1 }}>
+          BETTER PLAYER · BETTER PERSON
+        </div>
+
+        {/* Content */}
+        <div style={{ position:'relative', zIndex:1, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
+
+          {/* Eyebrow row */}
+          <FadeUp>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:20 }}>
+              <div style={{ width:60, height:1, background:'linear-gradient(to right, #1769FF, #7047FF)' }} />
+              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#60708A', textTransform:'uppercase', whiteSpace:'nowrap' }}>PLAYER PROGRESSION</span>
+              <div style={{ width:60, height:1, background:'linear-gradient(to left, #FF2448, #7047FF)' }} />
+            </div>
+
+            <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,5.5vw,72px)', lineHeight:0.92, color:'#080D16', textAlign:'center', margin:'0 0 16px' }}>
+              FROM PLAYER TO{' '}
+              <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>COMPETITOR</span>
+            </h2>
+
+            <p style={{ fontFamily:'Inter,sans-serif', fontSize:18, color:'#526078', textAlign:'center', marginTop:16, marginBottom:0 }}>
+              A structured path. Real improvement. Measurable results.
+            </p>
+          </FadeUp>
+
+          {/* Cards */}
+          <div style={{ display:'flex', flexDirection:'row', gap:0, marginTop:56, alignItems:'stretch' }}>
+            {[
+              { n:'01', label:'FOUNDATION',  desc:'Build the fundamentals.',                  Icon:Gamepad2,  color:'#1769FF', borderAlpha:'rgba(23,105,255,0.15)'   },
+              { n:'02', label:'MECHANICS',   desc:'Build mechanical consistency.',             Icon:Crosshair, color:'#4A90FF', borderAlpha:'rgba(74,144,255,0.15)'   },
+              { n:'03', label:'GAME IQ',     desc:'Understand situations and decisions.',     Icon:Brain,     color:'#7047FF', borderAlpha:'rgba(112,71,255,0.15)'   },
+              { n:'04', label:'COMPETITION', desc:'Perform under pressure.',                  Icon:Trophy,    color:'#FF2448', borderAlpha:'rgba(255,36,72,0.15)'    },
+            ].map((card, i) => (
+              <div key={card.label} style={{ display:'flex', alignItems:'center', flex:1 }}>
+                <motion.div
+                  initial={{ opacity:0, y:32 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.2 }}
+                  transition={{ duration:0.55, delay:i*0.1, ease:[0.22,1,0.36,1] }}
+                  whileHover={{ y:-5, transition:{ duration:0.2 } }}
+                  style={{
+                    flex:1,
+                    position:'relative',
+                    display:'flex', flexDirection:'column', alignItems:'flex-start',
+                    padding:'32px',
+                    background:'rgba(255,255,255,0.72)',
+                    backdropFilter:'blur(6px)',
+                    borderRadius:4,
+                    border:`1px solid ${card.borderAlpha}`,
+                    borderLeft:`3px solid ${card.color}`,
+                    boxShadow:'0 8px 32px rgba(7,17,31,0.06)',
+                  }}
+                >
+                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:13, color:card.color, opacity:0.6, letterSpacing:'0.1em', marginBottom:12 }}>{card.n}</div>
+                  <card.Icon size={36} strokeWidth={1.8} color={card.color} />
+                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:26, color:'#080D16', marginTop:12, letterSpacing:'0.02em' }}>{card.label}</div>
+                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, color:'#526078', marginTop:8, lineHeight:1.55 }}>{card.desc}</div>
+                </motion.div>
+
+                {/* Arrow connector */}
+                {i < 3 && (
+                  <div style={{ flexShrink:0, width:32, display:'flex', alignItems:'center', justifyContent:'center', zIndex:2 }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 6l6 6-6 6" stroke="url(#arrGrad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <defs>
+                        <linearGradient id="arrGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#1769FF"/>
+                          <stop offset="100%" stopColor="#FF2448"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom tagline */}
+          <FadeUp delay={0.3}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:48 }}>
+              <div style={{ width:80, height:1, background:'linear-gradient(to right, #1769FF, #7047FF)' }} />
+              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.35em', color:'#9BAABB', textTransform:'uppercase', whiteSpace:'nowrap' }}>WHERE GRIND BECOMES GREATNESS</span>
+              <div style={{ width:80, height:1, background:'linear-gradient(to left, #FF2448, #7047FF)' }} />
+            </div>
+          </FadeUp>
+
+        </div>
+      </section>
 
       {/* ══ PREREQUISITES ══ */}
       <Wrap bg="#F7F9FC" py="120px 0">
