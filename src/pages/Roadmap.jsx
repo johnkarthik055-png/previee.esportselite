@@ -785,100 +785,137 @@ export default function RoadmapPage() {
       </section>
 
       {/* ══ DEVELOPMENT LOOP ══ */}
-      <section style={{ background:'#080D16', padding:'100px 0 120px', position:'relative', overflow:'hidden' }}>
-        {/* Background effects */}
-        <div style={{ position:'absolute', left:-200, top:'50%', transform:'translateY(-50%)', width:700, height:700, background:'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ position:'absolute', right:-200, top:'50%', transform:'translateY(-50%)', width:700, height:700, background:'radial-gradient(circle, rgba(255,36,72,0.12) 0%, transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize:'28px 28px', pointerEvents:'none' }} />
+      <section style={{ background:'#FFFFFF', padding:'100px 0 80px', position:'relative', overflow:'hidden' }}>
+        {/* CSS background decorations */}
+        <div style={{ position:'absolute', top:0, left:0, width:220, height:280, clipPath:'polygon(0 0, 100% 0, 70% 100%, 0 80%)', background:'#1769FF', opacity:0.07, pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:0, left:0, width:200, height:240, clipPath:'polygon(0 20%, 80% 0, 100% 100%, 0 100%)', background:'#1769FF', opacity:0.08, pointerEvents:'none' }} />
+        <div style={{ position:'absolute', top:0, right:0, width:200, height:240, clipPath:'polygon(30% 0, 100% 0, 100% 80%, 0 100%)', background:'#FF2448', opacity:0.07, pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:0, right:0, width:200, height:240, clipPath:'polygon(20% 0, 100% 0, 100% 100%, 0 100%)', background:'#FF2448', opacity:0.08, pointerEvents:'none' }} />
+        <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle, #D9E3F0 1px, transparent 1px)', backgroundSize:'28px 28px', opacity:0.4, pointerEvents:'none' }} />
 
-        <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)', position:'relative' }}>
+        {/* Corner microcopy */}
+        <div style={{ position:'absolute', top:64, left:20, zIndex:2, userSelect:'none', pointerEvents:'none' }}>
+          {['TRAIN','ANALYZE','DOMINATE'].map((w,i) => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
+          <div style={{ width:20, height:1, background:'#1769FF', marginTop:6, opacity:0.5 }} />
+        </div>
+        <div style={{ position:'absolute', top:64, right:20, zIndex:2, textAlign:'right', userSelect:'none', pointerEvents:'none' }}>
+          {['SMALL','STEPS','BIG','RESULTS'].map((w,i) => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
+          <div style={{ width:20, height:1, background:'#FF2448', marginTop:6, opacity:0.5, marginLeft:'auto' }} />
+        </div>
+        <div style={{ position:'absolute', top:112, left:32, fontSize:20, fontWeight:300, color:'#1769FF', opacity:0.5, userSelect:'none', pointerEvents:'none' }}>+</div>
+        <div style={{ position:'absolute', top:112, right:32, fontSize:20, fontWeight:300, color:'#FF2448', opacity:0.5, userSelect:'none', pointerEvents:'none' }}>+</div>
+
+        {/* Bottom corner microcopy */}
+        <div style={{ position:'absolute', bottom:64, left:20, zIndex:2, userSelect:'none', pointerEvents:'none' }}>
+          {['DISCIPLINE','CREATES','FREEDOM'].map(w => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
+        </div>
+        <div style={{ position:'absolute', bottom:64, right:20, zIndex:2, textAlign:'right', userSelect:'none', pointerEvents:'none' }}>
+          {['BETTER PLAYERS','BUILD BETTER','FUTURES'].map(w => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
+        </div>
+
+        {/* Content */}
+        <div style={{ position:'relative', zIndex:1, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
 
           {/* Header */}
           <FadeUp>
-            <div style={{ textAlign:'center', marginBottom:64 }}>
+            <div style={{ textAlign:'center', marginBottom:56 }}>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:20 }}>
-                <div style={{ width:60, height:1, background:'linear-gradient(to right, #1769FF, transparent)' }} />
-                <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#AAB8C8', textTransform:'uppercase', whiteSpace:'nowrap' }}>THE DEVELOPMENT LOOP</span>
-                <div style={{ width:60, height:1, background:'linear-gradient(to left, #FF2448, transparent)' }} />
+                <div style={{ width:80, height:1, background:'#1769FF' }} />
+                <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#71829A', textTransform:'uppercase', whiteSpace:'nowrap' }}>THE DEVELOPMENT LOOP</span>
+                <div style={{ width:80, height:1, background:'#FF2448' }} />
               </div>
-              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(32px,5vw,68px)', lineHeight:0.92, color:'#FFFFFF', margin:'0 0 16px' }}>
+              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(32px,5vw,64px)', lineHeight:1, letterSpacing:'-0.02em', color:'#08111F', margin:'0 0 16px', textAlign:'center' }}>
                 LEARN → PRACTICE → ASSESS →{' '}
                 <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>IMPROVE</span>
               </h2>
-              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#AAB8C8', marginTop:16 }}>
+              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#52647D', marginTop:16, maxWidth:700, margin:'16px auto 0' }}>
                 Every stage runs the same cycle. Finish it and the next stage unlocks.
               </p>
             </div>
           </FadeUp>
 
-          {/* Cards row */}
-          <div style={{ display:'flex', alignItems:'stretch', gap:16 }}>
+          {/* Cards */}
+          <div style={{ display:'flex', alignItems:'stretch', gap:20, marginTop:56 }}>
             {[
-              { n:'01', color:'#1769FF', Icon:BookOpen,      title:'LEARN',     desc:'Real material per stage — structured lessons built around what you actually need.' },
-              { n:'02', color:'#4A8AFF', Icon:Dumbbell,      title:'PRACTICE',  desc:'Structured drills directly linked to the concept you just studied.' },
-              { n:'03', color:'#7047FF', Icon:ClipboardCheck, title:'ASSESS',    desc:'A scored assessment — not a quiz for the sake of it. Real feedback.' },
-              { n:'04', color:'#C62DCE', Icon:BarChart2,      title:'RESULT',    desc:'An honest read on where you stand based on your actual performance.' },
-              { n:'05', color:'#FF2448', Icon:TrendingUp,     title:'NEXT STEP', desc:'A specific weakness to work on before the next stage unlocks.' },
-            ].map((step, i) => (
-              <React.Fragment key={step.title}>
+              { n:'01', color:'#1769FF', Icon:BookOpen,      title:'LEARN',     desc:'Real material per stage — structured lessons built around what you actually need.',         bottom:'BUILD KNOWLEDGE'     },
+              { n:'02', color:'#4A8AFF', Icon:Gamepad2,      title:'PRACTICE',  desc:'Structured drills directly linked to the concept you just studied.',                        bottom:'DEVELOP CONSISTENCY' },
+              { n:'03', color:'#7047FF', Icon:ClipboardCheck, title:'ASSESS',   desc:'A scored assessment — not a quiz for the sake of it. Real feedback.',                       bottom:'ANALYZE & ADJUST'    },
+              { n:'04', color:'#C62DCE', Icon:BarChart2,      title:'RESULT',   desc:'An honest read on where you stand based on your actual performance.',                       bottom:'TRACK PROGRESS'      },
+              { n:'05', color:'#FF2448', Icon:TrendingUp,     title:'NEXT STEP',desc:'A specific weakness to work on before the next stage unlocks.',                             bottom:'KEEP EVOLVING'       },
+            ].map((step, i) => {
+              const arrowColors = ['#1769FF','#4A8AFF','#7047FF','#C62DCE']
+              return (
+                <React.Fragment key={step.title}>
+                  <motion.div
+                    initial={{ opacity:0, y:40 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.15 }}
+                    transition={{ duration:0.55, delay:i*0.1, ease:[0.22,1,0.36,1] }}
+                    whileHover={{ y:-6, boxShadow:`0 20px 50px rgba(20,50,100,0.12)`, borderColor:`${step.color}4D`, transition:{ duration:0.25 } }}
+                    style={{
+                      flex:1, position:'relative', overflow:'hidden', borderRadius:16, padding:28,
+                      background:'#FFFFFF', border:'1px solid #D9E3F0',
+                      boxShadow:'0 12px 35px rgba(20,50,100,0.06)',
+                      display:'flex', flexDirection:'column',
+                      transition:'border-color 0.3s, box-shadow 0.3s',
+                    }}
+                  >
+                    {/* Top accent */}
+                    <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:step.color, borderRadius:'3px 3px 0 0' }} />
+                    {/* Corner triangle */}
+                    <div style={{ position:'absolute', top:0, right:0, width:0, height:0, borderTop:`40px solid ${step.color}1E`, borderLeft:'40px solid transparent' }} />
+                    {/* Number */}
+                    <div style={{ position:'absolute', top:16, left:20, fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:32, color:step.color, opacity:0.75, letterSpacing:'-0.02em', lineHeight:1, userSelect:'none' }}>{step.n}</div>
+                    {/* Icon */}
+                    <div style={{ width:52, height:52, borderRadius:12, background:`${step.color}1A`, border:`1px solid ${step.color}33`, display:'flex', alignItems:'center', justifyContent:'center', marginTop:40, marginBottom:16 }}>
+                      <step.Icon size={24} strokeWidth={1.8} color={step.color} />
+                    </div>
+                    {/* Step label */}
+                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:step.color, marginBottom:4 }}>STEP {step.n}</div>
+                    {/* Title */}
+                    <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:24, color:'#08111F', lineHeight:1, marginTop:4 }}>{step.title}</div>
+                    {/* Desc */}
+                    <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, lineHeight:1.55, color:'#52647D', marginTop:12, flex:1 }}>{step.desc}</div>
+                    {/* Bottom label */}
+                    <div style={{ marginTop:'auto', paddingTop:20, borderTop:'1px solid #E8EEF5', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.3em', color:'#71829A' }}>{step.bottom}</div>
+                  </motion.div>
+                  {i < 4 && (
+                    <div style={{ display:'flex', alignItems:'center', flexShrink:0, alignSelf:'center' }}>
+                      <ArrowRight size={18} strokeWidth={1.5} color={arrowColors[i]} />
+                    </div>
+                  )}
+                </React.Fragment>
+              )
+            })}
+          </div>
+
+          {/* Stats row */}
+          <div style={{ marginTop:56, display:'flex', alignItems:'center', justifyContent:'center', gap:0 }}>
+            {[
+              { value:'10K+', label:'Players on the journey', color:'#1769FF', g:'linear-gradient(90deg,#1769FF,#7047FF)' },
+              { value:'10',   label:'Structured stages',       color:'#7047FF', g:'linear-gradient(90deg,#7047FF,#FF2448)' },
+              { value:'1',    label:'Clear objective',          color:'#FF2448', g:'#FF2448' },
+            ].map((stat, i) => (
+              <React.Fragment key={stat.label}>
+                {i > 0 && <div style={{ width:1, height:50, background:'#D9E3F0', flexShrink:0, margin:'0 48px' }} />}
                 <motion.div
-                  initial={{ opacity:0, y:30 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.15 }}
-                  transition={{ duration:0.55, delay:i*0.1, ease:[0.22,1,0.36,1] }}
-                  whileHover={{ y:-6, borderColor:`${step.color}66`, boxShadow:`0 20px 60px ${step.color}26`, transition:{ duration:0.25 } }}
-                  style={{
-                    flex:1, position:'relative', overflow:'hidden', borderRadius:16, padding:32,
-                    background:'#0D1526', border:'1px solid rgba(255,255,255,0.06)',
-                    transition:'border-color 0.3s, box-shadow 0.3s',
-                  }}
+                  initial={{ scale:0.9, opacity:0 }} whileInView={{ scale:1, opacity:1 }} viewport={{ once:true }}
+                  transition={{ delay:i*0.1+0.2, duration:0.5, ease:[0.22,1,0.36,1] }}
+                  style={{ textAlign:'center', flexShrink:0 }}
                 >
-                  {/* Top accent */}
-                  <div style={{ position:'absolute', top:0, left:0, right:0, height:2, background:step.color }} />
-                  {/* Faded step number */}
-                  <div style={{ position:'absolute', top:16, right:16, fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:48, color:'#FFFFFF', opacity:0.05, letterSpacing:'-0.02em', lineHeight:1, userSelect:'none' }}>{step.n}</div>
-                  {/* Icon wrapper */}
-                  <div style={{ width:52, height:52, borderRadius:12, background:`${step.color}1E`, border:`1px solid ${step.color}33`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:24 }}>
-                    <step.Icon size={24} strokeWidth={1.8} color={step.color} />
-                  </div>
-                  {/* Label */}
-                  <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.25em', color:step.color, marginBottom:8 }}>STEP {step.n}</div>
-                  {/* Title */}
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:26, color:'#FFFFFF', lineHeight:1 }}>{step.title}</div>
-                  {/* Desc */}
-                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, lineHeight:1.6, color:'#7A8FA8', marginTop:12 }}>{step.desc}</div>
+                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:44, lineHeight:1, background:stat.g, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>{stat.value}</div>
+                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#687990', marginTop:6 }}>{stat.label}</div>
                 </motion.div>
-                {i < 4 && (
-                  <div style={{ display:'flex', alignItems:'center', flexShrink:0 }}>
-                    <ArrowRight size={20} strokeWidth={1.5} color="rgba(255,255,255,0.2)" />
-                  </div>
-                )}
               </React.Fragment>
             ))}
           </div>
 
-          {/* Bottom stats */}
-          <motion.div
-            initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.2 }}
-            transition={{ duration:0.7, delay:0.2, ease:[0.22,1,0.36,1] }}
-            style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:64, marginTop:64, flexWrap:'wrap' }}
-          >
-            {[
-              { value:'10K+', label:'Players on the journey', g:'linear-gradient(90deg,#1769FF,#7047FF)' },
-              { value:'10',   label:'Structured stages',       g:'linear-gradient(90deg,#7047FF,#FF2448)' },
-              { value:'1',    label:'Clear objective',          g:'linear-gradient(90deg,#FF2448,#FF2448)' },
-            ].map((stat, i) => (
-              <React.Fragment key={stat.label}>
-                {i > 0 && <div style={{ width:1, height:48, background:'rgba(255,255,255,0.1)', flexShrink:0 }} />}
-                <motion.div
-                  initial={{ scale:0.9, opacity:0 }} whileInView={{ scale:1, opacity:1 }} viewport={{ once:true }}
-                  transition={{ delay:i*0.1+0.3, duration:0.5, ease:[0.22,1,0.36,1] }}
-                  style={{ textAlign:'center', flexShrink:0 }}
-                >
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:48, lineHeight:1, background:stat.g, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>{stat.value}</div>
-                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#7A8FA8', marginTop:6 }}>{stat.label}</div>
-                </motion.div>
-              </React.Fragment>
-            ))}
-          </motion.div>
+          {/* Bottom tagline */}
+          <FadeUp delay={0.2}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:48 }}>
+              <div style={{ width:100, height:1, background:'#D9E3F0' }} />
+              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.35em', color:'#71829A', textTransform:'uppercase', whiteSpace:'nowrap' }}>CONSISTENT EFFORT CREATES ELITE PLAYERS</span>
+              <div style={{ width:100, height:1, background:'#D9E3F0' }} />
+            </div>
+          </FadeUp>
 
         </div>
       </section>
