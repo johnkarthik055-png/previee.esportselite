@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { BarChart2, Target, Users, Zap } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
@@ -270,62 +271,121 @@ export default function RoadmapPage() {
       <Navbar activePage="roadmap" />
 
       {/* ══ HERO ══ */}
-      <section style={{ background:'#FFFFFF', minHeight:580, position:'relative', overflow:'hidden' }}>
-        {/* Dot grid */}
-        <div style={{ position:'absolute',inset:0,backgroundImage:'radial-gradient(circle,#DCE4EF 1px,transparent 1px)',backgroundSize:'28px 28px',opacity:0.45,pointerEvents:'none' }} />
-        {/* Blue shard TL */}
-        <div style={{ position:'absolute',top:-50,left:-50,width:320,height:360,background:'#1769FF',opacity:0.07,clipPath:'polygon(30% 0%,100% 0%,70% 100%,0% 100%)',pointerEvents:'none' }} />
-        {/* Red shard TR */}
-        <div style={{ position:'absolute',top:-40,right:-40,width:280,height:320,background:'#FF1838',opacity:0.07,clipPath:'polygon(0% 0%,100% 20%,100% 100%,40% 80%)',pointerEvents:'none' }} />
-        {/* Small blue BL */}
-        <div style={{ position:'absolute',bottom:-20,left:60,width:180,height:200,background:'#1769FF',opacity:0.04,clipPath:'polygon(20% 0%,100% 10%,80% 100%,0% 90%)',pointerEvents:'none' }} />
-        {/* Small red BR */}
-        <div style={{ position:'absolute',bottom:0,right:60,width:160,height:180,background:'#FF1838',opacity:0.04,clipPath:'polygon(0% 10%,100% 0%,100% 90%,10% 100%)',pointerEvents:'none' }} />
-        {/* Side text */}
-        <div style={{ position:'absolute',left:22,top:'50%',transform:'translateY(-50%)',fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:9,letterSpacing:'0.3em',color:'#C0CAD6',writingMode:'vertical-rl',textTransform:'uppercase',userSelect:'none',pointerEvents:'none' }}>TRAIN ANALYZE DOMINATE</div>
-        <div style={{ position:'absolute',right:22,top:'50%',transform:'translateY(-50%)',fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:9,letterSpacing:'0.3em',color:'#C0CAD6',writingMode:'vertical-rl',textTransform:'uppercase',userSelect:'none',pointerEvents:'none' }}>DISCIPLINE BUILDS FREEDOM</div>
+      <section style={{ background:'#FFFFFF', minHeight:820, position:'relative', overflow:'hidden' }}>
 
-        <div style={{ maxWidth:1280,margin:'0 auto',padding:'0 clamp(48px,6vw,96px)',display:'flex',alignItems:'center',gap:'clamp(40px,5vw,64px)',minHeight:580,flexWrap:'wrap' }}>
-          {/* Left */}
-          <motion.div style={{ flex:'1 1 420px',minWidth:0 }} variants={stagger} initial="hidden" animate="visible">
-            <motion.div variants={child}><Eyebrow color="#6D7B90">YOUR JOURNEY STARTS HERE</Eyebrow></motion.div>
-            <motion.h1 variants={child} style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(44px,7vw,88px)',lineHeight:0.92,letterSpacing:'-0.02em',color:'#0B1220',margin:'0 0 24px' }}>
-              A CLEAR ROADMAP<br />TO <GradSpan>GREATNESS</GradSpan>
-            </motion.h1>
-            <motion.p variants={child} style={{ fontFamily:'Inter,sans-serif',fontSize:17,lineHeight:1.6,color:'#536174',maxWidth:540,margin:'0 0 32px' }}>
-              Stop guessing what to practice. Esports Elite gives you a structured path from foundational mechanics to competitive-level performance.
-            </motion.p>
-            <motion.div variants={child} style={{ display:'flex',gap:14,flexWrap:'wrap',alignItems:'center' }}>
-              <RadialRevealButton label="START YOUR JOURNEY →" padding="13px 28px" rounded={8}
-                font={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:16,letterSpacing:'0.06em' }}
-                colors={{ fill:'#0B1220',textColor:'#FFFFFF',hoverFill:'#1769FF',hoverTextColor:'#FFFFFF' }}
-                border={{ borderWidth:0 }} />
-              <RadialRevealButton label="▶  WATCH HOW IT WORKS" padding="12px 24px" rounded={8}
-                font={{ fontFamily:'Inter,sans-serif',fontWeight:600,fontSize:14 }}
-                colors={{ fill:'#FFFFFF',textColor:'#111827',hoverFill:'#111827',hoverTextColor:'#FFFFFF' }}
-                border={{ borderWidth:1.5,borderStyle:'solid',borderColor:'#C8D2DE' }} />
-            </motion.div>
-          </motion.div>
-
-          {/* Right — image */}
-          <motion.div style={{ flex:'1 1 340px',minWidth:0 }}
-            initial={{ opacity:0,x:40 }} animate={{ opacity:1,x:0 }}
-            transition={{ duration:0.9,delay:0.2,ease:[0.22,1,0.36,1] }}>
-            <div style={{ position:'absolute',right:-80,top:'30%',width:500,height:500,background:'radial-gradient(circle,rgba(23,105,255,0.10) 0%,transparent 70%)',pointerEvents:'none' }} />
-            <div style={{ position:'relative',width:'100%',height:520,borderRadius:16,overflow:'hidden' }}>
-              <div style={{ position:'absolute',inset:0,background:'linear-gradient(135deg,#07111F,#0B1A2E)',borderRadius:16,border:'1px solid #1769FF22',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:12 }}>
-                <div style={{ fontSize:64,opacity:0.25 }}>🏆</div>
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontSize:13,fontWeight:600,letterSpacing:'0.3em',color:'#536174' }}>[ ROADMAP-HERO.PNG ]</div>
-                <div style={{ fontFamily:'Inter,sans-serif',fontSize:12,color:'#3D4F63' }}>Drop roadmap-hero.webp in /public</div>
-              </div>
-              <img src="/roadmap-hero.png" alt="Esports Elite Roadmap Hero" loading="eager"
-                style={{ position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',borderRadius:16 }}
-                onError={e => { e.target.style.display='none' }} />
-              <div style={{ position:'absolute',top:12,left:12,width:20,height:20,borderTop:'2px solid #1769FF55',borderLeft:'2px solid #1769FF55' }} />
-              <div style={{ position:'absolute',bottom:12,right:12,width:20,height:20,borderBottom:'2px solid #FF183855',borderRight:'2px solid #FF183855' }} />
-            </div>
-          </motion.div>
+        {/* ── RIGHT: full-bleed artwork ── */}
+        <div style={{ position:'absolute', top:0, right:0, width:'58%', height:'100%', zIndex:0 }}>
+          {/* Fallback dark bg so placeholder looks intentional */}
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(135deg,#0D1828,#1A2A42)', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:12 }}>
+            <div style={{ fontSize:72, opacity:0.18 }}>🏆</div>
+            <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#3D5070' }}>[ ROADMAP-HERO.PNG ]</div>
+            <div style={{ fontFamily:'Inter,sans-serif', fontSize:11, color:'#2A3E55' }}>Drop roadmap-hero.webp in /public</div>
+          </div>
+          <img
+            src="/roadmap-hero.png"
+            alt="Esports Elite — Roadmap Hero"
+            loading="eager"
+            style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center right', display:'block' }}
+            onError={e => { e.target.style.display = 'none' }}
+          />
+          {/* White fade — left edge of artwork blends into page */}
+          <div style={{ position:'absolute', top:0, left:0, width:320, height:'100%', background:'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.95) 30%, rgba(255,255,255,0.60) 65%, transparent 100%)', zIndex:1 }} />
         </div>
+
+        {/* ── LEFT: content column ── */}
+        <motion.div
+          variants={stagger} initial="hidden" animate="visible"
+          style={{
+            position:'relative', zIndex:2,
+            width:'46%', minHeight:820,
+            display:'flex', flexDirection:'column', justifyContent:'center',
+            paddingLeft:'clamp(40px,5vw,80px)', paddingRight:'clamp(20px,3vw,48px)',
+            paddingTop:80, paddingBottom:80,
+          }}
+          className="hero-left-col"
+        >
+          {/* Vertical side text */}
+          <div style={{ position:'absolute', left:20, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', pointerEvents:'none' }}>
+            TRAIN · ANALYZE · DOMINATE
+          </div>
+
+          {/* Eyebrow */}
+          <motion.div variants={child} style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
+            <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:13, letterSpacing:'0.35em', color:'#60708A', textTransform:'uppercase' }}>
+              YOUR JOURNEY STARTS HERE
+            </span>
+            <div style={{ width:45, height:1, background:'#CBD5E1', flexShrink:0 }} />
+          </motion.div>
+
+          {/* H1 */}
+          <motion.h1 variants={child} style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,6.5vw,80px)', lineHeight:0.92, letterSpacing:'-0.02em', margin:'0 0 20px' }}>
+            <span style={{ color:'#080D16', display:'block' }}>A CLEAR ROADMAP</span>
+            <span style={{ color:'#080D16' }}>TO </span>
+            <span style={{ background:'linear-gradient(90deg, #1769FF 0%, #7047FF 50%, #FF2448 100%)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>GREATNESS</span>
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p variants={child} style={{ fontFamily:'Inter,sans-serif', fontSize:18, lineHeight:1.55, color:'#526078', maxWidth:580, margin:'0 0 32px' }}>
+            Stop guessing what to practice. Esports Elite gives you a structured path from foundational mechanics to competitive-level performance.
+          </motion.p>
+
+          {/* Buttons */}
+          <motion.div variants={child} style={{ display:'flex', gap:16, flexWrap:'wrap', alignItems:'center', marginBottom:40 }}>
+            <motion.button
+              whileHover={{ y:-2, boxShadow:'0 8px 24px rgba(23,105,255,0.35)' }}
+              whileTap={{ scale:0.97 }}
+              style={{ background:'#080D16', color:'#FFFFFF', padding:'18px 32px', borderRadius:10, border:'none', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:15, letterSpacing:'0.05em', cursor:'pointer', transition:'box-shadow 0.2s' }}
+            >
+              START YOUR JOURNEY →
+            </motion.button>
+            <motion.button
+              whileHover={{ y:-2, borderColor:'#1769FF' }}
+              whileTap={{ scale:0.97 }}
+              style={{ background:'#FFFFFF', color:'#172033', padding:'18px 32px', borderRadius:10, border:'1.5px solid #D2DCE8', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:15, cursor:'pointer', transition:'border-color 0.2s' }}
+            >
+              ▶&nbsp;&nbsp;WATCH HOW IT WORKS
+            </motion.button>
+          </motion.div>
+
+          {/* Feature strip */}
+          <motion.div variants={child} style={{ display:'flex', alignItems:'center', gap:0, flexWrap:'wrap', rowGap:16 }}>
+            {[
+              { Icon:BarChart2, color:'#1769FF', line1:'STRUCTURED',  line2:'LEARNING'  },
+              { Icon:Target,    color:'#FF2448', line1:'MEASURABLE',  line2:'PROGRESS'  },
+              { Icon:Users,     color:'#7047FF', line1:'COMPETITIVE', line2:'READY'     },
+              { Icon:Zap,       color:'#FF2448', line1:'CONSISTENT',  line2:'GROWTH'    },
+            ].map((f, i) => (
+              <div key={f.line1} style={{ display:'flex', alignItems:'center', gap:0 }}>
+                {i > 0 && <div style={{ width:1, height:36, background:'#D7DFEA', margin:'0 24px', flexShrink:0 }} />}
+                <div style={{ display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
+                  <f.Icon size={20} color={f.color} strokeWidth={1.8} />
+                  <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
+                    <span style={{ fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:12, color:'#34435A', lineHeight:1.3 }}>{f.line1}</span>
+                    <span style={{ fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:12, color:'#34435A', lineHeight:1.3 }}>{f.line2}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Bottom-left faded text */}
+          <div style={{ position:'absolute', bottom:48, left:'clamp(40px,5vw,80px)', userSelect:'none', pointerEvents:'none' }}>
+            {['DISCIPLINE','BUILDS','FREEDOM'].map(w => (
+              <div key={w} style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:18, letterSpacing:'0.1em', color:'#1769FF', opacity:0.18, lineHeight:1.2 }}>{w}</div>
+            ))}
+          </div>
+
+          {/* Bottom micro text */}
+          <div style={{ position:'absolute', bottom:24, left:'50%', transform:'translateX(-50%)', whiteSpace:'nowrap', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.3em', color:'#B8C2D0', userSelect:'none', pointerEvents:'none' }}>
+            SAME PLAYER. DIFFERENT MINDSET. A HIGHER YOU.
+          </div>
+        </motion.div>
+
+        <style>{`
+          @media (max-width: 900px) {
+            .hero-left-col { width: 100% !important; padding-top: 100px !important; padding-bottom: 60px !important; }
+          }
+        `}</style>
       </section>
 
       {/* ══ PLAYER PROGRESSION ══ */}
