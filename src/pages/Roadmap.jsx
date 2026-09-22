@@ -989,58 +989,6 @@ export default function RoadmapPage() {
         </div>
       </section>
 
-      {/* ══ MAP KNOWLEDGE ══ */}
-      <Wrap bg="#FFFFFF" py="120px 0">
-        <div style={{ display:'flex',alignItems:'center',gap:'clamp(40px,6vw,64px)',flexWrap:'wrap' }}>
-          {/* Image left */}
-          <motion.div style={{ flex:'1 1 340px',minWidth:0 }}
-            initial={{ opacity:0,x:-40 }} whileInView={{ opacity:1,x:0 }} viewport={{ once:true,amount:0.15 }}
-            transition={{ duration:0.8,ease:[0.22,1,0.36,1] }}
-            whileHover={{ y:-5,scale:1.01,transition:{ duration:0.3 } }}>
-            <div style={{ width:'100%',height:390,borderRadius:16,overflow:'hidden',position:'relative',border:'1px solid #1769FF44',boxShadow:'0 25px 80px rgba(23,105,255,0.18)' }}>
-              <div style={{ position:'absolute',inset:0,background:'#07111F',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:12 }}>
-                <div style={{ fontSize:64,opacity:0.25 }}>🗺️</div>
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontSize:12,fontWeight:600,letterSpacing:'0.3em',color:'#3D5070' }}>[ MAP-KNOWLEDGE.PNG ]</div>
-                <div style={{ fontFamily:'Inter,sans-serif',fontSize:11,color:'#2D3F55' }}>Drop map-knowledge.webp in /public</div>
-              </div>
-              <img src="/map-knowledge.png" alt="Map Knowledge"
-                style={{ position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover' }}
-                onError={e => { e.target.style.display='none' }} />
-            </div>
-          </motion.div>
-
-          {/* Text right */}
-          <motion.div style={{ flex:'1 1 380px',minWidth:0 }}
-            initial={{ opacity:0,x:40 }} whileInView={{ opacity:1,x:0 }} viewport={{ once:true,amount:0.15 }}
-            transition={{ duration:0.8,delay:0.15,ease:[0.22,1,0.36,1] }}>
-            <div style={{ display:'flex',alignItems:'center',gap:12,marginBottom:16 }}>
-              <div style={{ width:40,height:2,background:'#1769FF' }} />
-              <span style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:12,color:'#1769FF',letterSpacing:'0.25em' }}>05</span>
-              <span style={{ color:'#C0CAD6' }}>—</span>
-              <span style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:12,color:'#6D7B90',letterSpacing:'0.2em' }}>MAP KNOWLEDGE</span>
-            </div>
-            <h2 style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(32px,5vw,58px)',lineHeight:0.92,color:'#0B1220',margin:'0 0 20px' }}>
-              KNOW THE<br /><GradSpan g="linear-gradient(90deg,#1769FF,#FF1838)">BATTLEFIELD</GradSpan>
-            </h2>
-            <p style={{ fontFamily:'Inter,sans-serif',fontSize:16,lineHeight:1.6,color:'#536174',maxWidth:480,margin:'0 0 24px' }}>
-              Understand rotations, compounds, loot routes, vehicle spawns and zone patterns before the match forces you to.
-            </p>
-            <div style={{ display:'flex',flexDirection:'column',gap:12,marginBottom:32 }}>
-              {['POIs & callouts','Rotations & zones','Vehicle spawns','Compound knowledge'].map(b => (
-                <div key={b} style={{ display:'flex',alignItems:'center',gap:12 }}>
-                  <div style={{ width:22,height:22,borderRadius:'50%',background:'#1769FF12',border:'1px solid #1769FF55',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:11,color:'#1769FF',fontWeight:700 }}>✓</div>
-                  <span style={{ fontFamily:'Inter,sans-serif',fontSize:14,color:'#536174' }}>{b}</span>
-                </div>
-              ))}
-            </div>
-            <RadialRevealButton label="EXPLORE MAP KNOWLEDGE →" padding="13px 28px" rounded={8}
-              font={{ fontFamily:'Inter,sans-serif',fontWeight:600,fontSize:14 }}
-              colors={{ fill:'#0B1220',textColor:'#FFFFFF',hoverFill:'#1769FF',hoverTextColor:'#FFFFFF' }}
-              border={{ borderWidth:0 }} />
-          </motion.div>
-        </div>
-      </Wrap>
-
       {/* ══ ELITE CTA ══ */}
       <section style={{ position:'relative',minHeight:380,overflow:'hidden',background:'#080D15' }}>
         <div style={{ position:'absolute',bottom:-100,left:-100,width:600,height:600,background:'radial-gradient(circle,rgba(23,105,255,0.20) 0%,transparent 70%)',zIndex:1 }} />
