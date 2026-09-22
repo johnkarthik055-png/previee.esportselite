@@ -601,199 +601,188 @@ export default function RoadmapPage() {
       </section>
 
       {/* ══ 10-STAGE ROADMAP ══ */}
-      <Wrap bg="#FFFFFF" py="120px 0 80px">
-        <FadeUp>
-          <div style={{ textAlign:'center',marginBottom:40 }}>
-            <Eyebrow center color="#6D7B90">THE PATH</Eyebrow>
-            <h2 style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(36px,5.5vw,64px)',lineHeight:0.92,color:'#0B1220',margin:'0 0 16px' }}>
-              10 STAGES.{' '}<GradSpan g="linear-gradient(90deg,#1769FF,#FF1838)">ONE OBJECTIVE.</GradSpan>
-            </h2>
-            <p style={{ fontFamily:'Inter,sans-serif',fontSize:16,color:'#536174' }}>
-              Every stage builds on the previous one. Learn the skill, train it, prove it, then move forward.
-            </p>
-          </div>
-        </FadeUp>
+      <section style={{ background:'#F7F9FC', padding:'100px 0 120px', position:'relative', overflow:'hidden' }}>
+        {/* Background glows */}
+        <div style={{ position:'absolute', top:-200, left:-200, width:600, height:600, background:'radial-gradient(circle, rgba(23,105,255,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:-200, right:-200, width:600, height:600, background:'radial-gradient(circle, rgba(255,36,72,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
 
-        {/* Roadmap container */}
-        <div style={{ position:'relative',width:'100%',height:'clamp(440px,38vw,600px)',borderRadius:20,overflow:'hidden' }}>
-          {/* Environment background */}
-          <div style={{ position:'absolute',inset:0,background:'linear-gradient(135deg,#EEF4FF 0%,#F7F0FF 40%,#FFF0F2 100%)',borderRadius:20 }} />
-          {/* Overlay for readability */}
-          <div style={{ position:'absolute',inset:0,background:'rgba(255,255,255,0.85)',borderRadius:20 }} />
-          {/* Side annotations */}
-          <div style={{ position:'absolute',left:20,top:'55%',transform:'translateY(-50%)',fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:8,letterSpacing:'0.28em',color:'#B0BBC8',writingMode:'vertical-rl',textTransform:'uppercase',userSelect:'none' }}>LEARN PRACTICE IMPROVE</div>
-          <div style={{ position:'absolute',right:20,top:'35%',transform:'translateY(-50%)',fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:8,letterSpacing:'0.28em',color:'#B0BBC8',writingMode:'vertical-rl',textTransform:'uppercase',userSelect:'none' }}>SAME PLAYERS DIFFERENT RESULTS</div>
+        <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
 
-          {/* SVG */}
-          <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid meet" overflow="visible"
-            style={{ position:'absolute',inset:0,width:'100%',height:'100%',zIndex:1 }}>
-            <defs>
-              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#1769FF"/>
-                <stop offset="50%" stopColor="#7137FF"/>
-                <stop offset="100%" stopColor="#FF1838"/>
-              </linearGradient>
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              <filter id="glow2" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur stdDeviation="8" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-            </defs>
+          {/* Header */}
+          <FadeUp>
+            <div style={{ textAlign:'center', marginBottom:64 }}>
+              <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#6D7B90', textTransform:'uppercase', marginBottom:16 }}>THE PATH</div>
+              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,5.5vw,72px)', lineHeight:0.92, color:'#080D16', margin:'0 0 16px' }}>
+                10 STAGES.{' '}
+                <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>ONE OBJECTIVE.</span>
+              </h2>
+              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#526078', marginTop:16 }}>
+                Every stage builds on the previous one. Learn the skill, train it, prove it, then move forward.
+              </p>
+            </div>
+          </FadeUp>
 
-            {/* Track */}
-            <path d={SVG_PATH} fill="none" stroke="#DCE4EF" strokeWidth="7" strokeLinecap="round"/>
-            {/* Glow halo */}
-            <path d={SVG_PATH} fill="none" stroke="url(#rg)" strokeWidth="16" strokeLinecap="round" opacity="0.13"/>
-            {/* Animated gradient line */}
-            <motion.path d={SVG_PATH} fill="none" stroke="url(#rg)" strokeWidth="4.5" strokeLinecap="round"
-              filter="url(#glow)"
-              initial={{ pathLength:0, opacity:0 }}
-              whileInView={{ pathLength:1, opacity:1 }}
-              viewport={{ once:true, amount:0.2 }}
-              transition={{ duration:3.2, ease:'easeInOut', delay:0.3 }}
-            />
-            {/* Animated dot travelling */}
-            <motion.circle r="7" fill="#FFFFFF" filter="url(#glow2)"
-              initial={{ offsetDistance:'0%', opacity:0 }}
-              whileInView={{ offsetDistance:'100%', opacity:[0,1,1,0] }}
-              viewport={{ once:true, amount:0.2 }}
-              style={{ offsetPath:`path("${SVG_PATH}")` }}
-              transition={{ duration:3.2, ease:'easeInOut', delay:0.3 }}
-            />
+          {/* Vertical timeline */}
+          <div style={{ position:'relative' }}>
+            {/* Center spine */}
+            <div style={{ position:'absolute', left:'50%', top:0, bottom:0, width:1, background:'linear-gradient(to bottom, #1769FF, #7047FF 50%, #FF2448)', transform:'translateX(-50%)', pointerEvents:'none' }} />
 
-            {/* Nodes */}
-            {STAGE_DATA.map((s, i) => {
+            {[
+              { id:1,  color:'#1769FF', name:'FOUNDATION',       sub:'Build Your Base',         chips:['Controls','Sensitivity','Movement','Camera','Gyroscope'] },
+              { id:2,  color:'#1769FF', name:'AIM FUNDAMENTALS', sub:'Build Reliable Aim',      chips:['Crosshair','ADS','Tracking','Flicks','Switching'] },
+              { id:3,  color:'#4A8AFF', name:'RECOIL & SPRAY',   sub:'Control Your Weapons',    chips:['Patterns','Spray','Burst','Familiarity','Distance'] },
+              { id:4,  color:'#7047FF', name:'CLOSE-RANGE',      sub:'Win The Fight',           chips:['Pre-fire','Peek','Hip fire','Movement','Timing'] },
+              { id:5,  color:'#7047FF', name:'MAP KNOWLEDGE',    sub:'Know The Battlefield',    chips:['POIs','Rotations','Zones','Vehicles','Compounds'] },
+              { id:6,  color:'#9B3FFF', name:'GAME SENSE',       sub:'Make Better Decisions',   chips:['Information','Timing','Risk','Prediction','Position'] },
+              { id:7,  color:'#C62DCE', name:'STRATEGY',         sub:'Control The Game',        chips:['Zone','Rotations','Position','Control','Fallback'] },
+              { id:8,  color:'#FF2448', name:'TEAMPLAY',         sub:'Play As One',             chips:['Communication','Roles','Trading','Spacing','Movement'] },
+              { id:9,  color:'#FF2448', name:'COMPETITIVE',      sub:'Perform Under Pressure',  chips:['Scrims','Adaptation','Pressure','Review','Clutch'] },
+              { id:10, color:'#FF2448', name:'GO ELITE',         sub:'Become Tournament Ready', chips:['Consistency','Decisions','Execution','Analysis','Growth'] },
+            ].map((stage, i) => {
+              const isLeft    = i % 2 === 0
               const isActive  = activeStage === i
-              const isHovered = hoveredNode === i
-              const above     = i % 2 === 0
-              const ly        = above ? s.cy - 38 : s.cy + 38
-              const ly2       = above ? s.cy - 24 : s.cy + 52
+              const isElite   = stage.id === 10
+              const nodeColor = stage.id <= 3 ? '#1769FF' : stage.id <= 6 ? '#7047FF' : '#FF2448'
+              const nodeOuterBg = stage.id <= 3 ? '#E8F0FF' : stage.id <= 6 ? '#F0EAFF' : '#FFE8EC'
+              const nodeGlow  = stage.id <= 3 ? 'rgba(23,105,255,0.3)' : stage.id <= 6 ? 'rgba(112,71,255,0.3)' : 'rgba(255,36,72,0.3)'
+
+              const card = (
+                <motion.div
+                  key={`card-${stage.id}`}
+                  initial={{ opacity:0, x: isLeft ? -40 : 40 }}
+                  whileInView={{ opacity:1, x:0 }}
+                  viewport={{ once:true, amount:0.15 }}
+                  transition={{ duration:0.6, delay:i*0.07, ease:[0.22,1,0.36,1] }}
+                  onClick={() => toggle(i)}
+                  whileHover={{ y:-3, boxShadow:'0 12px 40px rgba(7,17,31,0.12)', transition:{ duration:0.25 } }}
+                  style={{
+                    background:'#FFFFFF', borderRadius:12, padding:'24px 28px',
+                    border:`1px solid ${isActive ? stage.color+'66' : '#E8EEF5'}`,
+                    boxShadow: isActive ? `0 8px 32px ${stage.color}22` : '0 4px 20px rgba(7,17,31,0.06)',
+                    cursor:'pointer', flex:1, maxWidth:480,
+                    textAlign: isLeft ? 'right' : 'left',
+                    transition:'border-color 0.2s, box-shadow 0.2s',
+                  }}
+                >
+                  <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.25em', color:stage.color, marginBottom:4 }}>
+                    STAGE {String(stage.id).padStart(2,'0')}
+                  </div>
+                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:24, color:'#080D16', lineHeight:1 }}>{stage.name}</div>
+                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, color:'#526078', marginTop:4 }}>{stage.sub}</div>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:4, marginTop:12, justifyContent: isLeft ? 'flex-end' : 'flex-start' }}>
+                    {stage.chips.map(chip => (
+                      <span key={chip} style={{ background:`${stage.color}14`, border:`1px solid ${stage.color}33`, padding:'3px 10px', borderRadius:20, fontFamily:'Inter,sans-serif', fontSize:12, color:stage.color, fontWeight:500 }}>{chip}</span>
+                    ))}
+                  </div>
+                </motion.div>
+              )
+
+              const connector = <div style={{ width:24, height:1, background:stage.color, flexShrink:0 }} />
+
               return (
-                <g key={i} onClick={() => toggle(i)}
-                  onMouseEnter={() => setHoveredNode(i)}
-                  onMouseLeave={() => setHoveredNode(null)}
-                  style={{ cursor:'pointer' }}>
-                  {/* Outer glow ring */}
-                  <circle cx={s.cx} cy={s.cy} r={isActive || isHovered ? 36 : 27}
-                    fill={s.color} opacity={isActive ? 0.30 : isHovered ? 0.22 : 0.14}
-                    style={{ transition:'r 0.2s,opacity 0.2s' }}/>
-                  {/* Active pulse ring */}
-                  {isActive && <circle cx={s.cx} cy={s.cy} r={24} fill="none" stroke={s.color} strokeWidth="2" opacity="0.7"/>}
-                  {/* Main circle */}
-                  <motion.circle cx={s.cx} cy={s.cy}
-                    r={isHovered ? 21 : 18}
-                    fill={isActive ? s.color : '#FFFFFF'}
-                    stroke={s.color} strokeWidth="2.5"
-                    style={{ transformBox:'fill-box',transformOrigin:'50% 50%',transition:'r 0.15s' }}
-                    initial={{ scale:0, opacity:0 }}
-                    whileInView={{ scale:1, opacity:1 }}
-                    viewport={{ once:true }}
-                    transition={{ delay:i*0.25+3.2, type:'spring', stiffness:200, damping:16 }}/>
-                  {/* Crown for stage 10 */}
-                  {i === 9 && <motion.text x={s.cx} y={s.cy-32} textAnchor="middle" fill="#FF1838" fontSize="16"
-                    initial={{ opacity:0 }} whileInView={{ opacity:1 }} viewport={{ once:true }}
-                    transition={{ delay:9*0.25+3.7 }}>♛</motion.text>}
-                  {/* Number */}
-                  <motion.text x={s.cx} y={s.cy+5} textAnchor="middle" dominantBaseline="central"
-                    fill={isActive ? '#FFFFFF' : s.color} fontSize="11"
-                    fontFamily="Barlow Condensed, sans-serif" fontWeight="700"
-                    style={{ pointerEvents:'none',userSelect:'none' }}
-                    initial={{ opacity:0 }} whileInView={{ opacity:1 }} viewport={{ once:true }}
-                    transition={{ delay:i*0.25+3.35 }}>
-                    {String(i+1).padStart(2,'0')}
-                  </motion.text>
-                  {/* Connector tick */}
-                  <line x1={s.cx} y1={above ? s.cy-20 : s.cy+20} x2={s.cx} y2={above ? s.cy-34 : s.cy+34}
-                    stroke={s.color} strokeWidth="1.5" opacity="0.6"/>
-                  {/* Name */}
-                  <motion.text x={s.cx} y={ly} textAnchor="middle"
-                    fill="#0B1220" fontSize="12" fontFamily="Barlow Condensed, sans-serif" fontWeight="700"
-                    style={{ pointerEvents:'none',userSelect:'none' }}
-                    initial={{ opacity:0 }} whileInView={{ opacity:1 }} viewport={{ once:true }}
-                    transition={{ delay:i*0.25+3.45 }}>
-                    {s.name}
-                  </motion.text>
-                  <motion.text x={s.cx} y={ly2} textAnchor="middle"
-                    fill="#536174" fontSize="10" fontFamily="Inter, sans-serif"
-                    style={{ pointerEvents:'none',userSelect:'none' }}
-                    initial={{ opacity:0 }} whileInView={{ opacity:1 }} viewport={{ once:true }}
-                    transition={{ delay:i*0.25+3.55 }}>
-                    {s.sub}
-                  </motion.text>
-                </g>
+                <div key={stage.id} style={{ display:'flex', alignItems:'center', minHeight:120, marginBottom:8 }}>
+                  {/* Left half */}
+                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
+                    {isLeft ? <>{card}{connector}</> : null}
+                  </div>
+
+                  {/* Node */}
+                  <div style={{ width:80, flexShrink:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', position:'relative' }}>
+                    {isElite && <div style={{ position:'absolute', top:-24, fontSize:16, color:'#FF2448', lineHeight:1 }}>♛</div>}
+                    <motion.div
+                      initial={{ scale:0, opacity:0 }}
+                      whileInView={{ scale:1, opacity:1 }}
+                      viewport={{ once:true }}
+                      transition={{ delay:i*0.07+0.1, type:'spring', stiffness:180, damping:16 }}
+                      onClick={() => toggle(i)}
+                      style={{
+                        width:56, height:56, borderRadius:'50%', cursor:'pointer',
+                        background: isElite ? 'linear-gradient(135deg,#E8F0FF,#FFE8EC)' : nodeOuterBg,
+                        border:`2px solid ${isElite ? '#FF2448' : nodeColor}`,
+                        boxShadow:`0 0 ${isElite ? 30 : 20}px ${isElite ? 'rgba(255,36,72,0.4)' : nodeGlow}`,
+                        display:'flex', alignItems:'center', justifyContent:'center',
+                        transform: isActive ? 'scale(1.18)' : 'scale(1)',
+                        transition:'transform 0.2s, box-shadow 0.2s',
+                      }}
+                    >
+                      <div style={{
+                        width:40, height:40, borderRadius:'50%',
+                        background: isElite ? 'linear-gradient(135deg,#1769FF,#FF2448)' : nodeColor,
+                        display:'flex', alignItems:'center', justifyContent:'center',
+                      }}>
+                        <span style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:16, color:'#FFFFFF', lineHeight:1 }}>
+                          {String(stage.id).padStart(2,'0')}
+                        </span>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Right half */}
+                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'flex-start' }}>
+                    {!isLeft ? <>{connector}{card}</> : null}
+                  </div>
+                </div>
               )
             })}
-          </svg>
-        </div>
+          </div>
 
-        {/* Stage detail panel */}
-        <AnimatePresence mode="wait">
-          {active && (
-            <motion.div key={activeStage}
-              initial={{ opacity:0, y:-16 }}
-              animate={{ opacity:1, y:0 }}
-              exit={{ opacity:0, y:-10 }}
-              transition={{ duration:0.38, ease:[0.22,1,0.36,1] }}
-              style={{ display:'flex',borderRadius:20,overflow:'hidden',marginTop:24,border:`1px solid ${active.color}33`,boxShadow:`0 32px 80px rgba(7,17,31,0.35)` }}
-            >
-              {/* LEFT: info */}
-              <div style={{ background:'#07111F',padding:'40px 36px',flex:'0 0 44%',position:'relative' }}>
-                {/* Close */}
-                <button onClick={() => setActiveStage(null)}
-                  style={{ position:'absolute',top:16,right:16,width:32,height:32,borderRadius:'50%',background:'#1A2840',border:'none',cursor:'pointer',color:'#FFFFFF',fontSize:16,display:'flex',alignItems:'center',justifyContent:'center',transition:'background 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = active.color }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#1A2840' }}>×</button>
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:700,fontSize:10,letterSpacing:'0.28em',color:active.color,textTransform:'uppercase',marginBottom:6 }}>
-                  STAGE {String(active.id).padStart(2,'0')}
+          {/* Stage detail panel */}
+          <AnimatePresence mode="wait">
+            {active && (
+              <motion.div key={activeStage}
+                initial={{ opacity:0, y:-16 }}
+                animate={{ opacity:1, y:0 }}
+                exit={{ opacity:0, y:-10 }}
+                transition={{ duration:0.38, ease:[0.22,1,0.36,1] }}
+                style={{ background:'#07111F', borderRadius:20, padding:48, marginTop:32, border:`1px solid ${active.color}33`, boxShadow:'0 30px 80px rgba(23,105,255,0.15)' }}
+              >
+                {/* Header row */}
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:28 }}>
+                  <div>
+                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:11, letterSpacing:'0.28em', color:active.color, textTransform:'uppercase', marginBottom:8 }}>
+                      STAGE {String(active.id).padStart(2,'0')}
+                    </div>
+                    <h3 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:'clamp(28px,4vw,48px)', color:'#FFFFFF', lineHeight:0.92, margin:'0 0 8px' }}>{active.name}</h3>
+                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.22em', color:'#AAB8C8', textTransform:'uppercase', marginBottom:16 }}>{active.sub}</div>
+                    <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:`${active.color}18`, border:`1px solid ${active.color}44`, borderRadius:6, padding:'4px 12px' }}>
+                      <div style={{ width:6, height:6, borderRadius:'50%', background:active.color }} />
+                      <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:10, letterSpacing:'0.22em', color:active.color }}>IN PROGRESS</span>
+                    </div>
+                  </div>
+                  <button onClick={() => setActiveStage(null)}
+                    style={{ width:40, height:40, borderRadius:'50%', background:'#1A2840', border:'none', cursor:'pointer', color:'#FFFFFF', fontSize:18, display:'flex', alignItems:'center', justifyContent:'center', transition:'background 0.2s', flexShrink:0 }}
+                    onMouseEnter={e => { e.currentTarget.style.background = active.color }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#1A2840' }}>
+                    ×
+                  </button>
                 </div>
-                <h3 style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(24px,3.5vw,42px)',color:'#FFFFFF',lineHeight:0.92,margin:'0 0 6px' }}>
-                  {active.name}
-                </h3>
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:11,letterSpacing:'0.22em',color:'#AAB8C8',textTransform:'uppercase',marginBottom:16 }}>{active.sub}</div>
-                {/* Status badge */}
-                <div style={{ display:'inline-flex',alignItems:'center',gap:6,background:`${active.color}18`,border:`1px solid ${active.color}44`,borderRadius:6,padding:'4px 12px',marginBottom:18 }}>
-                  <div style={{ width:6,height:6,borderRadius:'50%',background:active.color }} />
-                  <span style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:700,fontSize:10,letterSpacing:'0.22em',color:active.color }}>IN PROGRESS</span>
-                </div>
-                <p style={{ fontFamily:'Inter,sans-serif',fontSize:14,color:'#94A3B8',lineHeight:1.7,marginBottom:24 }}>
+
+                <p style={{ fontFamily:'Inter,sans-serif', fontSize:15, color:'#94A3B8', lineHeight:1.7, marginBottom:28 }}>
                   {active.objective}. {active.why}
                 </p>
-                {/* Skills */}
-                <div style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:700,fontSize:10,letterSpacing:'0.28em',color:'#AAB8C8',textTransform:'uppercase',marginBottom:12 }}>CORE SKILLS</div>
-                <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:10 }}>
+
+                <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:10, letterSpacing:'0.28em', color:'#AAB8C8', textTransform:'uppercase', marginBottom:14 }}>CORE SKILLS</div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(140px,1fr))', gap:10, marginBottom:28 }}>
                   {active.skills.map(sk => (
-                    <div key={sk} style={{ display:'flex',alignItems:'center',gap:8 }}>
-                      <div style={{ width:18,height:18,borderRadius:'50%',background:`${active.color}18`,border:`1px solid ${active.color}55`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:9,color:active.color,fontWeight:700 }}>✓</div>
-                      <span style={{ fontFamily:'Inter,sans-serif',fontSize:13,color:'#C8D8F0' }}>{sk}</span>
+                    <div key={sk} style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <div style={{ width:18, height:18, borderRadius:'50%', background:`${active.color}18`, border:`1px solid ${active.color}55`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:9, color:active.color, fontWeight:700 }}>✓</div>
+                      <span style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#C8D8F0' }}>{sk}</span>
                     </div>
                   ))}
                 </div>
-                {/* Next stage */}
+
                 {active.next && (
-                  <div style={{ marginTop:24,paddingTop:20,borderTop:'1px solid #1E2D42' }}>
-                    <div style={{ fontFamily:'Rajdhani,sans-serif',fontSize:10,letterSpacing:'0.22em',color:'#536174',marginBottom:6 }}>NEXT STAGE</div>
-                    <div style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:18,color:'#FFFFFF' }}>{active.next} →</div>
+                  <div style={{ paddingTop:20, borderTop:'1px solid #1E2D42' }}>
+                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontSize:10, letterSpacing:'0.22em', color:'#536174', marginBottom:6 }}>NEXT STAGE</div>
+                    <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:20, color:'#FFFFFF' }}>{active.next} →</div>
                   </div>
                 )}
-              </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-              {/* RIGHT: image */}
-              <div style={{ flex:1,position:'relative',minHeight:340,background:'#0B1220' }}>
-                <div style={{ position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:12 }}>
-                  <div style={{ fontSize:56,opacity:0.2 }}>🗺️</div>
-                  <div style={{ fontFamily:'Rajdhani,sans-serif',fontSize:13,fontWeight:600,letterSpacing:'0.3em',color:'#3D5070' }}>[ STAGE IMAGE ]</div>
-                </div>
-                <img src={active.image} alt={active.name}
-                  style={{ position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover' }}
-                  onError={e => { e.target.style.display='none' }} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </Wrap>
+        </div>
+      </section>
 
       {/* ══ DEVELOPMENT LOOP ══ */}
       <Wrap bg="#FFFFFF" py="100px 0">
