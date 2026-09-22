@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BarChart2, Target, Users, Zap } from 'lucide-react'
 import Navbar from '../components/Navbar'
@@ -297,9 +297,9 @@ export default function RoadmapPage() {
           variants={stagger} initial="hidden" animate="visible"
           style={{
             position:'relative', zIndex:2,
-            width:'46%', minHeight:820,
+            width:'44%', maxWidth:'560px', minWidth:'480px', minHeight:820,
             display:'flex', flexDirection:'column', justifyContent:'center',
-            paddingLeft:'clamp(40px,5vw,80px)', paddingRight:'clamp(20px,3vw,48px)',
+            paddingLeft:'64px', paddingRight:'24px',
             paddingTop:80, paddingBottom:80,
           }}
           className="hero-left-col"
@@ -325,46 +325,43 @@ export default function RoadmapPage() {
           </motion.h1>
 
           {/* Description */}
-          <motion.p variants={child} style={{ fontFamily:'Inter,sans-serif', fontSize:18, lineHeight:1.55, color:'#526078', maxWidth:580, margin:'0 0 32px' }}>
+          <motion.p variants={child} style={{ fontFamily:'Inter,sans-serif', fontSize:18, lineHeight:1.55, color:'#526078', maxWidth:580, margin:0 }}>
             Stop guessing what to practice. Esports Elite gives you a structured path from foundational mechanics to competitive-level performance.
           </motion.p>
 
           {/* Buttons */}
-          <motion.div variants={child} style={{ display:'flex', gap:16, flexWrap:'wrap', alignItems:'center', marginBottom:40 }}>
+          <motion.div variants={child} style={{ display:'flex', flexDirection:'row', alignItems:'center', gap:'12px', marginTop:'28px', flexWrap:'nowrap' }}>
             <motion.button
               whileHover={{ y:-2, boxShadow:'0 8px 24px rgba(23,105,255,0.35)' }}
               whileTap={{ scale:0.97 }}
-              style={{ background:'#080D16', color:'#FFFFFF', padding:'18px 32px', borderRadius:10, border:'none', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:15, letterSpacing:'0.05em', cursor:'pointer', transition:'box-shadow 0.2s' }}
+              style={{ background:'#080D16', color:'#FFFFFF', padding:'14px 20px', borderRadius:10, border:'none', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:'13px', letterSpacing:'0.05em', cursor:'pointer', transition:'box-shadow 0.2s', whiteSpace:'nowrap', flexShrink:0 }}
             >
               START YOUR JOURNEY →
             </motion.button>
             <motion.button
               whileHover={{ y:-2, borderColor:'#1769FF' }}
               whileTap={{ scale:0.97 }}
-              style={{ background:'#FFFFFF', color:'#172033', padding:'18px 32px', borderRadius:10, border:'1.5px solid #D2DCE8', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:15, cursor:'pointer', transition:'border-color 0.2s' }}
+              style={{ background:'#FFFFFF', color:'#172033', padding:'14px 20px', borderRadius:10, border:'1.5px solid #D2DCE8', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:'13px', cursor:'pointer', transition:'border-color 0.2s', whiteSpace:'nowrap', flexShrink:0 }}
             >
               ▶&nbsp;&nbsp;WATCH HOW IT WORKS
             </motion.button>
           </motion.div>
 
           {/* Feature strip */}
-          <motion.div variants={child} style={{ display:'flex', alignItems:'center', gap:0, flexWrap:'wrap', rowGap:16 }}>
+          <motion.div variants={child} style={{ display:'flex', flexDirection:'row', flexWrap:'nowrap', alignItems:'center', gap:'10px', marginTop:'28px', width:'100%' }}>
             {[
-              { Icon:BarChart2, color:'#1769FF', line1:'STRUCTURED',  line2:'LEARNING'  },
-              { Icon:Target,    color:'#FF2448', line1:'MEASURABLE',  line2:'PROGRESS'  },
-              { Icon:Users,     color:'#7047FF', line1:'COMPETITIVE', line2:'READY'     },
-              { Icon:Zap,       color:'#FF2448', line1:'CONSISTENT',  line2:'GROWTH'    },
+              { Icon:BarChart2, color:'#1769FF', label:'STRUCTURED LEARNING'  },
+              { Icon:Target,    color:'#FF2448', label:'MEASURABLE PROGRESS'  },
+              { Icon:Users,     color:'#7047FF', label:'COMPETITIVE READY'    },
+              { Icon:Zap,       color:'#FF2448', label:'CONSISTENT GROWTH'    },
             ].map((f, i) => (
-              <div key={f.line1} style={{ display:'flex', alignItems:'center', gap:0 }}>
-                {i > 0 && <div style={{ width:1, height:36, background:'#D7DFEA', margin:'0 24px', flexShrink:0 }} />}
-                <div style={{ display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
-                  <f.Icon size={20} color={f.color} strokeWidth={1.8} />
-                  <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
-                    <span style={{ fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:12, color:'#34435A', lineHeight:1.3 }}>{f.line1}</span>
-                    <span style={{ fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:12, color:'#34435A', lineHeight:1.3 }}>{f.line2}</span>
-                  </div>
+              <React.Fragment key={f.label}>
+                {i > 0 && <div style={{ width:'1px', height:'24px', background:'#D7DFEA', flexShrink:0 }} />}
+                <div style={{ display:'flex', flexDirection:'row', alignItems:'center', gap:'6px', flexShrink:0 }}>
+                  <f.Icon size={14} color={f.color} strokeWidth={1.8} />
+                  <span style={{ fontFamily:'Inter, sans-serif', fontWeight:600, fontSize:'10px', color:'#34435A', whiteSpace:'nowrap', letterSpacing:'0.03em', lineHeight:1.2 }}>{f.label}</span>
                 </div>
-              </div>
+              </React.Fragment>
             ))}
           </motion.div>
 
