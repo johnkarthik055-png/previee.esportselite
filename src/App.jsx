@@ -1,6 +1,6 @@
+import { useEffect } from 'react'
+import { motion, useScroll, useSpring, useMotionValue } from 'framer-motion'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { AuthProvider } from './context/AuthContext'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
@@ -26,54 +26,56 @@ import RefundPolicy from './pages/RefundPolicy'
 import Cookies      from './pages/Cookies'
 import NotFound     from './pages/NotFound'
 
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
+  return (
+    <motion.div
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0,
+        height: 2,
+        background: 'linear-gradient(90deg, #1769FF, #7137FF, #FF1838)',
+        transformOrigin: 'left',
+        scaleX,
+        zIndex: 9999,
+        pointerEvents: 'none',
+      }}
+    />
+  )
+}
+
 function CursorGlow() {
-  const x = useMotionValue(-100)
-  const y = useMotionValue(-100)
-  const springX = useSpring(x, { stiffness: 140, damping: 18 })
-  const springY = useSpring(y, { stiffness: 140, damping: 18 })
+  const mouseX = useMotionValue(-100)
+  const mouseY = useMotionValue(-100)
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 15 })
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 15 })
 
   useEffect(() => {
-    const move = (e) => { x.set(e.clientX - 20); y.set(e.clientY - 20) }
+    const move = (e) => { mouseX.set(e.clientX - 20); mouseY.set(e.clientY - 20) }
     window.addEventListener('mousemove', move)
     return () => window.removeEventListener('mousemove', move)
-  }, [x, y])
+  }, [])
 
   return (
     <motion.div
       aria-hidden="true"
       style={{
-        position: 'fixed', top: 0, left: 0,
-        x: springX, y: springY,
+        position: 'fixed',
+        left: springX, top: springY,
         width: 40, height: 40,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(23,105,255,0.18) 0%, transparent 70%)',
-        filter: 'blur(10px)',
+        background: 'radial-gradient(circle, rgba(23,105,255,0.2) 0%, transparent 70%)',
         pointerEvents: 'none',
-        zIndex: 9998,
+        zIndex: 9997,
         willChange: 'transform',
       }}
     />
   )
 }
 
-function ScrollProgress() {
-  const [pct, setPct] = useState(0)
-  useEffect(() => {
-    const update = () => {
-      const el    = document.documentElement
-      const total = el.scrollHeight - el.clientHeight
-      setPct(total > 0 ? (el.scrollTop / total) * 100 : 0)
-    }
-    window.addEventListener('scroll', update, { passive: true })
-    return () => window.removeEventListener('scroll', update)
-  }, [])
-  return <div className="scroll-progress" style={{ width: `${pct}%` }} />
-}
-
 function Layout() {
   return (
     <>
-      <ScrollProgress />
       <ScrollToTop />
       <Navbar />
       <main style={{ paddingTop: '64px' }}>
@@ -86,7 +88,6 @@ function Layout() {
           <Route path="/contact"   element={<Contact />} />
           <Route path="/help"      element={<Help />} />
           <Route path="/faq"       element={<FAQ />} />
-          {/* direct-URL-only demo of the receipt-printer widget — not in any nav */}
           <Route path="/receipt-preview" element={<ReceiptPreview />} />
           <Route path="/privacy"        element={<Privacy />} />
           <Route path="/terms"          element={<Terms />} />
@@ -104,16 +105,16 @@ function Layout() {
 export default function App() {
   return (
     <AuthProvider>
+      <ScrollProgress />
       <CursorGlow />
       <BrowserRouter>
         <Routes>
-          {/* Standalone pages — include their own Navbar/Footer */}
-          <Route path="/" element={<Home />} />
+          <Route path="/"         element={<Home />} />
+          <Route path="/home"     element={<Home />} />
           <Route path="/features" element={<Features />} />
-          <Route path="/roadmap" element={<Roadmap />} />
-          <Route path="/pricing" element={<Pricing />} />
-          {/* All other routes go through the full Layout */}
-          <Route path="/*" element={<Layout />} />
+          <Route path="/roadmap"  element={<Roadmap />} />
+          <Route path="/pricing"  element={<Pricing />} />
+          <Route path="/*"        element={<Layout />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -1,22 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion, useScroll } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import RadialRevealButton from './ui/RadialRevealButton'
 
 const LINKS = ['Home', 'Features', 'Roadmap', 'Pricing', 'About']
-
-const PAGE_MAP = {
-  'Home':     'home',
-  'Features': 'features',
-  'Roadmap':  'roadmap',
-  'Pricing':  'pricing',
-  'About':    'about',
-}
+const PAGE_MAP = { Home: 'home', Features: 'features', Roadmap: 'roadmap', Pricing: 'pricing', About: 'about' }
 
 function NavLink({ link, activePage }) {
-  const isActive = activePage
-    ? PAGE_MAP[link] === activePage
-    : link === 'Home'
+  const isActive = activePage ? PAGE_MAP[link] === activePage : link === 'Home'
   const href = link === 'Home' ? '/' : `/${link.toLowerCase()}`
   const [hov, setHov] = useState(false)
 
@@ -30,7 +20,7 @@ function NavLink({ link, activePage }) {
         fontFamily: 'Inter, sans-serif',
         fontWeight: 500,
         fontSize: 14,
-        color: isActive || hov ? '#1769FF' : '#526071',
+        color: isActive ? '#1769FF' : hov ? '#111827' : '#536174',
         textDecoration: 'none',
         paddingBottom: 6,
         transition: 'color 0.2s ease',
@@ -38,7 +28,8 @@ function NavLink({ link, activePage }) {
       }}
     >
       {link}
-      {isActive ? (
+      {/* Active underline */}
+      {isActive && (
         <span style={{
           position: 'absolute', bottom: 0, left: '50%',
           transform: 'translateX(-50%)',
@@ -46,15 +37,18 @@ function NavLink({ link, activePage }) {
           background: '#1769FF',
           borderRadius: 2, display: 'block',
         }} />
-      ) : (
+      )}
+      {/* Hover underline */}
+      {!isActive && (
         <motion.span
-          animate={{ width: hov ? '100%' : '0%' }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
+          animate={{ scaleX: hov ? 1 : 0 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
           style={{
             position: 'absolute', bottom: 0, left: 0,
-            height: 2,
+            height: 2, width: '100%',
             background: 'linear-gradient(90deg, #1769FF, #FF1838)',
             borderRadius: 2, display: 'block',
+            transformOrigin: 'left',
           }}
         />
       )}
@@ -68,7 +62,7 @@ export default function Navbar({ activePage }) {
   const { scrollY } = useScroll()
 
   useEffect(() => {
-    const unsub = scrollY.on('change', v => setScrolled(v > 12))
+    const unsub = scrollY.on('change', v => setScrolled(v > 80))
     return unsub
   }, [scrollY])
 
@@ -79,12 +73,12 @@ export default function Navbar({ activePage }) {
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          background: 'rgba(255,255,255,0.88)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(220,227,236,0.7)',
-          boxShadow: scrolled ? '0 4px 24px rgba(7,17,31,0.08)' : 'none',
-          transition: 'box-shadow 0.3s ease',
+          background: scrolled ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.92)',
+          backdropFilter: scrolled ? 'blur(20px)' : 'blur(12px)',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'blur(12px)',
+          borderBottom: '1px solid #DCE4EF',
+          boxShadow: scrolled ? '0 1px 40px rgba(0,0,0,0.06)' : 'none',
+          transition: 'box-shadow 0.3s ease, background 0.3s ease',
         }}
       >
         <div
@@ -93,7 +87,7 @@ export default function Navbar({ activePage }) {
             margin: '0 auto',
             paddingLeft: 32,
             paddingRight: 32,
-            height: 80,
+            height: 72,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -101,50 +95,38 @@ export default function Navbar({ activePage }) {
           }}
           className="nav-inner"
         >
-          {/* Logo + brand name */}
-          <a href="/" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <img
-                src="/hero-art.png"
-                alt="Esports Elite"
-                style={{ width: 80, height: 80, objectFit: 'contain', display: 'block', flexShrink: 0 }}
-              />
-              <span style={{
-                fontFamily: 'Barlow Condensed, sans-serif',
-                fontSize: '28px',
-                fontWeight: '800',
-                letterSpacing: '0.08em',
-                background: 'linear-gradient(90deg, #1769FF 0%, #7B35FF 50%, #FF1838 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                whiteSpace: 'nowrap',
-                lineHeight: 1,
-              }}>ESPORTS ELITE</span>
+          {/* Logo */}
+          <a href="/" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+            <img src="/hero-art.png" alt="Esports Elite" style={{ width: 44, height: 44, objectFit: 'contain' }} />
+            <div>
+              <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 20, color: '#111827', letterSpacing: '0.06em' }}>ESPORTS </span>
+              <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 20, background: 'linear-gradient(90deg, #1769FF, #FF1838)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', letterSpacing: '0.06em' }}>ELITE</span>
             </div>
           </a>
 
           {/* Center links */}
-          <nav className="nav-links" style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+          <nav className="nav-links" style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
             {LINKS.map(link => <NavLink key={link} link={link} activePage={activePage} />)}
           </nav>
 
           {/* Right: CTA + hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div className="nav-cta">
-              <RadialRevealButton
-                label="JOIN WAITLIST →"
-                padding="10px 24px"
-                rounded={8}
-                font={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14 }}
-                colors={{
-                  fill: '#0B0F16',
-                  textColor: '#FFFFFF',
-                  hoverFill: '#1769FF',
-                  hoverTextColor: '#FFFFFF',
+              <motion.a
+                href="/pricing"
+                whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  background: '#0B1220', color: '#FFFFFF',
+                  padding: '10px 24px', borderRadius: 8,
+                  fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14,
+                  textDecoration: 'none', cursor: 'pointer',
+                  display: 'inline-block', transition: 'box-shadow 0.2s',
+                  whiteSpace: 'nowrap',
                 }}
-                border={{ borderWidth: 0 }}
-              />
+              >
+                JOIN WAITLIST →
+              </motion.a>
             </div>
 
             <button
@@ -165,8 +147,8 @@ export default function Navbar({ activePage }) {
         animate={menuOpen ? { opacity: 1, pointerEvents: 'auto' } : { opacity: 0, pointerEvents: 'none' }}
         transition={{ duration: 0.25 }}
         style={{
-          position: 'fixed', inset: 0, top: 80,
-          background: 'rgba(255,255,255,0.97)',
+          position: 'fixed', inset: 0, top: 72,
+          background: 'rgba(255,255,255,0.98)',
           backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
           zIndex: 49, display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center', gap: 0,
@@ -181,10 +163,11 @@ export default function Navbar({ activePage }) {
             animate={menuOpen ? { y: 0, opacity: 1 } : { y: 16, opacity: 0 }}
             transition={{ delay: menuOpen ? i * 0.06 : 0, duration: 0.25 }}
             style={{
-              fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 42,
+              fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 48,
               color: activePage && PAGE_MAP[link] === activePage ? '#1769FF' : '#111827',
-              textDecoration: 'none', padding: '14px 0',
-              width: '100%', textAlign: 'center', borderBottom: '1px solid #DCE3EC',
+              textDecoration: 'none', padding: '12px 0',
+              width: '100%', textAlign: 'center',
+              borderBottom: '1px solid #DCE4EF',
               letterSpacing: '0.02em',
             }}
           >
@@ -197,25 +180,25 @@ export default function Navbar({ activePage }) {
           transition={{ delay: menuOpen ? LINKS.length * 0.06 : 0, duration: 0.25 }}
           style={{ marginTop: 32 }}
         >
-          <RadialRevealButton
-            label="JOIN WAITLIST →"
-            padding="14px 40px"
-            rounded={8}
-            font={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 15 }}
-            colors={{
-              fill: '#0B0F16',
-              textColor: '#FFFFFF',
-              hoverFill: '#1769FF',
-              hoverTextColor: '#FFFFFF',
+          <motion.a
+            href="/pricing"
+            whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
+            whileTap={{ scale: 0.97 }}
+            style={{
+              background: '#0B1220', color: '#FFFFFF',
+              padding: '14px 40px', borderRadius: 8,
+              fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15,
+              textDecoration: 'none', display: 'inline-block',
             }}
-            border={{ borderWidth: 0 }}
-          />
+          >
+            JOIN WAITLIST →
+          </motion.a>
         </motion.div>
       </motion.div>
 
       <style>{`
         @media (max-width: 767px) {
-          .nav-inner { padding-left: 20px !important; padding-right: 20px !important; height: 68px !important; }
+          .nav-inner { padding-left: 20px !important; padding-right: 20px !important; height: 64px !important; }
           .nav-links  { display: none !important; }
           .nav-cta    { display: none !important; }
           .hamburger  { display: flex !important; }

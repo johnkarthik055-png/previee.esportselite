@@ -77,9 +77,9 @@ function ImagePlaceholder({ color, glow, icon, label, animX = 40 }) {
         overflow: 'hidden',
         aspectRatio: '16/10',
         maxWidth: 580,
-        border: `1px solid ${color}44`,
+        border: `1px solid ${color}33`,
         boxShadow: `0 20px 60px ${glow}`,
-        background: '#07111F',
+        background: '#F7F9FC',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -91,26 +91,26 @@ function ImagePlaceholder({ color, glow, icon, label, animX = 40 }) {
       <div style={{
         position: 'absolute', top: 12, left: 12,
         width: 20, height: 20,
-        borderTop: `2px solid ${color}66`,
-        borderLeft: `2px solid ${color}66`,
+        borderTop: `2px solid ${color}55`,
+        borderLeft: `2px solid ${color}55`,
       }} />
       {/* Bottom-right bracket */}
       <div style={{
         position: 'absolute', bottom: 12, right: 12,
         width: 20, height: 20,
-        borderBottom: `2px solid ${color}66`,
-        borderRight: `2px solid ${color}66`,
+        borderBottom: `2px solid ${color}55`,
+        borderRight: `2px solid ${color}55`,
       }} />
 
       {/* Shimmer */}
       <div className="shimmer-overlay" aria-hidden="true" />
       {/* Center content */}
-      <span style={{ fontSize: 48, opacity: 0.4, lineHeight: 1 }}>{icon}</span>
+      <span style={{ fontSize: 48, opacity: 0.5, lineHeight: 1 }}>{icon}</span>
       <span style={{
         fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 13,
-        letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase',
+        letterSpacing: '0.3em', color: '#9BAABB', textTransform: 'uppercase',
       }}>[ {label} SCREENSHOT ]</span>
-      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#3D4F63' }}>
+      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#B0BAC8' }}>
         Image coming soon
       </span>
     </motion.div>
