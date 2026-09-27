@@ -17,10 +17,10 @@ const faqs = [
 ]
 
 const timeline = [
-  { year: 'THE PROBLEM', accent: '#1769FF', title: 'THE PROBLEM', desc: 'We were grinding BGMI every day but kept running into the same problem: more hours did not always mean more improvement. YouTube had information. The game had practice modes. But there was no clear system connecting practice, performance and progression.' },
-  { year: 'THE IDEA', accent: '#4A8AFF', title: 'THE IDEA', desc: 'The first version started as a personal practice tracker. We began mapping the skills that actually needed to be developed and turned them into a structured progression system. That became the foundation of the 10-stage roadmap.' },
-  { year: 'THE BUILD', accent: '#7137FF', title: 'THE BUILD', desc: 'The idea grew into a complete platform. We built the first versions of the training system, Match Logger, Map Knowledge, Strategy Maker and AI-powered analysis — then started testing with BGMI players.' },
-  { year: '2025', accent: '#FF1838', title: 'THE BUILD CONTINUES', desc: 'We are still building. The platform is in development — being tested, refined and shaped around what BGMI players actually need before we open the doors.' },
+  { year: '2023',       accent: '#1769FF', title: 'THE PROBLEM',       desc: 'We were grinding BGMI every day but kept running into the same problem: more hours did not always mean more improvement. YouTube had information. The game had practice modes. But there was no clear system connecting practice, performance and progression.' },
+  { year: 'Early 2024', accent: '#4A8AFF', title: 'THE IDEA',           desc: 'The first version started as a personal practice tracker. We began mapping the skills that actually needed to be developed and turned them into a structured progression system. That became the foundation of the 10-stage roadmap.' },
+  { year: 'Mid 2024',   accent: '#7137FF', title: 'THE BUILD',          desc: 'The idea grew into a complete platform. We built the first versions of the training system, Match Logger, Map Knowledge, Strategy Maker and AI-powered analysis — then started testing with BGMI players.' },
+  { year: '2025',       accent: '#FF1838', title: 'THE BUILD CONTINUES', desc: 'We are still building. The platform is in development — being tested, refined and shaped around what BGMI players actually need before we open the doors.' },
 ]
 
 const G = {
