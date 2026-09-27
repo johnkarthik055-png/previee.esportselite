@@ -41,6 +41,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
           server-dir: ./domains/esportselite.in/public_html/preview/
+          state-name: .ftp-deploy-sync-state-v2.json
           exclude: |
             **/.git*
             **/.git*/**

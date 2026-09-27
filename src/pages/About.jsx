@@ -233,30 +233,33 @@ export default function About() {
               <span style={{ display: 'block', ...G }}>THE PLATFORM.</span>
             </div>
 
-            {/* Image card with spinning border */}
-            <div style={{ position: 'relative', padding: 2, borderRadius: 22, overflow: 'hidden' }}>
-              {/* Spinning conic gradient — CSS animation, off main thread */}
-              <div className="ab-spin-border" />
-              {/* Dark card */}
-              <div style={{ position: 'relative', zIndex: 1, borderRadius: 20, overflow: 'hidden', background: '#07111F' }}>
-                <img
-                  src="/sparkop.jpeg"
-                  alt="SparkOp — Karthik, Founder"
-                  style={{ width: '100%', display: 'block', objectFit: 'cover', objectPosition: 'top center', maxHeight: 420 }}
-                />
-                {/* Bottom gradient */}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top,rgba(7,17,31,0.95) 0%,transparent 100%)', pointerEvents: 'none' }} />
-                {/* Info overlay */}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }}>
-                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 32, color: '#FFFFFF', lineHeight: 1 }}>KARTHIK</div>
-                  <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 16, marginTop: 2, ...G }}>SparkOp</div>
-                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#AAB8C8', marginTop: 4 }}>Founder · Esports Elite</div>
-                  <div style={{ display: 'flex', flexDirection: 'row', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
-                    {['🎮 BGMI Player', '🏆 Founder', '📍 Karnataka'].map(pill => (
-                      <span key={pill} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '4px 10px', fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#FFFFFF' }}>{pill}</span>
-                    ))}
-                  </div>
-                </div>
+            {/* Clean image card — no spinning border */}
+            <div style={{ borderRadius: 18, overflow: 'hidden', position: 'relative', background: '#F7F9FC' }}>
+              <img
+                src="/sparkop.jpeg"
+                alt="Karthik - SparkOp, Founder of Esports Elite"
+                loading="eager"
+                onError={(e) => { e.target.style.display = 'none' }}
+                style={{
+                  width: '100%',
+                  height: '460px',
+                  display: 'block',
+                  objectFit: 'cover',
+                  objectPosition: 'top center',
+                  borderRadius: '18px',
+                }}
+              />
+            </div>
+
+            {/* Name / tag / pills — below image */}
+            <div style={{ marginTop: 20 }}>
+              <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 36, color: '#111827', lineHeight: 1 }}>KARTHIK</div>
+              <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 18, marginTop: 4, background: 'linear-gradient(90deg,#1769FF,#FF1838)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>SparkOp</div>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#536174', marginTop: 6 }}>Founder · Esports Elite</div>
+              <div style={{ display: 'flex', flexDirection: 'row', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
+                {['🎮 BGMI Player', '🏆 Founder', '📍 Karnataka'].map(pill => (
+                  <span key={pill} style={{ background: '#F7F9FC', border: '1px solid #DCE4EF', borderRadius: 20, padding: '6px 14px', fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#536174' }}>{pill}</span>
+                ))}
               </div>
             </div>
           </motion.div>
