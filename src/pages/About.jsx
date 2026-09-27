@@ -1,402 +1,471 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Target, Shield, Star, Users, Zap, MapPin, ChevronRight, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
 
-/* ─── Constants ─── */
+const ease = [0.23, 1, 0.32, 1]
+
 const faqs = [
-  { q: 'Who is Esports Elite for?', a: "Any BGMI player who wants to improve seriously — from beginners learning the basics to experienced players breaking into competitive. If you're willing to put in the work, this platform is built for you." },
-  { q: 'Which maps are covered?', a: 'Erangel, Miramar and Rondo are fully covered with zone breakdowns, rotation paths and strategy overlays. Additional maps will be added based on the active competitive meta.' },
-  { q: 'Do I need to be a good player to join?', a: "No. Esports Elite is designed to take you from wherever you are right now to the next level. The 10-stage roadmap starts from the very basics and builds up to tournament-ready performance." },
-  { q: 'Is there a free trial?', a: 'No free trial currently. Full access from day one for ₹149/month. Cancel anytime, no questions asked.' },
-  { q: 'How is this different from watching YouTube guides?', a: 'YouTube gives you random tips. Esports Elite gives you a structured system — a roadmap, AI feedback on your actual matches, and tools to track real improvement over time.' },
+  { q: 'WHO IS ESPORTS ELITE FOR?', a: 'Esports Elite is built for BGMI players who want a more structured approach to improvement — from players developing their fundamentals to competitive players preparing for scrims and tournaments.' },
+  { q: 'WHICH MAPS ARE COVERED?', a: 'Map coverage depends on the training and analysis features currently available on the platform. We continue expanding coverage as the platform evolves.' },
+  { q: 'DO I NEED TO BE A GOOD PLAYER TO JOIN?', a: 'No. Esports Elite is not built around your current rank. It is built around helping you improve from wherever you are.' },
+  { q: 'IS THERE A FREE TRIAL?', a: 'Yes. New users can explore the available trial experience before choosing a subscription.' },
+  { q: 'HOW IS THIS DIFFERENT FROM WATCHING YOUTUBE GUIDES?', a: 'YouTube can teach you individual concepts. Esports Elite is designed to connect those concepts into a structured improvement process — training, tracking, analysis and progression in one place.' },
+]
+
+const timeline = [
+  { year: '2023', accent: '#1769FF', title: 'THE PROBLEM', desc: 'We were grinding BGMI every day but kept running into the same problem: more hours did not always mean more improvement. YouTube had information. The game had practice modes. But there was no clear system connecting practice, performance and progression.' },
+  { year: 'EARLY 2024', accent: '#4A8AFF', title: 'THE IDEA', desc: 'The first version started as a personal practice tracker. We began mapping the skills that actually needed to be developed and turned them into a structured progression system. That became the foundation of the 10-stage roadmap.' },
+  { year: 'MID 2024', accent: '#7137FF', title: 'THE BUILD', desc: 'The idea grew into a complete platform. We built the first versions of the training system, Match Logger, Map Knowledge, Strategy Maker and AI-powered analysis — then started testing with BGMI players.' },
+  { year: '2025', accent: '#FF1838', title: 'THE LAUNCH', desc: 'Esports Elite launched publicly at ₹149/month, bringing structured training, performance tracking and progression into one platform. And we are still building.' },
 ]
 
 const G = {
   background: 'linear-gradient(90deg,#1769FF,#7137FF,#FF1838)',
-  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
 }
 
-const E = [0.23, 1, 0.32, 1]
+const missionCards = [
+  { n: '01', title: 'STRUCTURED',   desc: 'A clear progression system that gives your practice direction instead of leaving you wondering what to work on next.' },
+  { n: '02', title: 'DATA-DRIVEN',  desc: 'Turn your match and practice data into useful feedback, identify patterns and understand where you need to improve.' },
+  { n: '03', title: 'PLAYER-BUILT', desc: 'Designed around the real problems competitive BGMI players face — inconsistent practice, unclear weaknesses and the lack of a structured improvement path.' },
+]
+
+const values = [
+  { n: '01', label: 'DISCIPLINE FIRST', title: 'THERE ARE NO SHORTCUTS TO BECOMING A BETTER PLAYER.', desc: 'We believe consistent, purposeful practice beats mindless grinding. Every feature we build is designed to help players practice with intent and improve over time.' },
+  { n: '02', label: 'BUILT FOR SQUADS', title: 'BGMI IS MORE THAN AN INDIVIDUAL GAME.',              desc: 'Individual mechanics matter, but communication, coordination and decision-making matter just as much. Esports Elite is built to support both individual development and squad improvement.' },
+  { n: '03', label: 'PLAYERS FIRST',    title: 'EVERY FEATURE STARTS WITH ONE QUESTION.',            desc: 'Does this actually help the player improve? No unnecessary complexity. No distractions. Just tools designed around the grind.' },
+]
 
 export default function About() {
   const [openFaq, setOpenFaq] = useState(null)
 
   return (
     <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
-      <Navbar />
+      <Navbar activePage="about" />
 
-      {/* ══════════════════════════════════════════
+      {/* ════════════════════════════════════════
           SECTION 1 — HERO
-      ══════════════════════════════════════════ */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: '70vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', paddingTop: 64 }}>
-        <div style={{ position: 'absolute', left: -200, top: -200, width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.09) 0%,transparent 60%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', right: -200, bottom: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.07) 0%,transparent 60%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: 0, left: 0, width: 300, height: 380, clipPath: 'polygon(0 0,100% 0,55% 100%,0 85%)', background: '#1769FF', opacity: 0.05, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: 0, right: 0, width: 260, height: 340, clipPath: 'polygon(45% 0,100% 0,100% 85%,0 100%)', background: '#FF1838', opacity: 0.05, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '28px 28px', opacity: 0.6, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 'min(20vw,200px)', color: '#111827', opacity: 0.02, pointerEvents: 'none', userSelect: 'none', whiteSpace: 'nowrap' }}>ABOUT</div>
+      ════════════════════════════════════════ */}
+      <section style={{ background: '#FFFFFF', minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', borderBottom: '1px solid #DCE4EF' }}>
+        {/* Dot grid */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '32px 32px', opacity: 0.5, pointerEvents: 'none' }} />
+        {/* Blue tint top-left */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: 600, height: 400, background: 'radial-gradient(circle,rgba(23,105,255,0.05) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
         <div className="ab-hero-inner">
-          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-            <div style={{ width: 40, height: 2, background: '#1769FF', borderRadius: 1 }} />
-            <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 13, letterSpacing: '0.35em', color: '#1769FF', textTransform: 'uppercase' }}>OUR STORY</span>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.1 }} className="ab-h1" style={{ color: '#111827' }}>WE BUILT</motion.div>
-          <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.2 }} className="ab-h1" style={{ color: '#111827' }}>WHAT WE</motion.div>
-          <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.3 }} className="ab-h1"><span style={G}>NEEDED.</span></motion.div>
-
-          <motion.p initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.4 }} className="ab-desc">
-            As BGMI players ourselves, we couldn't find a structured way to improve. So we built one.
-          </motion.p>
-
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.8, ease: E, delay: 0.5 }} style={{ width: 80, height: 2, background: 'linear-gradient(to right,#1769FF,transparent)', marginTop: 24, marginBottom: 24, transformOrigin: 'left' }} />
-
-          <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.6 }} style={{ display: 'flex', flexDirection: 'row', gap: 32, marginTop: 8 }}>
-            {[{ num: '2024', label: 'FOUNDED' }, { num: 'India', label: 'BASED' }].map(s => (
-              <div key={s.label} style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 36, ...G, lineHeight: 1 }}>{s.num}</span>
-                <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: '#536174', marginTop: 4, textTransform: 'uppercase' }}>{s.label}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 2 — MISSION
-      ══════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '96px 0' }}>
-        <div className="ab-inner ab-mission-row">
-          <motion.div
-            initial={{ opacity: 0, transform: 'translateX(-40px)' }}
-            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: E }}
-            style={{ flex: 1 }}
-          >
-            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#1769FF', textTransform: 'uppercase', marginBottom: 16 }}>OUR MISSION</div>
-
-            <div className="ab-mission-h2">
-              <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '0.01em', color: '#111827' }}>DISCIPLINE</div>
-              <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '0.01em', color: '#111827' }}>BUILDS</div>
-              <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '0.01em', ...G }}>FREEDOM.</div>
-            </div>
-
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginTop: 24, maxWidth: 480 }} className="ab-mission-p">
-              Most BGMI players grind for hours with no real improvement plan. They repeat the same mistakes, plateau at the same rank, and eventually quit.
-            </p>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginTop: 16, maxWidth: 480 }} className="ab-mission-p">
-              Esports Elite exists to change that. We believe every player — regardless of current rank — deserves access to the same structured training system that professional teams use.
-            </p>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginTop: 16, maxWidth: 480 }} className="ab-mission-p">
-              Our platform gives you a clear 10-stage roadmap, AI-powered coaching on your actual matches, and the tools to analyze and improve every single session.
-            </p>
-
-            <div style={{ marginTop: 32 }}>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
-                <RadialRevealButton fill="#0B1220" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, color: '#FFFFFF', cursor: 'pointer' }}>
-                  JOIN FOR ₹149/MONTH <ChevronRight size={16} strokeWidth={2.5} />
-                </RadialRevealButton>
-              </Link>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, transform: 'translateX(40px)' }}
-            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: E }}
-            style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}
-            className="ab-mission-right"
-          >
+          {/* H1 lines — staggered */}
+          <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88, letterSpacing: '-0.02em', color: '#111827' }} className="ab-h1">
             {[
-              { accent: '#1769FF', bg: '#EEF5FF', border: 'rgba(23,105,255,0.15)', shadow: 'rgba(23,105,255,0.1)', Icon: Target, title: 'STRUCTURED',    desc: 'A clear path from beginner to competitive — no guessing, no wasted time.' },
-              { accent: '#7137FF', bg: '#F0EAFF', border: 'rgba(113,55,255,0.15)', shadow: 'rgba(113,55,255,0.1)', Icon: Zap,    title: 'DATA-DRIVEN',   desc: 'AI analysis on every match you play. Real feedback, not generic advice.' },
-              { accent: '#FF1838', bg: '#FFF0F2', border: 'rgba(255,24,56,0.15)',  shadow: 'rgba(255,24,56,0.1)',  Icon: Shield, title: 'PROVEN SYSTEM', desc: 'Built by BGMI players, for BGMI players. We know exactly what holds you back.' },
-            ].map(card => (
-              <motion.div
-                key={card.title}
-                whileHover={{ y: -4, boxShadow: `0 12px 40px ${card.shadow}` }}
-                style={{ background: '#FFFFFF', border: `1px solid ${card.border}`, borderRadius: 16, padding: 24, borderLeft: `4px solid ${card.accent}`, display: 'flex', gap: 16, alignItems: 'flex-start', transition: 'box-shadow 0.25s' }}
+              { text: 'WE BUILT',  gradient: false },
+              { text: 'WHAT WE',   gradient: false },
+              { text: 'NEEDED.',   gradient: true  },
+            ].map((line, i) => (
+              <motion.span
+                key={line.text}
+                initial={{ opacity: 0, transform: 'translateY(60px)' }}
+                animate={{ opacity: 1, transform: 'translateY(0px)' }}
+                transition={{ duration: 0.9, ease, delay: i * 0.12 }}
+                style={{ display: 'block', ...(line.gradient ? G : {}) }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: card.bg, border: `1px solid ${card.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <card.Icon size={20} color={card.accent} strokeWidth={1.8} />
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 22, color: '#111827' }}>{card.title}</div>
-                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#536174', marginTop: 4, lineHeight: 1.5 }}>{card.desc}</div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 3 — VALUES
-      ══════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', padding: '96px 0' }}>
-        <div className="ab-inner">
-          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase', marginBottom: 12 }}>WHAT WE STAND FOR</div>
-            <div className="ab-section-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em' }}>
-              OUR <span style={G}>VALUES</span>
-            </div>
-          </motion.div>
-
-          <div className="ab-val-row">
-            {[
-              { n: '01', accent: '#1769FF', iconBg: '#EEF5FF', iconBdr: 'rgba(23,105,255,0.15)', Icon: Target, title: 'DISCIPLINE FIRST', desc: "We don't believe in shortcuts. Every feature is designed around building real, long-term skill through structured practice and honest self-assessment." },
-              { n: '02', accent: '#7137FF', iconBg: '#F0EAFF', iconBdr: 'rgba(113,55,255,0.15)', Icon: Users,  title: 'BUILT FOR SQUADS', desc: 'BGMI is a team game. Our platform is designed for individual improvement and squad coordination — everything your team needs in one place.' },
-              { n: '03', accent: '#FF1838', iconBg: '#FFF0F2', iconBdr: 'rgba(255,24,56,0.15)',  Icon: Star,   title: 'PLAYERS FIRST',   desc: 'Every decision we make starts with one question: does this make our players better? No ads, no bloat, no distractions. Just tools that work.' },
-            ].map((card, i) => (
-              <motion.div
-                key={card.n}
-                initial={{ opacity: 0, transform: 'translateY(30px)' }}
-                whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: E, delay: i * 0.12 }}
-                whileHover={{ y: -6, boxShadow: '0 20px 60px rgba(7,17,31,0.08)' }}
-                style={{ flex: 1, background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 16, padding: 32, position: 'relative', overflow: 'hidden', transition: 'box-shadow 0.25s' }}
-              >
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: card.accent }} />
-                <div style={{ position: 'absolute', top: 16, right: 20, fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 80, color: '#F0F4F8', pointerEvents: 'none', userSelect: 'none', lineHeight: 1 }}>{card.n}</div>
-                <div style={{ width: 52, height: 52, borderRadius: 12, background: card.iconBg, border: `1px solid ${card.iconBdr}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                  <card.Icon size={24} color={card.accent} strokeWidth={1.8} />
-                </div>
-                <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 26, color: '#111827', marginBottom: 12 }}>{card.title}</div>
-                <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, lineHeight: 1.6, color: '#536174' }}>{card.desc}</div>
-              </motion.div>
+                {line.text}
+              </motion.span>
             ))}
           </div>
+
+          {/* Body copy */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateY(20px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0px)' }}
+            transition={{ duration: 0.8, ease, delay: 0.5 }}
+            style={{ maxWidth: 520, marginTop: 40 }}
+          >
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 18, lineHeight: 1.7, color: '#536174', margin: 0 }}>
+              As BGMI players, we could not find a clear, structured way to improve. There were guides, stats and endless hours of gameplay — but no system that connected them.
+            </p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 18, lineHeight: 1.7, color: '#111827', fontWeight: 600, marginTop: 16, marginBottom: 0 }}>
+              So we built one.
+            </p>
+          </motion.div>
+
+          {/* Metadata row */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateY(20px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0px)' }}
+            transition={{ duration: 0.8, ease, delay: 0.7 }}
+            style={{ display: 'flex', flexDirection: 'row', gap: 64, marginTop: 64 }}
+          >
+            {[{ num: '2024', label: 'FOUNDED' }, { num: 'INDIA', label: 'BASED' }].map(stat => (
+              <div key={stat.label} style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: 32, height: 1, background: '#DCE4EF', marginBottom: 12 }} />
+                <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 40, color: '#111827', lineHeight: 1 }}>{stat.num}</span>
+                <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#9BAABB', marginTop: 4, textTransform: 'uppercase' }}>{stat.label}</span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
-          SECTION 4 — FOUNDER (premium redesign)
-      ══════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
-        {/* BG glows */}
-        <div style={{ position: 'absolute', left: -200, top: '50%', transform: 'translateY(-50%)', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.08) 0%,transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', right: -200, top: '50%', transform: 'translateY(-50%)', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.08) 0%,transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '28px 28px', opacity: 0.4, pointerEvents: 'none' }} />
-
-        <div className="ab-inner ab-founder-row">
-
-          {/* ── LEFT: profile card ── */}
+      {/* ════════════════════════════════════════
+          SECTION 2 — MISSION
+      ════════════════════════════════════════ */}
+      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '128px 0' }}>
+        <div className="ab-inner ab-mission-grid">
+          {/* LEFT */}
           <motion.div
-            initial={{ opacity: 0, transform: 'translateX(-60px)' }}
-            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+            initial={{ opacity: 0, transform: 'translateY(40px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="ab-card-wrap"
-            style={{ flexShrink: 0, position: 'relative' }}
+            transition={{ duration: 0.8, ease }}
           >
-            {/* Floating badge */}
-            <motion.div
-              animate={{ y: [-4, 4, -4], rotate: [-3, 3, -3] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ position: 'absolute', top: -16, right: -16, zIndex: 10, background: 'linear-gradient(135deg,#1769FF,#FF1838)', borderRadius: 16, padding: '10px 18px', boxShadow: '0 8px 32px rgba(23,105,255,0.4)', pointerEvents: 'none' }}
-            >
-              <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.15em', color: '#FFFFFF' }}>⚡ LIVE NOW</span>
-            </motion.div>
-
-            {/* Spinning border wrapper */}
-            <div style={{ position: 'relative', borderRadius: 26, overflow: 'hidden', padding: 3 }}>
-              {/* Spinning conic gradient — CSS animation runs off main thread */}
-              <div className="ab-spin-border" />
-              {/* Dark card */}
-              <div style={{ position: 'relative', zIndex: 1, borderRadius: 22, overflow: 'hidden', background: '#07111F' }}>
-                <img
-                  src="/sparkop.jpeg"
-                  alt="SparkOp — Karthik"
-                  style={{ width: '100%', display: 'block', objectFit: 'cover', objectPosition: 'top center' }}
-                />
-                {/* Gradient fade over bottom of image */}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top,#07111F 0%,transparent 100%)', pointerEvents: 'none' }} />
-                {/* Info overlay */}
-                <motion.div
-                  initial={{ opacity: 0, transform: 'translateY(10px)' }}
-                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, ease: E, delay: 0.4 }}
-                  style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }}
-                >
-                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 36, color: '#FFFFFF', lineHeight: 1 }}>KARTHIK</div>
-                  <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 18, background: 'linear-gradient(90deg,#1769FF,#FF1838)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', marginTop: 2 }}>SparkOp</div>
-                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#AAB8C8', marginTop: 4 }}>Founder · Esports Elite</div>
-                  <div style={{ display: 'flex', flexDirection: 'row', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-                    {['🎮 SparkOp', '🏆 Founder', '📍 Karnataka'].map(pill => (
-                      <div key={pill} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '4px 12px', fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#FFFFFF' }}>{pill}</div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#1769FF', textTransform: 'uppercase', marginBottom: 24 }}>OUR MISSION</div>
+            <div className="ab-mission-h2">
+              <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88, color: '#111827', display: 'block' }}>DISCIPLINE</span>
+              <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88, color: '#111827', display: 'block' }}>BUILDS</span>
+              <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88, display: 'block', ...G }}>FREEDOM.</span>
             </div>
           </motion.div>
 
-          {/* ── RIGHT: content ── */}
+          {/* RIGHT */}
           <motion.div
-            initial={{ opacity: 0, transform: 'translateX(60px)' }}
-            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+            initial={{ opacity: 0, transform: 'translateY(40px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}
-            style={{ flex: 1 }}
+            transition={{ duration: 0.8, ease, delay: 0.15 }}
           >
-            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#1769FF', textTransform: 'uppercase', marginBottom: 16 }}>THE BUILDER</div>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, lineHeight: 1.75, color: '#536174', margin: 0 }}>Most players do not need another random tip.</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, lineHeight: 1.75, color: '#536174', marginTop: 16, marginBottom: 0 }}>They need to know what to practice, why they are practicing it, and whether they are actually improving.</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, lineHeight: 1.75, color: '#536174', marginTop: 16, marginBottom: 0 }}>Esports Elite exists to bring structure to that process. We combine guided training, match tracking, performance analysis and progression into one system — helping players turn hours of grinding into deliberate improvement.</p>
 
-            <div className="ab-founder-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '0.01em', color: '#111827' }}>THE MIND</div>
-            <div className="ab-founder-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '0.01em', color: '#111827' }}>BEHIND THE</div>
-            <div className="ab-founder-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '0.01em' }}><span style={G}>PLATFORM.</span></div>
-
-            <div style={{ width: 60, height: 2, background: 'linear-gradient(to right,#1769FF,transparent)', marginTop: 20, marginBottom: 20 }} />
-
-            <div style={{ borderLeft: '3px solid #1769FF', paddingLeft: 20, marginTop: 20, marginBottom: 24 }}>
-              <p className="ab-founder-quote" style={{ fontFamily: 'Inter,sans-serif', color: '#536174', lineHeight: 1.7, fontStyle: 'italic', margin: 0 }}>
-                "I've been grinding BGMI as SparkOp for years. The biggest thing holding players back isn't talent — it's the lack of a proper improvement system. I built Esports Elite to fix that."
-              </p>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
-              {[
-                { num: '2024', label1: 'Year Esports Elite', label2: 'was founded' },
-                { num: '10',   label1: 'Stage structured roadmap', label2: 'built from scratch' },
-                { num: '₹149', label1: 'Flat monthly price —', label2: 'no hidden fees' },
-              ].map((row, i) => (
+            {/* Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 48 }}>
+              {missionCards.map((card, i) => (
                 <motion.div
-                  key={row.num}
-                  initial={{ opacity: 0, transform: 'translateX(20px)' }}
-                  whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+                  key={card.n}
+                  initial={{ opacity: 0, transform: 'translateY(20px)' }}
+                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, ease: E, delay: 0.3 + i * 0.1 }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 16 }}
+                  transition={{ duration: 0.6, ease, delay: i * 0.1 }}
+                  className="ab-mission-card"
+                  style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, padding: '24px 28px', display: 'flex', gap: 20, alignItems: 'flex-start' }}
                 >
-                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 28, ...G, minWidth: 56, flexShrink: 0 }}>{row.num}</div>
-                  <div style={{ width: 1, height: 32, background: '#DCE4EF', flexShrink: 0 }} />
-                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#536174', lineHeight: 1.4 }}>
-                    {row.label1}<br />{row.label2}
+                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 20, ...G, flexShrink: 0, width: 32 }}>{card.n}</div>
+                  <div>
+                    <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 20, color: '#111827', marginBottom: 6 }}>{card.title}</div>
+                    <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, lineHeight: 1.6, color: '#536174' }}>{card.desc}</div>
                   </div>
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </div>
+      </section>
 
-            <div style={{ marginTop: 32, display: 'flex', flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
-                <RadialRevealButton fill="#0B1220" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, color: '#FFFFFF', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-                  JOIN THE PLATFORM →
-                </RadialRevealButton>
-              </Link>
+      {/* ════════════════════════════════════════
+          SECTION 3 — VALUES
+      ════════════════════════════════════════ */}
+      <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
+        <div className="ab-inner">
+          {/* Heading */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateY(30px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease }}
+            style={{ marginBottom: 80 }}
+          >
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#536174', textTransform: 'uppercase', marginBottom: 16 }}>WHAT WE STAND FOR</div>
+            <div className="ab-values-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, color: '#111827' }}>
+              OUR <span style={G}>VALUES</span>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* ══════════════════════════════════════════
-          SECTION 5 — TIMELINE / STORY
-      ══════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', padding: '96px 0' }}>
-        <div className="ab-inner">
-          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 64 }}>
-            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase', marginBottom: 12 }}>HOW WE GOT HERE</div>
-            <div className="ab-section-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em', ...G }}>THE JOURNEY</div>
-          </motion.div>
-
-          <div style={{ maxWidth: 700, margin: '0 auto', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 24, top: 0, bottom: 0, width: 2, background: 'linear-gradient(to bottom,#1769FF,#7137FF,#FF1838)', pointerEvents: 'none' }} />
-
-            {[
-              { accent: '#1769FF', year: '2023',       title: 'THE PROBLEM', desc: "We were grinding BGMI daily but hitting the same rank ceiling. YouTube gave tips but no structure. Coaching was expensive and inconsistent." },
-              { accent: '#4A8AFF', year: 'Early 2024', title: 'THE IDEA',    desc: 'Started building a personal practice tracker. Mapped out the 10-stage skill progression that actually made us improve. Realized other players needed this.' },
-              { accent: '#7137FF', year: 'Mid 2024',   title: 'THE BUILD',   desc: 'Built the first version of Esports Elite — Map Knowledge, Match Logger, Strategy Maker and the AI Coach. Tested with a small group of BGMI players.' },
-              { accent: '#FF1838', year: '2025',        title: 'THE LAUNCH',  desc: "Launched publicly at ₹149/month. India's first structured BGMI training platform. The journey continues — with you." },
-            ].map((item, i) => (
+          {/* Editorial blocks */}
+          <div>
+            {values.map((v, i) => (
               <motion.div
-                key={item.title}
-                initial={{ opacity: 0, transform: 'translateX(-30px)' }}
-                whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.55, ease: E, delay: i * 0.15 }}
-                style={{ paddingLeft: 64, position: 'relative', marginBottom: i < 3 ? 40 : 0 }}
-              >
-                <div style={{ position: 'absolute', left: 16, top: 6, width: 16, height: 16, borderRadius: '50%', background: item.accent, border: '2px solid #FFFFFF', boxShadow: `0 0 0 3px ${item.accent}4D` }} />
-                <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.2em', color: item.accent, textTransform: 'uppercase', marginBottom: 4 }}>{item.year}</div>
-                <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 22, color: '#111827', marginBottom: 8 }}>{item.title}</div>
-                <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, lineHeight: 1.6, color: '#536174' }}>{item.desc}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          SECTION 6 — FAQ
-      ══════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
-        <div className="ab-inner-narrow">
-          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} className="ab-faq-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, color: '#111827', textAlign: 'center', marginBottom: 48 }}>
-            COMMON QUESTIONS
-          </motion.div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {faqs.map((faq, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, transform: 'translateY(20px)' }}
+                key={v.n}
+                initial={{ opacity: 0, transform: 'translateY(30px)' }}
                 whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: E, delay: i * 0.08 }}
-                whileHover={{ borderColor: 'rgba(23,105,255,0.2)' }}
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', transition: 'border-color 0.2s' }}
+                transition={{ duration: 0.7, ease, delay: i * 0.15 }}
+                className="ab-val-block"
+                style={{ borderTop: '1px solid #DCE4EF', paddingTop: 48, paddingBottom: 48, display: 'flex', gap: 64, alignItems: 'flex-start', ...(i === values.length - 1 ? { borderBottom: '1px solid #DCE4EF' } : {}) }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px' }}>
-                  <span style={{ fontFamily: 'Inter,sans-serif', fontWeight: 600, fontSize: 15, color: '#111827', paddingRight: 16 }}>{faq.q}</span>
-                  <motion.div animate={{ rotate: openFaq === i ? 45 : 0 }} transition={{ duration: 0.3, ease: E }} style={{ flexShrink: 0 }}>
-                    <Plus size={20} color="#1769FF" strokeWidth={1.5} />
-                  </motion.div>
+                {/* Left — number + label */}
+                <div className="ab-val-left">
+                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 80, color: '#F0F4F8', lineHeight: 1, userSelect: 'none' }}>{v.n}</div>
+                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 18, color: '#111827', marginTop: -8 }}>{v.label}</div>
                 </div>
-                <AnimatePresence>
-                  {openFaq === i && (
-                    <motion.div key="a" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }} style={{ overflow: 'hidden' }}>
-                      <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, lineHeight: 1.6, color: '#536174', padding: '0 24px 20px', margin: 0 }}>{faq.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Right — title + desc */}
+                <div style={{ flex: 1 }}>
+                  <div className="ab-val-title" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, color: '#111827', marginBottom: 16 }}>{v.title}</div>
+                  <div className="ab-val-desc" style={{ fontFamily: 'Inter,sans-serif', lineHeight: 1.75, color: '#536174', maxWidth: 640 }}>{v.desc}</div>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
-          SECTION 7 — FINAL CTA
-      ══════════════════════════════════════════ */}
+      {/* ════════════════════════════════════════
+          SECTION 4 — FOUNDER
+      ════════════════════════════════════════ */}
+      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '128px 0' }}>
+        <div className="ab-inner ab-founder-grid">
+          {/* LEFT — heading + image */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateX(-40px)' }}
+            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease }}
+          >
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#1769FF', textTransform: 'uppercase', marginBottom: 24 }}>THE BUILDER</div>
+
+            <div className="ab-founder-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88, color: '#111827', marginBottom: 40 }}>
+              <span style={{ display: 'block' }}>THE PLAYER</span>
+              <span style={{ display: 'block' }}>BEHIND</span>
+              <span style={{ display: 'block', ...G }}>THE PLATFORM.</span>
+            </div>
+
+            {/* Image card with spinning border */}
+            <div style={{ position: 'relative', padding: 2, borderRadius: 22, overflow: 'hidden' }}>
+              {/* Spinning conic gradient — CSS animation, off main thread */}
+              <div className="ab-spin-border" />
+              {/* Dark card */}
+              <div style={{ position: 'relative', zIndex: 1, borderRadius: 20, overflow: 'hidden', background: '#07111F' }}>
+                <img
+                  src="/sparkop.jpeg"
+                  alt="SparkOp — Karthik, Founder"
+                  style={{ width: '100%', display: 'block', objectFit: 'cover', objectPosition: 'top center', maxHeight: 420 }}
+                />
+                {/* Bottom gradient */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top,rgba(7,17,31,0.95) 0%,transparent 100%)', pointerEvents: 'none' }} />
+                {/* Info overlay */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }}>
+                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 32, color: '#FFFFFF', lineHeight: 1 }}>KARTHIK</div>
+                  <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 16, marginTop: 2, ...G }}>SparkOp</div>
+                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#AAB8C8', marginTop: 4 }}>Founder · Esports Elite</div>
+                  <div style={{ display: 'flex', flexDirection: 'row', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
+                    {['🎮 BGMI Player', '🏆 Founder', '📍 Karnataka'].map(pill => (
+                      <span key={pill} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '4px 10px', fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#FFFFFF' }}>{pill}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* RIGHT — quote + metrics + CTA */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateX(40px)' }}
+            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease, delay: 0.15 }}
+          >
+            {/* Quote */}
+            <div style={{ borderLeft: '3px solid #1769FF', paddingLeft: 24, marginBottom: 40 }}>
+              <p className="ab-quote" style={{ fontFamily: 'Inter,sans-serif', lineHeight: 1.75, color: '#536174', fontStyle: 'italic', margin: 0 }}>
+                "I started Esports Elite because I experienced the problem firsthand. I could spend hours grinding BGMI and still struggle to understand what I was actually improving.
+              </p>
+              <p className="ab-quote" style={{ fontFamily: 'Inter,sans-serif', lineHeight: 1.75, color: '#536174', fontStyle: 'italic', marginTop: 16, marginBottom: 0 }}>
+                There were plenty of guides, stats and practice tools — but no clear system connecting them.
+              </p>
+              <p className="ab-quote" style={{ fontFamily: 'Inter,sans-serif', lineHeight: 1.75, color: '#536174', fontStyle: 'italic', marginTop: 16, marginBottom: 0 }}>
+                Esports Elite started as my attempt to build that system."
+              </p>
+            </div>
+
+            {/* Metrics */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', paddingTop: 32, paddingBottom: 32, marginBottom: 40 }}>
+              {[
+                { val: '2024', label: 'Year Esports Elite was founded' },
+                { val: '10',   label: 'Stage structured roadmap' },
+                { val: '₹149', label: 'Monthly individual plan' },
+              ].map((m, i) => (
+                <motion.div
+                  key={m.val}
+                  initial={{ opacity: 0, transform: 'translateY(20px)' }}
+                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease, delay: i * 0.1 }}
+                  style={{ textAlign: 'center', paddingLeft: 16, paddingRight: 16, ...(i < 2 ? { borderRight: '1px solid #DCE4EF' } : {}) }}
+                >
+                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 40, ...G }}>{m.val}</div>
+                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#536174', marginTop: 8, lineHeight: 1.4 }}>{m.label}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <RadialRevealButton
+                fill="#0B1220"
+                hoverFill="#1769FF"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, color: '#FFFFFF', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              >
+                JOIN THE PLATFORM →
+              </RadialRevealButton>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          SECTION 5 — TIMELINE
+      ════════════════════════════════════════ */}
+      <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
+        <div className="ab-inner-narrow">
+          {/* Heading */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateY(30px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease }}
+            style={{ marginBottom: 80 }}
+          >
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#536174', textTransform: 'uppercase', marginBottom: 16 }}>HOW WE GOT HERE</div>
+            <div className="ab-tl-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, ...G }}>THE JOURNEY</div>
+          </motion.div>
+
+          {/* Timeline */}
+          <div style={{ position: 'relative' }}>
+            {/* Left gradient line */}
+            <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 2, background: 'linear-gradient(to bottom,#1769FF,#7137FF,#FF1838)', pointerEvents: 'none' }} />
+
+            {timeline.map((item, i) => (
+              <div key={item.title} style={{ paddingLeft: 48, position: 'relative', marginBottom: i < timeline.length - 1 ? 64 : 0 }}>
+                <motion.div
+                  initial={{ opacity: 0, transform: 'translateX(-30px)' }}
+                  whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease, delay: i * 0.15 }}
+                >
+                  {/* Timeline node */}
+                  <div style={{ position: 'absolute', left: -5, top: 8, width: 12, height: 12, borderRadius: '50%', background: item.accent, border: '2px solid #FFFFFF', boxShadow: `0 0 0 3px ${item.accent}40` }} />
+
+                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 13, letterSpacing: '0.15em', color: item.accent, marginBottom: 8, textTransform: 'uppercase' }}>{item.year}</div>
+                  <div className="ab-tl-title" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, color: '#111827', marginBottom: 12 }}>{item.title}</div>
+                  <div className="ab-tl-desc" style={{ fontFamily: 'Inter,sans-serif', lineHeight: 1.7, color: '#536174', maxWidth: 600 }}>{item.desc}</div>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          SECTION 6 — FAQ
+      ════════════════════════════════════════ */}
+      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '128px 0' }}>
+        <div className="ab-inner-narrow">
+          {/* Heading */}
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateY(30px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease }}
+            style={{ textAlign: 'center', marginBottom: 64 }}
+          >
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#536174', textTransform: 'uppercase', marginBottom: 16 }}>COMMON QUESTIONS</div>
+            <div className="ab-faq-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88, color: '#111827' }}>
+              <span style={{ display: 'block' }}>QUESTIONS,</span>
+              <span style={{ display: 'block', ...G }}>ANSWERED.</span>
+            </div>
+          </motion.div>
+
+          {/* Accordion */}
+          {faqs.map((faq, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, transform: 'translateY(20px)' }}
+              whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease, delay: i * 0.08 }}
+              onClick={() => setOpenFaq(openFaq === i ? null : i)}
+              style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', marginBottom: 8 }}
+              className="ab-faq-item"
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 28px' }}>
+                <span className="ab-faq-q" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, color: '#111827', letterSpacing: '0.02em' }}>{faq.q}</span>
+                <motion.div
+                  animate={{ rotate: openFaq === i ? 45 : 0 }}
+                  transition={{ duration: 0.3, ease }}
+                  style={{ flexShrink: 0, marginLeft: 16 }}
+                >
+                  <Plus size={20} color="#1769FF" strokeWidth={1.5} />
+                </motion.div>
+              </div>
+
+              <AnimatePresence>
+                {openFaq === i && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, lineHeight: 1.7, color: '#536174', padding: '0 28px 24px', margin: 0 }}>{faq.a}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          SECTION 7 — CTA
+      ════════════════════════════════════════ */}
       <section style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 800, margin: '0 auto', padding: '0 32px', textAlign: 'center' }}>
-          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.7, ease: E }}>
-            <div className="ab-cta-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '-0.01em' }}>
+          <motion.div
+            initial={{ opacity: 0, transform: 'translateY(30px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease }}
+          >
+            <div className="ab-cta-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.88 }}>
               <span style={{ color: '#FFFFFF', display: 'block' }}>READY TO START</span>
-              <span style={G}>YOUR JOURNEY?</span>
+              <span style={{ display: 'block', ...G }}>YOUR JOURNEY?</span>
             </div>
-            <p className="ab-cta-desc" style={{ fontFamily: 'Inter,sans-serif', color: '#AAB8C8', marginTop: 16, lineHeight: 1.65 }}>
-              Join India's most serious BGMI training platform. ₹149/month. Cancel anytime.
+
+            <p className="ab-cta-p" style={{ fontFamily: 'Inter,sans-serif', color: '#AAB8C8', marginTop: 24, lineHeight: 1.65, maxWidth: 520, margin: '24px auto 0' }}>
+              Stop guessing what to practice. Start training with a system built around improvement.
             </p>
+
             <div style={{ marginTop: 40 }}>
+              <span className="ab-price-num" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, ...G }}>₹149</span>
+              <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 14, letterSpacing: '0.2em', color: '#AAB8C8', marginLeft: 8, verticalAlign: 'middle' }}>/MONTH</span>
+            </div>
+
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 8 }}>GST inclusive · Cancel anytime</p>
+
+            <div style={{ marginTop: 32 }}>
               <Link to="/pricing" style={{ textDecoration: 'none' }}>
-                <RadialRevealButton fill="#FFFFFF" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 56px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer' }}>
-                  JOIN NOW — ₹149/MONTH →
+                <RadialRevealButton
+                  fill="#FFFFFF"
+                  hoverFill="#1769FF"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 56px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                >
+                  START TRAINING →
                 </RadialRevealButton>
               </Link>
             </div>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>GST inclusive · Cancel anytime</p>
+
+            <p style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.3em', color: '#4A5568', marginTop: 24, textTransform: 'uppercase' }}>
+              WHERE GRIND BECOMES GREATNESS.
+            </p>
           </motion.div>
         </div>
       </section>
@@ -404,35 +473,56 @@ export default function About() {
       <Footer />
 
       <style>{`
-        /* ── Layout ── */
-        .ab-hero-inner   { max-width: 1280px; margin: 0 auto; padding: 128px 64px; position: relative; z-index: 1; width: 100%; }
+        /* ── Layout containers ── */
+        .ab-hero-inner   { max-width: 1280px; margin: 0 auto; padding: 160px 64px; position: relative; z-index: 1; }
         .ab-inner        { max-width: 1280px; margin: 0 auto; padding: 0 64px; }
-        .ab-inner-narrow { max-width: 800px;  margin: 0 auto; padding: 0 64px; }
+        .ab-inner-narrow { max-width: 900px;  margin: 0 auto; padding: 0 64px; }
 
-        /* ── Typography ── */
-        .ab-h1           { font-family: 'Barlow Condensed',sans-serif; font-weight:900; font-size:80px; line-height:0.92; letter-spacing:-0.01em; display:block; }
-        .ab-desc         { font-family: 'Inter',sans-serif; font-size:20px; line-height:1.6; color:#536174; max-width:580px; margin-top:20px; }
-        .ab-section-h2   { font-size: 64px; }
-        .ab-mission-h2 div { font-size: 56px; }
-        .ab-faq-h2       { font-size: 48px; }
-        .ab-cta-h2       { font-size: 88px; }
-        .ab-cta-desc     { font-size: 18px; }
-        .ab-founder-quote{ font-size: 17px; }
-        .ab-mission-p    { font-size: 17px; }
+        /* ── Hero H1 ── */
+        .ab-h1 { font-size: clamp(64px, 10vw, 120px); }
+
+        /* ── Mission grid ── */
+        .ab-mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: start; }
+        .ab-mission-h2   { font-size: 64px; }
+
+        /* ── Mission cards hover — gated to pointer devices ── */
+        @media (hover: hover) and (pointer: fine) {
+          .ab-mission-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(7,17,31,0.06);
+            transition: transform 200ms cubic-bezier(0.23,1,0.32,1), box-shadow 200ms cubic-bezier(0.23,1,0.32,1);
+          }
+        }
+
+        /* ── Values ── */
+        .ab-values-h2  { font-size: 72px; }
+        .ab-val-left   { flex-shrink: 0; width: 160px; }
+        .ab-val-title  { font-size: 28px; }
+        .ab-val-desc   { font-size: 16px; }
+
+        /* ── Founder grid ── */
+        .ab-founder-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: center; }
         .ab-founder-h2   { font-size: 56px; }
+        .ab-quote        { font-size: 17px; }
 
-        /* ── Mission row ── */
-        .ab-mission-row  { display: flex; flex-direction: row; align-items: center; gap: 80px; }
-        .ab-mission-right{ flex: 1; }
+        /* ── Timeline ── */
+        .ab-tl-h2    { font-size: 72px; }
+        .ab-tl-title { font-size: 28px; }
+        .ab-tl-desc  { font-size: 16px; }
 
-        /* ── Values row ── */
-        .ab-val-row { display: flex; flex-direction: row; gap: 24px; align-items: stretch; }
+        /* ── FAQ ── */
+        .ab-faq-h2 { font-size: 64px; }
+        .ab-faq-q  { font-size: 18px; }
+        @media (hover: hover) and (pointer: fine) {
+          .ab-faq-item:hover { border-color: rgba(23,105,255,0.2); transition: border-color 200ms ease; }
+        }
 
-        /* ── Founder row ── */
-        .ab-founder-row  { display: flex; flex-direction: row; align-items: center; gap: 80px; }
-        .ab-card-wrap    { width: 380px; }
+        /* ── CTA ── */
+        .ab-cta-h2    { font-size: 88px; }
+        .ab-cta-p     { font-size: 18px; }
+        .ab-price-num { font-size: 56px; }
 
-        /* ── Spinning border ── */
+        /* ── Spinning border (CSS animation — off main thread) ── */
         .ab-spin-border {
           position: absolute;
           left: 50%; top: 50%;
@@ -450,28 +540,33 @@ export default function About() {
 
         /* ── Mobile ── */
         @media (max-width: 900px) {
-          .ab-hero-inner   { padding: 80px 20px !important; }
+          .ab-hero-inner   { padding: 100px 20px !important; }
           .ab-inner        { padding: 0 20px !important; }
           .ab-inner-narrow { padding: 0 20px !important; }
-          .ab-h1           { font-size: 48px !important; }
-          .ab-desc         { font-size: 16px !important; }
-          .ab-section-h2   { font-size: 36px !important; }
-          .ab-mission-h2 div { font-size: 40px !important; }
-          .ab-faq-h2       { font-size: 32px !important; }
+
+          .ab-h1           { font-size: clamp(48px, 14vw, 80px) !important; }
+          .ab-mission-grid { grid-template-columns: 1fr !important; gap: 48px !important; padding: 80px 20px !important; }
+          .ab-mission-h2   { font-size: 40px !important; }
+          .ab-values-h2    { font-size: 44px !important; }
+          .ab-val-block    { flex-direction: column !important; gap: 24px !important; }
+          .ab-val-left     { width: auto !important; }
+          .ab-val-title    { font-size: 22px !important; }
+          .ab-val-desc     { font-size: 15px !important; }
+          .ab-founder-grid { grid-template-columns: 1fr !important; gap: 48px !important; padding: 80px 20px !important; }
+          .ab-founder-h2   { font-size: 36px !important; }
+          .ab-quote        { font-size: 15px !important; }
+          .ab-tl-h2        { font-size: 44px !important; }
+          .ab-tl-title     { font-size: 22px !important; }
+          .ab-tl-desc      { font-size: 15px !important; }
+          .ab-faq-h2       { font-size: 40px !important; }
+          .ab-faq-q        { font-size: 16px !important; }
           .ab-cta-h2       { font-size: 48px !important; }
-          .ab-cta-desc     { font-size: 16px !important; }
-          .ab-founder-quote{ font-size: 15px !important; }
-          .ab-mission-p    { font-size: 15px !important; }
-          .ab-founder-h2   { font-size: 40px !important; }
-          .ab-mission-row  { flex-direction: column !important; gap: 48px !important; }
-          .ab-mission-right{ width: 100% !important; }
-          .ab-val-row      { flex-direction: column !important; }
-          .ab-founder-row  { flex-direction: column !important; gap: 48px !important; }
-          .ab-card-wrap    { width: 100% !important; }
+          .ab-cta-p        { font-size: 16px !important; }
+          .ab-price-num    { font-size: 40px !important; }
         }
 
+        /* ── Reduced motion ── */
         @media (prefers-reduced-motion: reduce) {
-          * { animation: none !important; transition: none !important; }
           .ab-spin-border { animation: none !important; }
         }
       `}</style>
