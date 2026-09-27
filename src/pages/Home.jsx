@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Map, Brain, BarChart2, PenTool, ChevronRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import RadialRevealButton from '../components/ui/RadialRevealButton'
 
 /* ─── Gradient text helper ─── */
 const G = {
@@ -44,20 +45,6 @@ const FEATURES = [
   },
 ]
 
-/* ─── Stats ─── */
-const HERO_STATS = [
-  { num: '10K+', label: 'PLAYERS TRAINING' },
-  { num: '4',    label: 'MAPS COVERED'     },
-  { num: 'AI',   label: 'POWERED COACH'    },
-]
-
-const STATS_BAND = [
-  { num: '10K+', label: 'Players Trained' },
-  { num: '50+',  label: 'Pro Strategies'  },
-  { num: '4',    label: 'Maps Covered'    },
-  { num: 'AI',   label: 'Powered Coach'   },
-]
-
 /* ─── Roadmap teaser cards ─── */
 const ROADMAP = [
   {
@@ -72,24 +59,24 @@ const ROADMAP = [
     hover: { y: -6, boxShadow: '0 20px 60px rgba(23,105,255,0.12)', borderColor: '#1769FF' },
   },
   {
-    badge: 'COMING SOON', badgeBg: '#F7F9FC', badgeColor: '#9BAABB',
-    badgeBdr: '1px solid #DCE4EF',
-    range: 'STAGES 04–07', rangeColor: '#9BAABB',
-    title: 'INTELLIGENCE', titleColor: '#9BAABB',
-    bg: '#F7F9FC', bdr: '#DCE4EF',
-    corner: 'linear-gradient(135deg, rgba(150,166,186,0.1) 0%, transparent 60%)',
-    items: ['→ AI Coach', '→ Game Sense', '→ Strategy'],
-    itemColor: '#C0CAD6',
-    hover: {},
+    badge: 'IN DEVELOPMENT', badgeBg: 'rgba(113,55,255,0.12)', badgeColor: '#7137FF',
+    badgeBdr: undefined,
+    range: 'STAGES 04–07', rangeColor: '#7137FF',
+    title: 'INTELLIGENCE', titleColor: '#111827',
+    bg: '#F0EAFF', bdr: 'rgba(113,55,255,0.2)',
+    corner: 'linear-gradient(135deg, rgba(113,55,255,0.15) 0%, transparent 60%)',
+    items: ['→ AI Coach', '→ Squad Tools', '→ Analytics'],
+    itemColor: '#536174',
+    hover: { y: -6, boxShadow: '0 20px 60px rgba(113,55,255,0.12)', borderColor: '#7137FF' },
   },
   {
-    badge: 'COMING SOON', badgeBg: 'rgba(255,24,56,0.1)', badgeColor: '#FF1838',
+    badge: 'COMING SOON', badgeBg: 'rgba(255,24,56,0.12)', badgeColor: '#FF1838',
     badgeBdr: undefined,
     range: 'STAGES 08–10', rangeColor: '#FF1838',
     title: 'DOMINATION',  titleColor: '#111827',
     bg: '#FFF0F2', bdr: 'rgba(255,24,56,0.2)',
     corner: 'linear-gradient(135deg, rgba(255,24,56,0.15) 0%, transparent 60%)',
-    items: ['→ Teamplay', '→ Performance', '→ Go Elite'],
+    items: ['→ Leaderboards', '→ Tournament Mode', '→ Pro Coaching'],
     itemColor: '#536174',
     hover: { y: -6, boxShadow: '0 20px 60px rgba(255,24,56,0.1)', borderColor: '#FF1838' },
   },
@@ -115,9 +102,6 @@ export default function Home() {
           .hero-btn   { width: 100% !important; text-align: center !important; }
           .feat-wrap  { padding: 80px 20px !important; }
           .feat-grid  { grid-template-columns: 1fr !important; }
-          .stats-wrap { padding: 0 20px !important; }
-          .stats-wrap > div { border-right: none !important; border-bottom: 1px solid #DCE4EF !important; }
-          .stats-wrap > div:last-child { border-bottom: none !important; }
           .road-wrap  { padding: 80px 20px !important; }
           .road-cards { flex-direction: column !important; }
           .cta-sect   { padding: 80px 0 !important; }
@@ -263,49 +247,28 @@ export default function Home() {
               style={{ display: 'flex', gap: 16, marginTop: 32, flexWrap: 'wrap' }}
             >
               <Link to="/pricing" style={{ textDecoration: 'none' }}>
-                <motion.button
-                  whileHover={{ y: -3, boxShadow: '0 12px 32px rgba(23,105,255,0.3)' }}
-                  whileTap={{ scale: 0.97 }}
-                  className="hero-btn"
-                  style={{ background: '#0B1220', color: 'white', padding: '14px 32px', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                >
-                  JOIN NOW — ₹149/MONTH →
-                </motion.button>
+                <RadialRevealButton
+                  label="JOIN NOW — ₹149/MONTH →"
+                  padding="14px 32px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 700, fontSize: 15, letterSpacing: '0.02em' }}
+                  colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                />
               </Link>
 
               <Link to="/features" style={{ textDecoration: 'none' }}>
-                <motion.button
-                  whileHover={{ y: -3, borderColor: '#1769FF', color: '#1769FF' }}
-                  whileTap={{ scale: 0.97 }}
-                  className="hero-btn"
-                  style={{ background: 'white', color: '#111827', border: '1.5px solid #DCE4EF', padding: '14px 32px', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 15, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
-                >
-                  EXPLORE FEATURES →
-                </motion.button>
+                <RadialRevealButton
+                  label="EXPLORE FEATURES →"
+                  padding="14px 32px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 600, fontSize: 15 }}
+                  colors={{ fill: '#FFFFFF', textColor: '#111827', hoverFill: '#111827', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 1.5, borderColor: '#DCE4EF' }}
+                />
               </Link>
             </motion.div>
 
-            {/* Stats row */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1 }}
-              style={{ display: 'flex', gap: 0, marginTop: 48, flexWrap: 'wrap', alignItems: 'center' }}
-            >
-              {HERO_STATS.map((s, i) => (
-                <div key={s.num} style={{ display: 'flex', alignItems: 'center' }}>
-                  {i > 0 && <div style={{ width: 1, height: 40, background: '#DCE4EF', flexShrink: 0 }} />}
-                  <div style={{ paddingLeft: i === 0 ? 0 : 32, paddingRight: 32 }}>
-                    <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 40, lineHeight: 1, ...G }}>
-                      {s.num}
-                    </div>
-                    <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: '#536174', marginTop: 4, textTransform: 'uppercase' }}>
-                      {s.label}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
           </div>
 
           {/* RIGHT — hero image */}
@@ -426,32 +389,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════
-          SECTION 4 — STATS BAND
-      ══════════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '80px 0' }}>
-        <div className="stats-wrap" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px', display: 'flex', flexWrap: 'wrap' }}>
-          {STATS_BAND.map((s, i) => (
-            <motion.div
-              key={s.num}
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              style={{ flex: 1, textAlign: 'center', padding: '32px 16px', borderRight: i < 3 ? '1px solid #DCE4EF' : 'none', minWidth: 180 }}
-            >
-              <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 56, lineHeight: 1, ...G }}>
-                {s.num}
-              </div>
-              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174', marginTop: 8 }}>
-                {s.label}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════
-          SECTION 5 — ROADMAP TEASER
+          SECTION 4 — ROADMAP TEASER
       ══════════════════════════════════════════════ */}
       <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
         <div className="road-wrap" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
@@ -567,15 +505,18 @@ export default function Home() {
               Join India's most serious BGMI training platform
             </p>
 
-            <Link to="/pricing" style={{ textDecoration: 'none' }}>
-              <motion.button
-                whileHover={{ scale: 1.05, y: -4, boxShadow: '0 20px 60px rgba(23,105,255,0.4)' }}
-                whileTap={{ scale: 0.97 }}
-                style={{ marginTop: 40, background: 'linear-gradient(135deg, #1769FF, #FF1838)', color: 'white', padding: '18px 56px', borderRadius: 8, fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 18, border: 'none', cursor: 'pointer', display: 'inline-block' }}
-              >
-                JOIN NOW — ₹149/MONTH →
-              </motion.button>
-            </Link>
+            <div style={{ marginTop: 40 }}>
+              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                <RadialRevealButton
+                  label="JOIN NOW — ₹149/MONTH →"
+                  padding="18px 56px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 800, fontSize: 18 }}
+                  colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                />
+              </Link>
+            </div>
 
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>
               GST inclusive · Cancel anytime
