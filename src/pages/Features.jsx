@@ -102,6 +102,8 @@ function ImagePlaceholder({ color, glow, icon, label, animX = 40 }) {
         borderRight: `2px solid ${color}66`,
       }} />
 
+      {/* Shimmer */}
+      <div className="shimmer-overlay" aria-hidden="true" />
       {/* Center content */}
       <span style={{ fontSize: 48, opacity: 0.4, lineHeight: 1 }}>{icon}</span>
       <span style={{
@@ -153,7 +155,7 @@ function FeaturesHero() {
             BUILT FOR COMPETITIVE MINDS
           </motion.p>
           <motion.h1 variants={fadeUp} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 92, lineHeight: 0.88, color: '#0B1220', textTransform: 'uppercase', margin: 0, textAlign: 'center' }} className="feat-hero-h1">
-            FEATU<span style={gBlueRed}>RES</span>
+            FEATU<span style={gBlueRed} className="hue-shift-anim">RES</span>
           </motion.h1>
           <motion.div variants={fadeUp} style={{ width: 120, height: 2, background: 'linear-gradient(90deg, #1769FF, #FF1838)', margin: '20px auto', borderRadius: 2 }} />
           <motion.p variants={fadeUp} style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.6, color: '#536174', maxWidth: 620, textAlign: 'center', margin: 0, padding: '0 24px' }}>

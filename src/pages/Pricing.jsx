@@ -196,7 +196,8 @@ export default function Pricing() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
-              style={{ background: '#FFFFFF', borderRadius: 20, padding: 40, border: '1px solid #E8EEF5', boxShadow: '0 8px 40px rgba(7,17,31,0.08)', width: 460, flexShrink: 0, display: 'flex', flexDirection: 'column' }}
+              className="solo-glow-anim"
+              style={{ background: '#FFFFFF', borderRadius: 20, padding: 40, border: '1px solid #E8EEF5', width: 460, flexShrink: 0, display: 'flex', flexDirection: 'column' }}
             >
               <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', marginBottom: 4 }}>INDIVIDUAL ELITE</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4, marginTop: 12 }}>
@@ -242,7 +243,7 @@ export default function Pricing() {
                 BEST VALUE
               </div>
 
-              <div style={{ background: '#07111F', borderRadius: 20, padding: 40, border: '2px solid #1769FF', boxShadow: '0 20px 60px rgba(23,105,255,0.2)', display: 'flex', flexDirection: 'column' }}>
+              <div className="squad-glow-anim" style={{ background: '#07111F', borderRadius: 20, padding: 40, border: '2px solid #1769FF', display: 'flex', flexDirection: 'column' }}>
 
                 {/* Label + tagline */}
                 <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF' }}>SQUAD ELITE</div>
@@ -292,11 +293,33 @@ export default function Pricing() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', marginBottom: 4 }}>PER PLAYER</div>
-                      <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, color: '#FFFFFF', lineHeight: 1 }}>&#x20B9;{tier.perMember}</div>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={`per-${selectedSize}`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                          style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, color: '#FFFFFF', lineHeight: 1 }}
+                        >
+                          &#x20B9;{tier.perMember}
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', marginBottom: 4 }}>TOTAL/MONTH</div>
-                      <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, background: 'linear-gradient(90deg,#1769FF,#FF2448)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}>&#x20B9;{tier.total}</div>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={`total-${selectedSize}`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                          style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, background: 'linear-gradient(90deg,#1769FF,#FF2448)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}
+                        >
+                          &#x20B9;{tier.total}
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
@@ -307,9 +330,18 @@ export default function Pricing() {
 
                 {/* Savings badge */}
                 <div style={{ marginTop: 12, textAlign: 'center' }}>
-                  <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: '#00C48C' }}>
-                    Save &#x20B9;{tier.save}/member vs individual
-                  </span>
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={`save-${selectedSize}`}
+                      initial={{ opacity: 0, scale: 0.92 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.92 }}
+                      transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+                      style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: '#00C48C', display: 'inline-block' }}
+                    >
+                      Save &#x20B9;{tier.save}/member vs individual
+                    </motion.span>
+                  </AnimatePresence>
                 </div>
 
                 {/* Divider */}

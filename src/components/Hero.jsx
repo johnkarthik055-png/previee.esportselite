@@ -40,6 +40,15 @@ function Shards() {
   )
 }
 
+const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+  color: ['#1769FF', '#FF1838', '#7137FF'][i % 3],
+  size: 2 + (i % 3),
+  left: `${8 + (i * 5.2) % 84}%`,
+  top: `${10 + (i * 7.7) % 78}%`,
+  duration: `${3.2 + (i % 4) * 0.7}s`,
+  delay: `${(i * 0.38) % 3.2}s`,
+}))
+
 export default function Hero() {
   return (
     <section style={{
@@ -50,6 +59,33 @@ export default function Hero() {
       display: 'flex',
       alignItems: 'stretch',
     }}>
+      {/* ── Breathing glow orbs ── */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', right: '14%', top: '20%',
+        width: 600, height: 600, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(23,105,255,0.15) 0%, transparent 70%)',
+        animation: 'glow-pulse-blue 4s ease-in-out infinite',
+        pointerEvents: 'none', willChange: 'transform',
+      }} />
+      <div aria-hidden="true" style={{
+        position: 'absolute', right: '28%', top: '42%',
+        width: 600, height: 600, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(255,24,56,0.12) 0%, transparent 70%)',
+        animation: 'glow-pulse-red 5s ease-in-out 2s infinite',
+        pointerEvents: 'none', willChange: 'transform',
+      }} />
+
+      {/* ── Ambient particles ── */}
+      {PARTICLES.map((p, i) => (
+        <div key={i} aria-hidden="true" style={{
+          position: 'absolute', left: p.left, top: p.top,
+          width: p.size, height: p.size, borderRadius: '50%',
+          background: p.color, opacity: 0.35,
+          animation: `particle-float-y ${p.duration} ease-in-out ${p.delay} infinite`,
+          pointerEvents: 'none',
+        }} />
+      ))}
+
       <svg aria-hidden="true" style={{ position:'absolute', top:0, right:0, width:260, height:220, pointerEvents:'none' }} viewBox="0 0 260 220">
         <polygon points="260,0 260,220 80,0" fill="#FF1838" opacity="0.07" />
       </svg>

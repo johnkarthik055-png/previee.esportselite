@@ -273,6 +273,10 @@ export default function RoadmapPage() {
       {/* ══ HERO ══ */}
       <section style={{ background:'#FFFFFF', minHeight:820, position:'relative', overflow:'hidden', paddingBottom:0 }}>
 
+        {/* ── Breathing glow orbs ── */}
+        <div aria-hidden="true" style={{ position:'absolute', right:'20%', top:'25%', width:560, height:560, borderRadius:'50%', background:'radial-gradient(circle, rgba(23,105,255,0.14) 0%, transparent 70%)', animation:'glow-pulse-blue 4s ease-in-out infinite', pointerEvents:'none', willChange:'transform', zIndex:1 }} />
+        <div aria-hidden="true" style={{ position:'absolute', right:'38%', top:'45%', width:500, height:500, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,36,72,0.10) 0%, transparent 70%)', animation:'glow-pulse-red 5.5s ease-in-out 2s infinite', pointerEvents:'none', willChange:'transform', zIndex:1 }} />
+
         {/* ── RIGHT: full-bleed artwork ── */}
         <div style={{ position:'absolute', top:0, right:0, width:'58%', height:'100%', zIndex:0 }}>
           {/* Fallback dark bg so placeholder looks intentional */}

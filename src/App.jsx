@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { AuthProvider } from './context/AuthContext'
 import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
@@ -24,6 +25,36 @@ import Terms        from './pages/Terms'
 import RefundPolicy from './pages/RefundPolicy'
 import Cookies      from './pages/Cookies'
 import NotFound     from './pages/NotFound'
+
+function CursorGlow() {
+  const x = useMotionValue(-100)
+  const y = useMotionValue(-100)
+  const springX = useSpring(x, { stiffness: 140, damping: 18 })
+  const springY = useSpring(y, { stiffness: 140, damping: 18 })
+
+  useEffect(() => {
+    const move = (e) => { x.set(e.clientX - 20); y.set(e.clientY - 20) }
+    window.addEventListener('mousemove', move)
+    return () => window.removeEventListener('mousemove', move)
+  }, [x, y])
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      style={{
+        position: 'fixed', top: 0, left: 0,
+        x: springX, y: springY,
+        width: 40, height: 40,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(23,105,255,0.18) 0%, transparent 70%)',
+        filter: 'blur(10px)',
+        pointerEvents: 'none',
+        zIndex: 9998,
+        willChange: 'transform',
+      }}
+    />
+  )
+}
 
 function ScrollProgress() {
   const [pct, setPct] = useState(0)
@@ -73,6 +104,7 @@ function Layout() {
 export default function App() {
   return (
     <AuthProvider>
+      <CursorGlow />
       <BrowserRouter>
         <Routes>
           {/* Standalone pages — include their own Navbar/Footer */}
