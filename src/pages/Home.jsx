@@ -45,40 +45,46 @@ const FEATURES = [
   },
 ]
 
-/* ─── Roadmap teaser cards ─── */
-const ROADMAP = [
+/* ─── Roadmap teaser cards — horizontal layout ─── */
+const ROADMAP_CARDS = [
   {
-    badge: 'LIVE NOW',   badgeBg: 'rgba(23,105,255,0.12)', badgeColor: '#1769FF',
-    badgeBdr: undefined,
-    range: 'STAGES 01–03', rangeColor: '#1769FF',
-    title: 'FOUNDATION', titleColor: '#111827',
-    bg: '#EEF5FF', bdr: 'rgba(23,105,255,0.2)',
-    corner: 'linear-gradient(135deg, rgba(23,105,255,0.15) 0%, transparent 60%)',
+    accent: '#1769FF',
+    number: '01',
+    badge: '● LIVE NOW',
+    badgeBg: 'rgba(23,105,255,0.08)',
+    stages: 'STAGES 01–03',
+    title: 'FOUNDATION',
     items: ['→ Map Knowledge', '→ Match Logger', '→ Strategy Maker'],
-    itemColor: '#536174',
-    hover: { y: -6, boxShadow: '0 20px 60px rgba(23,105,255,0.12)', borderColor: '#1769FF' },
+    pillarBg: '#EEF5FF',
+    pillarBdr: 'rgba(23,105,255,0.2)',
+    watermark: 'FOUND',
+    hoverShadow: '0 8px 40px rgba(23,105,255,0.12)',
   },
   {
-    badge: 'IN DEVELOPMENT', badgeBg: 'rgba(113,55,255,0.12)', badgeColor: '#7137FF',
-    badgeBdr: undefined,
-    range: 'STAGES 04–07', rangeColor: '#7137FF',
-    title: 'INTELLIGENCE', titleColor: '#111827',
-    bg: '#F0EAFF', bdr: 'rgba(113,55,255,0.2)',
-    corner: 'linear-gradient(135deg, rgba(113,55,255,0.15) 0%, transparent 60%)',
+    accent: '#7137FF',
+    number: '02',
+    badge: '◐ IN DEVELOPMENT',
+    badgeBg: 'rgba(113,55,255,0.08)',
+    stages: 'STAGES 04–07',
+    title: 'INTELLIGENCE',
     items: ['→ AI Coach', '→ Squad Tools', '→ Analytics'],
-    itemColor: '#536174',
-    hover: { y: -6, boxShadow: '0 20px 60px rgba(113,55,255,0.12)', borderColor: '#7137FF' },
+    pillarBg: '#F0EAFF',
+    pillarBdr: 'rgba(113,55,255,0.2)',
+    watermark: 'INTEL',
+    hoverShadow: '0 8px 40px rgba(113,55,255,0.12)',
   },
   {
-    badge: 'COMING SOON', badgeBg: 'rgba(255,24,56,0.12)', badgeColor: '#FF1838',
-    badgeBdr: undefined,
-    range: 'STAGES 08–10', rangeColor: '#FF1838',
-    title: 'DOMINATION',  titleColor: '#111827',
-    bg: '#FFF0F2', bdr: 'rgba(255,24,56,0.2)',
-    corner: 'linear-gradient(135deg, rgba(255,24,56,0.15) 0%, transparent 60%)',
+    accent: '#FF1838',
+    number: '03',
+    badge: '○ COMING SOON',
+    badgeBg: 'rgba(255,24,56,0.08)',
+    stages: 'STAGES 08–10',
+    title: 'DOMINATION',
     items: ['→ Leaderboards', '→ Tournament Mode', '→ Pro Coaching'],
-    itemColor: '#536174',
-    hover: { y: -6, boxShadow: '0 20px 60px rgba(255,24,56,0.1)', borderColor: '#FF1838' },
+    pillarBg: '#FFF0F2',
+    pillarBdr: 'rgba(255,24,56,0.2)',
+    watermark: 'DOMIN',
+    hoverShadow: '0 8px 40px rgba(255,24,56,0.12)',
   },
 ]
 
@@ -103,11 +109,16 @@ export default function Home() {
           .feat-wrap  { padding: 80px 20px !important; }
           .feat-grid  { grid-template-columns: 1fr !important; }
           .road-wrap  { padding: 80px 20px !important; }
-          .road-cards { flex-direction: column !important; }
+          .road-card-inner { flex-direction: column !important; gap: 16px !important; }
+          .road-card-watermark { display: none !important; }
           .cta-sect   { padding: 80px 0 !important; }
           .cta-h      { font-size: 48px !important; }
           .feat-wrap .section-heading { font-size: 48px !important; }
           .road-wrap .section-heading { font-size: 44px !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .road-card-motion { transition: none !important; }
         }
       `}</style>
 
@@ -342,7 +353,7 @@ export default function Home() {
             <div style={{ width: 60, height: 2, background: 'linear-gradient(to right, #1769FF, #FF1838)', margin: '24px auto 0' }} />
           </motion.div>
 
-          {/* 2×2 grid */}
+          {/* 2x2 grid */}
           <div className="feat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 24 }}>
             {FEATURES.map((f, i) => (
               <motion.div
@@ -394,7 +405,7 @@ export default function Home() {
       <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
         <div className="road-wrap" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
 
-          {/* Heading */}
+          {/* Heading — unchanged */}
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -413,68 +424,172 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* 3 cards */}
-          <div className="road-cards" style={{ display: 'flex', gap: 24, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {ROADMAP.map((c, i) => (
+          {/* Horizontal stacked cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 48 }}>
+            {ROADMAP_CARDS.map((c, i) => (
               <motion.div
                 key={c.title}
-                initial={{ y: 40, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
+                className="road-card-motion"
+                initial={{ opacity: 0, transform: 'translateX(-50px)' }}
+                whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.65, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={Object.keys(c.hover).length ? { ...c.hover, transition: { duration: 0.3 } } : {}}
-                style={{ flex: 1, minWidth: 280, borderRadius: 16, padding: 32, background: c.bg, border: `1px solid ${c.bdr}`, position: 'relative', overflow: 'hidden', cursor: 'default' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: i * 0.15 }}
+                whileHover={{ transform: 'translateX(6px)', boxShadow: c.hoverShadow, transition: { duration: 0.25, ease: [0.23, 1, 0.32, 1] } }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  background: 'white',
+                  border: '1px solid #DCE4EF',
+                  borderLeft: `4px solid ${c.accent}`,
+                  borderRadius: 16,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                }}
               >
-                {/* Corner decoration */}
-                <div style={{ position: 'absolute', top: 0, left: 0, width: 80, height: 80, background: c.corner, pointerEvents: 'none' }} />
+                {/* Background watermark */}
+                <div
+                  className="road-card-watermark"
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    right: 24,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    fontFamily: 'Barlow Condensed, sans-serif',
+                    fontWeight: 900,
+                    fontSize: 80,
+                    color: c.accent,
+                    opacity: 0.04,
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    lineHeight: 1,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {c.watermark}
+                </div>
 
-                {/* Badge */}
-                <span style={{
-                  background: c.badgeBg, color: c.badgeColor,
-                  border: c.badgeBdr,
-                  fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.2em',
-                  padding: '4px 12px', borderRadius: 20, display: 'inline-block', marginBottom: 16,
-                  textTransform: 'uppercase',
-                }}>
-                  {c.badge}
-                </span>
+                {/* Inner flex row — all content */}
+                <div
+                  className="road-card-inner"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 32,
+                    padding: '28px 32px',
+                    width: '100%',
+                    position: 'relative',
+                    zIndex: 1,
+                  }}
+                >
+                  {/* LEFT — number pill */}
+                  <div
+                    style={{
+                      flexShrink: 0,
+                      width: 56,
+                      height: 56,
+                      borderRadius: 12,
+                      background: c.pillarBg,
+                      border: `1px solid ${c.pillarBdr}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 22, color: c.accent, lineHeight: 1 }}>
+                      {c.number}
+                    </span>
+                  </div>
 
-                <p style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.2em', color: c.rangeColor, margin: '0 0 8px', textTransform: 'uppercase' }}>
-                  {c.range}
-                </p>
+                  {/* CENTER — content */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    {/* Badge + stage row */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
+                      <span style={{
+                        background: c.badgeBg,
+                        color: c.accent,
+                        fontFamily: 'Rajdhani, sans-serif',
+                        fontWeight: 700,
+                        fontSize: 10,
+                        letterSpacing: '0.2em',
+                        padding: '3px 10px',
+                        borderRadius: 20,
+                        textTransform: 'uppercase',
+                        display: 'inline-block',
+                        whiteSpace: 'nowrap',
+                      }}>
+                        {c.badge}
+                      </span>
+                      <span style={{
+                        fontFamily: 'Rajdhani, sans-serif',
+                        fontWeight: 600,
+                        fontSize: 11,
+                        letterSpacing: '0.15em',
+                        color: '#9BAABB',
+                        textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
+                      }}>
+                        {c.stages}
+                      </span>
+                    </div>
 
-                <h3 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 32, color: c.titleColor, margin: '0 0 16px', textTransform: 'uppercase' }}>
-                  {c.title}
-                </h3>
+                    {/* Title */}
+                    <div style={{
+                      fontFamily: 'Barlow Condensed, sans-serif',
+                      fontWeight: 800,
+                      fontSize: 28,
+                      color: '#111827',
+                      lineHeight: 1,
+                      textTransform: 'uppercase',
+                    }}>
+                      {c.title}
+                    </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {c.items.map(item => (
-                    <p key={item} style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: c.itemColor, margin: 0 }}>
-                      {item}
-                    </p>
-                  ))}
+                    {/* Items */}
+                    <div style={{ display: 'flex', gap: 16, marginTop: 10, flexWrap: 'wrap' }}>
+                      {c.items.map(item => (
+                        <span key={item} style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174' }}>
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* RIGHT — chevron */}
+                  <div style={{ flexShrink: 0 }}>
+                    <ChevronRight size={20} color={c.accent} strokeWidth={2} />
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
-          {/* View full roadmap */}
+          {/* View full roadmap CTA */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            style={{ textAlign: 'center', marginTop: 48 }}
+            transition={{ duration: 0.5, delay: 0.5, ease: [0.23, 1, 0.32, 1] }}
+            style={{ textAlign: 'center', marginTop: 32 }}
           >
-            <Link to="/roadmap" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, color: '#1769FF', textDecoration: 'none', letterSpacing: '0.03em' }}>
-              VIEW FULL ROADMAP →
+            <Link to="/roadmap" style={{ textDecoration: 'none' }}>
+              <RadialRevealButton
+                label="VIEW FULL ROADMAP →"
+                padding="13px 28px"
+                rounded={8}
+                font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.1em' }}
+                colors={{ fill: '#F7F9FC', textColor: '#111827', hoverFill: '#0B1220', hoverTextColor: '#FFFFFF' }}
+                border={{ borderWidth: 1, borderColor: '#DCE4EF' }}
+              />
             </Link>
           </motion.div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════
-          SECTION 6 — FINAL CTA
+          SECTION 5 — FINAL CTA
       ══════════════════════════════════════════════ */}
       <section className="cta-sect" style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
 
