@@ -84,10 +84,9 @@ export default function Pricing() {
         <div style={{ position: 'absolute', top: '50%', right: '43%', color: '#1769FF', fontSize: 18, opacity: 0.4, pointerEvents: 'none', userSelect: 'none' }}>+</div>
 
         {/* Right artwork */}
-        <div style={{ position: 'absolute', right: 0, top: 0, width: '56%', height: '100%', zIndex: 0 }}>
-          <img src="/pricing-hero.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left center', display: 'block' }} />
-          {/* Left fade — tighter than before so image is visible at 1366px */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: 280, height: '100%', background: 'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.95) 40%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', right: 0, top: 0, width: '52%', height: '100%', zIndex: 0, overflow: 'hidden' }}>
+          <img src="/pricing-hero.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, width: 250, height: '100%', background: 'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.9) 50%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           {/* Right microcopy */}
@@ -100,7 +99,7 @@ export default function Pricing() {
         </div>
 
         {/* Left content */}
-        <div style={{ position: 'relative', zIndex: 1, width: '48%', minWidth: '500px', paddingLeft: '64px', paddingRight: '32px', paddingTop: '120px', paddingBottom: '80px' }}>
+        <div style={{ position: 'relative', zIndex: 1, width: '46%', minWidth: '500px', paddingLeft: '64px', paddingRight: '32px', paddingTop: '120px', paddingBottom: '80px' }}>
           <motion.div variants={heroContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column' }}>
 
             {/* Eyebrow */}
@@ -110,7 +109,7 @@ export default function Pricing() {
             </motion.div>
 
             {/* H1 — capped at 68px to fit at 1366px */}
-            <motion.h1 variants={heroItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(48px,5vw,68px)', lineHeight: 0.94, letterSpacing: '-0.02em', margin: 0, color: '#08111F' }}>
+            <motion.h1 variants={heroItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: '64px', lineHeight: 0.94, letterSpacing: '-0.02em', margin: 0, color: '#08111F' }}>
               ONE PLAN.
               <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', display: 'block' }}>EVERYTHING</span>
               IN IT.
