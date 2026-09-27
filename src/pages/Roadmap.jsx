@@ -1,956 +1,491 @@
-import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BarChart2, Target, Users, Zap, Gamepad2, Crosshair, Brain, Trophy, Settings, Move, Calendar, Check, BookOpen, Dumbbell, ClipboardCheck, TrendingUp, ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  ChevronRight, Check, Gamepad2, Target, Brain, Trophy,
+  Settings, Move, Zap, Calendar, BookOpen, Dumbbell,
+  ClipboardCheck, BarChart2, TrendingUp, ArrowRight,
+} from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
 
-/* ══════════════════════════════════════════════
-   DATA
-══════════════════════════════════════════════ */
-const STAGE_DATA = [
-  {
-    id: 1, cx: 72, cy: 420, name: 'FOUNDATION', sub: 'Build Your Base', color: '#1769FF',
-    objective: 'Build your competitive base',
-    why: 'Every elite player started by mastering the basics. Skipping foundations leads to a ceiling you can never break through.',
-    prereqs: ['Device & Settings', 'Basic game knowledge'],
-    training: ['Controls Drill', 'Sensitivity Setup', 'Movement Basics', 'Camera Control'],
-    assessment: 'Complete a full foundation assessment covering settings, movement and camera discipline.',
-    outcome: 'A solid, reliable technical base to build every other skill on.',
-    next: 'AIM FUNDAMENTALS',
-    skills: ['Controls', 'Sensitivity', 'Movement', 'Camera', 'Gyroscope'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 2, cx: 195, cy: 275, name: 'AIM FUNDAMENTALS', sub: 'Build Reliable Aim', color: '#2477FF',
-    objective: 'Develop consistent crosshair placement, ADS control and target tracking.',
-    why: 'Aim is your primary weapon. You cannot compete without a reliable aim foundation.',
-    prereqs: ['Foundation'],
-    training: ['Crosshair Placement Drill', 'ADS Control', 'Tracking Session', 'Flick Practice'],
-    assessment: 'Complete structured aim sessions and hit consistency benchmarks.',
-    outcome: 'Reliable aim you can count on under pressure.',
-    next: 'RECOIL & SPRAY',
-    skills: ['Crosshair placement', 'ADS', 'Tracking', 'Flicks', 'Target switching'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 3, cx: 295, cy: 235, name: 'RECOIL & SPRAY', sub: 'Control Your Weapons', color: '#3D8AFF',
-    objective: 'Learn weapon-specific recoil patterns and build consistent spray control.',
-    why: 'Spray control separates players who get lucky from those who win gunfights intentionally.',
-    prereqs: ['Foundation', 'Aim Fundamentals'],
-    training: ['Recoil Pattern Study', 'Spray Transfer Drill', 'Burst Control', 'Weapon Familiarity'],
-    assessment: 'Demonstrate consistent spray control across at least three weapons.',
-    outcome: 'Predictable, controllable weapon handling in real matches.',
-    next: 'CLOSE-RANGE MECHANICS',
-    skills: ['Recoil', 'Spray transfer', 'Burst control', 'Weapon familiarity', 'Distance control'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 4, cx: 390, cy: 355, name: 'CLOSE-RANGE MECHANICS', sub: 'Win The Fight', color: '#7137FF',
-    objective: 'Become reliable in close-range engagements.',
-    why: 'The majority of BGMI gunfights are decided at close range. Winning these consistently changes your game completely.',
-    prereqs: ['Aim Fundamentals', 'Recoil & Spray', 'Movement'],
-    training: ['Close Range Drill', 'Shot Timing', 'Movement Drill', 'Pre-fire Drill'],
-    assessment: 'Complete structured close-range sessions.',
-    outcome: 'Become more reliable during close-range engagements.',
-    next: 'MAP KNOWLEDGE',
-    skills: ['Pre-fire', 'Peeking', 'Movement', 'Hip fire', 'Shot timing'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 5, cx: 490, cy: 390, name: 'MAP KNOWLEDGE', sub: 'Know The Battlefield', color: '#9B5BFF',
-    objective: 'Know the battlefield',
-    why: 'Understand rotations, compounds, loot routes, vehicle spawns and zone patterns before the match forces you to.',
-    prereqs: ['Close-Range Mechanics'],
-    training: ['POI Study', 'Rotation Routes', 'Zone Pattern Analysis', 'Vehicle Spawns'],
-    assessment: 'Complete map knowledge assessments for all major maps.',
-    outcome: 'Stop reacting to the map. Start using it as a weapon.',
-    next: 'GAME SENSE',
-    skills: ['POIs', 'Rotations', 'Zones', 'Vehicles', 'Compound knowledge'],
-    image: '/map-knowledge.png',
-  },
-  {
-    id: 6, cx: 590, cy: 210, name: 'GAME SENSE', sub: 'Make Better Decisions', color: '#C060FF',
-    objective: 'Make better decisions',
-    why: 'The best players do not react — they predict. Game sense is the skill that multiplies everything below it.',
-    prereqs: ['Map Knowledge', 'Close-Range Mechanics'],
-    training: ['Information Gathering', 'Timing Study', 'Enemy Prediction', 'Positioning Logic'],
-    assessment: 'Demonstrate correct decision-making in staged scenarios.',
-    outcome: 'Fewer bad engagements. More wins from better timing.',
-    next: 'STRATEGY & ROTATIONS',
-    skills: ['Information gathering', 'Timing', 'Risk assessment', 'Enemy prediction', 'Positioning'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 7, cx: 690, cy: 170, name: 'STRATEGY & ROTATIONS', sub: 'Control The Game', color: '#E040A0',
-    objective: 'Control the game',
-    why: 'Random rotations lose games. Systematic zone control wins them.',
-    prereqs: ['Game Sense', 'Map Knowledge'],
-    training: ['Zone Prediction', 'Rotation Planning', 'Compound Control', 'Fallback Routes'],
-    assessment: 'Demonstrate zone-based decision making in scrims.',
-    outcome: 'Stop surviving by luck. Start controlling where the game goes.',
-    next: 'TEAMPLAY',
-    skills: ['Zone prediction', 'Rotation timing', 'Position selection', 'Compound control', 'Fallback planning'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 8, cx: 790, cy: 305, name: 'TEAMPLAY', sub: 'Play As One', color: '#FF4060',
-    objective: 'Play as one',
-    why: 'Individual skill has a ceiling. Team execution does not.',
-    prereqs: ['Strategy & Rotations', 'Game Sense'],
-    training: ['Communication Drills', 'Role Assignment', 'Trade Mechanics', 'Squad Spacing'],
-    assessment: 'Complete coordinated team exercises with measurable outcomes.',
-    outcome: 'Become a player that makes your whole squad better.',
-    next: 'COMPETITIVE PERFORMANCE',
-    skills: ['Communication', 'Roles', 'Trading', 'Spacing', 'Team movement'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 9, cx: 890, cy: 345, name: 'COMPETITIVE PERFORMANCE', sub: 'Perform Under Pressure', color: '#FF2A40',
-    objective: 'Perform under pressure',
-    why: 'Skills that disappear under pressure are not real skills. This stage builds the mental game that holds everything together.',
-    prereqs: ['Teamplay', 'Strategy & Rotations'],
-    training: ['Scrim Mentality', 'Pressure Management', 'Tournament Preparation', 'Tilt Control'],
-    assessment: 'Complete tournament-format scrims and performance reviews.',
-    outcome: 'Skills that hold up when the stakes are real.',
-    next: 'GO ELITE',
-    skills: ['Scrims', 'Tournament preparation', 'Adaptation', 'Pressure management', 'Performance review'],
-    image: '/roadmap-hero.png',
-  },
-  {
-    id: 10, cx: 1100, cy: 85, name: 'GO ELITE', sub: 'Become Tournament Ready', color: '#FF1838',
-    objective: 'Become tournament ready',
-    why: 'This is where it all comes together. Mechanics, game sense, strategy, teamwork and consistency into one competitive system.',
-    prereqs: ['Competitive Performance', 'All previous stages'],
-    training: ['Elite Consistency', 'Advanced Decision Making', 'Team Execution', 'Performance Analysis'],
-    assessment: 'Compete in structured tournaments and demonstrate elite-level consistency.',
-    outcome: 'A player ready to compete at the highest accessible level.',
-    next: null,
-    skills: ['Consistency', 'Advanced decision making', 'Team execution', 'Performance analysis', 'Continuous improvement'],
-    image: '/roadmap-hero.png',
-  },
+/* ─── Gradient text style ─── */
+const G = {
+  background: 'linear-gradient(90deg, #1769FF, #7137FF, #FF1838)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+}
+const GB = {
+  background: 'linear-gradient(90deg, #1769FF, #4A8AFF)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+}
+const GR = {
+  background: 'linear-gradient(90deg, #C62DCE, #FF1838)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+}
+
+/* ─── Ease curve ─── */
+const E = [0.23, 1, 0.32, 1]
+
+/* ─── Stage data ─── */
+const STAGES = [
+  { n: '01', accent: '#1769FF', bg: '#EEF5FF', label: 'STAGE 01', name: 'Foundation', sub: 'Build Your Base',           skills: ['Controls', 'Sensitivity', 'Movement', 'Camera', 'Gyroscope'] },
+  { n: '02', accent: '#1769FF', bg: '#EEF5FF', label: 'STAGE 02', name: 'Aim Fundamentals', sub: 'Build Reliable Aim',  skills: ['Crosshair', 'ADS', 'Tracking', 'Flicks', 'Switching'] },
+  { n: '03', accent: '#4A8AFF', bg: '#EEF5FF', label: 'STAGE 03', name: 'Recoil & Spray', sub: 'Control Your Weapons',  skills: ['Patterns', 'Spray', 'Burst', 'Familiarity', 'Distance'] },
+  { n: '04', accent: '#7137FF', bg: '#F0EAFF', label: 'STAGE 04', name: 'Close-Range', sub: 'Win The Fight',            skills: ['Pre-fire', 'Peek', 'Hip fire', 'Movement', 'Timing'] },
+  { n: '05', accent: '#7137FF', bg: '#F0EAFF', label: 'STAGE 05', name: 'Game Sense', sub: 'Make Better Decisions',     skills: ['Information', 'Timing', 'Risk', 'Prediction', 'Position'] },
+  { n: '06', accent: '#9B3FFF', bg: '#F0EAFF', label: 'STAGE 06', name: 'Strategy', sub: 'Control The Game',            skills: ['Zone', 'Rotations', 'Position', 'Control', 'Fallback'] },
+  { n: '07', accent: '#C62DCE', bg: '#FDF0FF', label: 'STAGE 07', name: 'Teamplay', sub: 'Play As One',                 skills: ['Communication', 'Roles', 'Trading', 'Spacing', 'Movement'] },
+  { n: '08', accent: '#C62DCE', bg: '#FDF0FF', label: 'STAGE 08', name: 'Competitive', sub: 'Perform Under Pressure',   skills: ['Scrims', 'Adaptation', 'Pressure', 'Review', 'Clutch'] },
+  { n: '09', accent: '#FF1838', bg: '#FFF0F2', label: 'STAGE 09', name: 'Advanced Meta', sub: 'Read The Game',          skills: ['Meta', 'Positioning', 'Gunfight selection', 'Timing', 'Adaptation'] },
+  { n: '10', accent: '#FF1838', bg: '#FFF0F2', label: 'STAGE 10', name: 'Go Elite', sub: 'Become Tournament Ready',     skills: ['Consistency', 'Decisions', 'Execution', 'Analysis', 'Growth'] },
 ]
 
-const PREREQS = [
-  { n:'01', title:'DEVICE & SETTINGS',  bullets:['Stable FPS','Correct sensitivity','Gyroscope setup','Comfortable controls'] },
-  { n:'02', title:'CONTROL & MOVEMENT', bullets:['Movement basics','Camera control','Peeking','Positioning'] },
-  { n:'03', title:'AIM FUNDAMENTALS',   bullets:['Crosshair placement','ADS control','Tracking','Flick control'] },
-  { n:'04', title:'RECOIL CONTROL',     bullets:['Weapon familiarity','Spray control','Burst discipline','Vertical recoil'] },
-  { n:'05', title:'GAME ROUTINE',       bullets:['Consistent practice','Warm-up routine','Review sessions','Recovery'] },
-  { n:'06', title:'MENTAL DISCIPLINE',  bullets:['Patience','Decision making','Composure','Learning mindset'] },
-]
-
-const PROGRESSION = [
-  { n:'01', label:'FOUNDATION',  desc:'Build the fundamentals.',               color:'#1769FF' },
-  { n:'02', label:'MECHANICS',   desc:'Build mechanical consistency.',          color:'#4A90FF' },
-  { n:'03', label:'GAME IQ',     desc:'Understand situations and decisions.',   color:'#7137FF' },
-  { n:'04', label:'COMPETITION', desc:'Perform under pressure.',                color:'#FF1838' },
-]
-
-const LOOP = [
-  { label:'LEARN',     desc:'Understand the concept.',      border:'#1769FF' },
-  { label:'PRACTICE',  desc:'Train the skill.',             border:'#4A90FF' },
-  { label:'ASSESS',    desc:'Prove your performance.',       border:'#7137FF' },
-  { label:'RESULT',    desc:'Measure the outcome.',          border:'#C060FF' },
-  { label:'NEXT STEP', desc:'Unlock the next stage.',        border:'#FF1838' },
-]
-
-const PROGRESS_STAGES = [
-  { label:'Foundation',   state:'done'    },
-  { label:'Aim',          state:'done'    },
-  { label:'Recoil',       state:'done'    },
-  { label:'Close-Range',  state:'current' },
-  { label:'Map',          state:'locked'  },
-  { label:'Game Sense',   state:'locked'  },
-  { label:'Strategy',     state:'locked'  },
-  { label:'Teamplay',     state:'locked-red' },
-  { label:'Performance',  state:'locked-red' },
-  { label:'Go Elite',     state:'elite'   },
-]
-
-const SVG_PATH = 'M 72,420 C 110,420 150,270 220,240 S 310,370 390,360 S 470,395 490,390 C 530,360 560,230 615,200 S 690,170 690,170 S 740,270 790,305 S 850,330 890,345 C 960,340 1050,150 1100,85'
-
-/* ══════════════════════════════════════════════
-   SVG ICONS
-══════════════════════════════════════════════ */
-const IconSettings = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1769FF" strokeWidth="1.5" strokeLinecap="round">
-    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-  </svg>
-)
-const IconMove = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1769FF" strokeWidth="1.5" strokeLinecap="round">
-    <path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/>
-  </svg>
-)
-const IconAim = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1769FF" strokeWidth="1.5" strokeLinecap="round">
-    <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="3" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="21" y2="12"/>
-  </svg>
-)
-const IconRecoil = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1769FF" strokeWidth="1.5" strokeLinecap="round">
-    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-  </svg>
-)
-const IconRoutine = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1769FF" strokeWidth="1.5" strokeLinecap="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-  </svg>
-)
-const IconMind = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1769FF" strokeWidth="1.5" strokeLinecap="round">
-    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24A2.5 2.5 0 0 1 9.5 2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2z"/>
-  </svg>
-)
-const ICONS = [IconSettings, IconMove, IconAim, IconRecoil, IconRoutine, IconMind]
-
-/* ══════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════ */
-const GRAD = 'linear-gradient(90deg,#1769FF,#7137FF,#FF1838)'
-
-function Eyebrow({ children, center = false, color = '#6D7B90' }) {
+/* ─── Section-level eyebrow divider ─── */
+function SectionEyebrow({ left, text, right }) {
   return (
-    <div style={{
-      fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11,
-      letterSpacing:'0.35em', textTransform:'uppercase', color,
-      marginBottom:14, textAlign: center ? 'center' : 'left',
-    }}>
-      {children}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 16 }}>
+      {left && <div style={{ width: 60, height: 1, background: left }} />}
+      <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase' }}>{text}</span>
+      {right && <div style={{ width: 60, height: 1, background: right }} />}
     </div>
   )
 }
 
-function GradSpan({ children, g = GRAD }) {
+/* ─── Small tagline row ─── */
+function Tagline({ text }) {
   return (
-    <span style={{ background:g, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
-      {children}
-    </span>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 48 }}>
+      <div style={{ width: 80, height: 1, background: '#DCE4EF' }} />
+      <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.3em', color: '#9BAABB', textTransform: 'uppercase' }}>{text}</span>
+      <div style={{ width: 80, height: 1, background: '#DCE4EF' }} />
+    </div>
   )
 }
 
-function FadeUp({ children, delay = 0, y = 24, x = 0 }) {
-  return (
-    <motion.div
-      initial={{ opacity:0, y, x }}
-      whileInView={{ opacity:1, y:0, x:0 }}
-      viewport={{ once:true, amount:0.15 }}
-      transition={{ duration:0.65, delay, ease:[0.22,1,0.36,1] }}
-    >
-      {children}
-    </motion.div>
-  )
-}
-
-function Wrap({ children, bg='#FFFFFF', py='120px 0' }) {
-  return (
-    <section style={{ background:bg, padding:py, overflow:'hidden' }}>
-      <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 clamp(20px,5vw,64px)' }}>
-        {children}
-      </div>
-    </section>
-  )
-}
-
-const stagger = { hidden:{}, visible:{ transition:{ staggerChildren:0.12 } } }
-const child   = { hidden:{ opacity:0, y:20 }, visible:{ opacity:1, y:0, transition:{ duration:0.7, ease:[0.22,1,0.36,1] } } }
-
-/* ══════════════════════════════════════════════
-   MAIN PAGE
-══════════════════════════════════════════════ */
-export default function RoadmapPage() {
+export default function Roadmap() {
   const [activeStage, setActiveStage] = useState(null)
-  const [hoveredNode, setHoveredNode]  = useState(null)
-  const active = activeStage !== null ? STAGE_DATA[activeStage] : null
-
-  function toggle(i) { setActiveStage(p => p === i ? null : i) }
 
   return (
-    <div style={{ background:'#FFFFFF', overflowX:'hidden' }}>
-      <Navbar activePage="roadmap" />
+    <>
+      <Navbar />
 
-      {/* ══ HERO ══ */}
-      <section style={{ background:'#FFFFFF', minHeight:820, position:'relative', overflow:'hidden', paddingBottom:0 }}>
+      {/* ══════════════════════════════════════════
+          SECTION 1 — HERO
+      ══════════════════════════════════════════ */}
+      <section style={{ minHeight: '75vh', background: '#FFFFFF', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', paddingTop: 64 }}>
+        {/* Blue glow */}
+        <div style={{ position: 'absolute', left: -200, top: -200, width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.09) 0%,transparent 60%)', pointerEvents: 'none' }} />
+        {/* Red glow */}
+        <div style={{ position: 'absolute', right: -200, bottom: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.07) 0%,transparent 60%)', pointerEvents: 'none' }} />
+        {/* Top-left shard */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: 300, height: 380, clipPath: 'polygon(0 0,100% 0,55% 100%,0 85%)', background: '#1769FF', opacity: 0.05, pointerEvents: 'none' }} />
+        {/* Top-right shard */}
+        <div style={{ position: 'absolute', top: 0, right: 0, width: 260, height: 340, clipPath: 'polygon(45% 0,100% 0,100% 85%,0 100%)', background: '#FF1838', opacity: 0.05, pointerEvents: 'none' }} />
+        {/* Dot grid */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '28px 28px', opacity: 0.6, pointerEvents: 'none' }} />
+        {/* Watermark */}
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'min(20vw,200px)', color: '#111827', opacity: 0.02, pointerEvents: 'none', userSelect: 'none', whiteSpace: 'nowrap' }}>ROADMAP</div>
 
-        {/* ── Breathing glow orbs ── */}
-        <div aria-hidden="true" style={{ position:'absolute', right:'20%', top:'25%', width:560, height:560, borderRadius:'50%', background:'radial-gradient(circle, rgba(23,105,255,0.14) 0%, transparent 70%)', animation:'glow-pulse-blue 4s ease-in-out infinite', pointerEvents:'none', willChange:'transform', zIndex:1 }} />
-        <div aria-hidden="true" style={{ position:'absolute', right:'38%', top:'45%', width:500, height:500, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,36,72,0.10) 0%, transparent 70%)', animation:'glow-pulse-red 5.5s ease-in-out 2s infinite', pointerEvents:'none', willChange:'transform', zIndex:1 }} />
-
-        {/* ── RIGHT: full-bleed artwork ── */}
-        <div style={{ position:'absolute', top:0, right:0, width:'58%', height:'100%', zIndex:0 }}>
-          {/* Fallback dark bg so placeholder looks intentional */}
-          <div style={{ position:'absolute', inset:0, background:'linear-gradient(135deg,#0D1828,#1A2A42)', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:12 }}>
-            <div style={{ fontSize:72, opacity:0.18 }}>🏆</div>
-            <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#3D5070' }}>[ ROADMAP-HERO.PNG ]</div>
-            <div style={{ fontFamily:'Inter,sans-serif', fontSize:11, color:'#2A3E55' }}>Drop roadmap-hero.webp in /public</div>
-          </div>
-          <img
-            src="/roadmap-hero.png"
-            alt="Esports Elite — Roadmap Hero"
-            loading="eager"
-            style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', objectPosition:'center right', display:'block' }}
-            onError={e => { e.target.style.display = 'none' }}
-          />
-          {/* White fade — left edge of artwork blends into page */}
-          <div style={{ position:'absolute', top:0, left:0, width:320, height:'100%', background:'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.95) 30%, rgba(255,255,255,0.60) 65%, transparent 100%)', zIndex:1 }} />
-          {/* Bottom fade — artwork blends into next section */}
-          <div style={{ position:'absolute', bottom:0, left:0, right:0, height:200, background:'linear-gradient(to bottom, transparent 0%, #FFFFFF 100%)', zIndex:2, pointerEvents:'none' }} />
-        </div>
-
-        {/* ── LEFT: content column ── */}
-        <motion.div
-          variants={stagger} initial="hidden" animate="visible"
-          style={{
-            position:'relative', zIndex:2,
-            width:'44%', maxWidth:'560px', minWidth:'480px', minHeight:820,
-            display:'flex', flexDirection:'column', justifyContent:'center',
-            paddingLeft:'64px', paddingRight:'24px',
-            paddingTop:80, paddingBottom:80,
-          }}
-          className="hero-left-col"
-        >
-          {/* Vertical side text */}
-          <div style={{ position:'absolute', left:20, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', pointerEvents:'none' }}>
-            TRAIN · ANALYZE · DOMINATE
-          </div>
-
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '128px 64px', position: 'relative', zIndex: 1, width: '100%' }} className="hero-inner">
           {/* Eyebrow */}
-          <motion.div variants={child} style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
-            <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:13, letterSpacing:'0.35em', color:'#60708A', textTransform:'uppercase' }}>
-              YOUR JOURNEY STARTS HERE
-            </span>
-            <div style={{ width:45, height:1, background:'#CBD5E1', flexShrink:0 }} />
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+            <div style={{ width: 40, height: 2, background: '#1769FF', borderRadius: 1 }} />
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#536174', textTransform: 'uppercase' }}>YOUR JOURNEY STARTS HERE</span>
           </motion.div>
 
           {/* H1 */}
-          <motion.h1 variants={child} style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,6.5vw,80px)', lineHeight:0.92, letterSpacing:'-0.02em', margin:'0 0 20px' }}>
-            <span style={{ color:'#080D16', display:'block' }}>A CLEAR ROADMAP</span>
-            <span style={{ color:'#080D16' }}>TO </span>
-            <span style={{ background:'linear-gradient(90deg, #1769FF 0%, #7047FF 50%, #FF2448 100%)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>GREATNESS</span>
+          <motion.h1 initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.08 }} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '-0.01em', margin: 0 }} className="hero-h1">
+            <span style={{ color: '#111827', display: 'block' }}>A CLEAR ROADMAP</span>
+            <span style={{ display: 'inline' }}>TO </span><span style={G}>GREATNESS</span>
           </motion.h1>
 
-          {/* Description */}
-          <motion.p variants={child} style={{ fontFamily:'Inter,sans-serif', fontSize:18, lineHeight:1.55, color:'#526078', maxWidth:580, margin:0 }}>
+          {/* Desc */}
+          <motion.p initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.16 }} style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, color: '#536174', maxWidth: 580, marginTop: 20, lineHeight: 1.65 }} className="hero-desc">
             Stop guessing what to practice. Esports Elite gives you a structured path from foundational mechanics to competitive-level performance.
           </motion.p>
 
+          {/* Pills */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.24 }} style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 32 }}>
+            {['STRUCTURED LEARNING', 'MEASURABLE PROGRESS', 'COMPETITIVE READY', 'CONSISTENT GROWTH'].map((pill) => (
+              <motion.div key={pill} whileHover={{ background: '#FFFFFF', boxShadow: '0 4px 16px rgba(7,17,31,0.08)', y: -2 }} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#F7F9FC', border: '1px solid #DCE4EF', padding: '8px 16px', borderRadius: 20, cursor: 'default' }}>
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1769FF', flexShrink: 0 }} />
+                <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.1em', color: '#536174', textTransform: 'uppercase' }}>{pill}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+
           {/* Buttons */}
-          <motion.div variants={child} style={{ display:'flex', flexDirection:'row', alignItems:'center', gap:'12px', marginTop:'28px', flexWrap:'nowrap' }}>
-            <motion.button
-              whileHover={{ y:-2, boxShadow:'0 8px 24px rgba(23,105,255,0.35)' }}
-              whileTap={{ scale:0.97 }}
-              style={{ background:'#080D16', color:'#FFFFFF', padding:'14px 20px', borderRadius:10, border:'none', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:'13px', letterSpacing:'0.05em', cursor:'pointer', transition:'box-shadow 0.2s', whiteSpace:'nowrap', flexShrink:0 }}
-            >
-              START YOUR JOURNEY →
-            </motion.button>
-            <motion.button
-              whileHover={{ y:-2, borderColor:'#1769FF' }}
-              whileTap={{ scale:0.97 }}
-              style={{ background:'#FFFFFF', color:'#172033', padding:'14px 20px', borderRadius:10, border:'1.5px solid #D2DCE8', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:'13px', cursor:'pointer', transition:'border-color 0.2s', whiteSpace:'nowrap', flexShrink:0 }}
-            >
-              ▶&nbsp;&nbsp;WATCH HOW IT WORKS
-            </motion.button>
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.32 }} style={{ display: 'flex', gap: 16, marginTop: 32, flexWrap: 'wrap' }} className="hero-btns">
+            <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <RadialRevealButton
+                fill="#0B1220" hoverFill="#1769FF"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15, color: '#FFFFFF', cursor: 'pointer' }}
+              >
+                START YOUR JOURNEY <ArrowRight size={16} strokeWidth={2.5} />
+              </RadialRevealButton>
+            </Link>
+            <button style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#FFFFFF', border: '1.5px solid #DCE4EF', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 15, color: '#111827', cursor: 'pointer', transition: 'border-color 0.2s, background 0.2s' }}>
+              ▶ WATCH HOW IT WORKS
+            </button>
           </motion.div>
-
-          {/* Feature strip */}
-          <motion.div variants={child} style={{ display:'flex', flexDirection:'row', flexWrap:'nowrap', alignItems:'center', gap:'10px', marginTop:'28px', width:'100%' }}>
-            {[
-              { Icon:BarChart2, color:'#1769FF', label:'STRUCTURED LEARNING'  },
-              { Icon:Target,    color:'#FF2448', label:'MEASURABLE PROGRESS'  },
-              { Icon:Users,     color:'#7047FF', label:'COMPETITIVE READY'    },
-              { Icon:Zap,       color:'#FF2448', label:'CONSISTENT GROWTH'    },
-            ].map((f, i) => (
-              <React.Fragment key={f.label}>
-                {i > 0 && <div style={{ width:'1px', height:'24px', background:'#D7DFEA', flexShrink:0 }} />}
-                <div style={{ display:'flex', flexDirection:'row', alignItems:'center', gap:'6px', flexShrink:0 }}>
-                  <f.Icon size={14} color={f.color} strokeWidth={1.8} />
-                  <span style={{ fontFamily:'Inter, sans-serif', fontWeight:600, fontSize:'10px', color:'#34435A', whiteSpace:'nowrap', letterSpacing:'0.03em', lineHeight:1.2 }}>{f.label}</span>
-                </div>
-              </React.Fragment>
-            ))}
-          </motion.div>
-
-          {/* Bottom-left faded text */}
-          <div style={{ position:'absolute', bottom:48, left:'clamp(40px,5vw,80px)', userSelect:'none', pointerEvents:'none' }}>
-            {['DISCIPLINE','BUILDS','FREEDOM'].map(w => (
-              <div key={w} style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:18, letterSpacing:'0.1em', color:'#1769FF', opacity:0.18, lineHeight:1.2 }}>{w}</div>
-            ))}
-          </div>
-
-          {/* Bottom micro text */}
-          <div style={{ position:'absolute', bottom:24, left:'50%', transform:'translateX(-50%)', whiteSpace:'nowrap', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.3em', color:'#B8C2D0', userSelect:'none', pointerEvents:'none' }}>
-            SAME PLAYER. DIFFERENT MINDSET. A HIGHER YOU.
-          </div>
-        </motion.div>
-
-        {/* Section-level bottom fade over everything */}
-        <div style={{ position:'absolute', bottom:0, left:0, right:0, height:120, background:'linear-gradient(to bottom, transparent 0%, #FFFFFF 100%)', zIndex:3, pointerEvents:'none' }} />
-
-        <style>{`
-          @media (max-width: 900px) {
-            .hero-left-col { width: 100% !important; padding-top: 100px !important; padding-bottom: 60px !important; }
-          }
-        `}</style>
+        </div>
       </section>
 
-      {/* ══ PLAYER PROGRESSION ══ */}
-      <section style={{ position:'relative', overflow:'hidden', padding:'80px 0 100px', background:'#FFFFFF' }}>
-        {/* CSS-only decorative elements — no image dependency */}
-
-        {/* Dot grid */}
-        <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle, #DCE4EF 1px, transparent 1px)', backgroundSize:'28px 28px', opacity:0.4, pointerEvents:'none', zIndex:0 }} />
-
-        {/* Top-left blue shard */}
-        <div style={{ position:'absolute', top:-20, left:0, width:200, height:300, clipPath:'polygon(0 0, 60% 0, 40% 100%, 0 100%)', background:'linear-gradient(135deg, #1769FF 0%, rgba(23,105,255,0.05) 100%)', opacity:0.12, zIndex:0, pointerEvents:'none' }} />
-
-        {/* Bottom-right red shard */}
-        <div style={{ position:'absolute', bottom:-20, right:0, width:200, height:300, clipPath:'polygon(40% 0, 100% 0, 100% 100%, 60% 100%)', background:'linear-gradient(225deg, #FF2448 0%, rgba(255,36,72,0.05) 100%)', opacity:0.12, zIndex:0, pointerEvents:'none' }} />
-
-        {/* + crosshairs */}
-        <div style={{ position:'absolute', top:24, left:24, color:'#1769FF', fontSize:18, opacity:0.4, userSelect:'none', zIndex:1 }}>+</div>
-        <div style={{ position:'absolute', top:24, right:24, color:'#FF2448', fontSize:18, opacity:0.4, userSelect:'none', zIndex:1 }}>+</div>
-
-        {/* Left vertical text */}
-        <div style={{ position:'absolute', left:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', opacity:0.6, zIndex:1 }}>
-          TRAIN · ANALYZE · DOMINATE
-        </div>
-        {/* Right vertical text */}
-        <div style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', opacity:0.6, zIndex:1 }}>
-          BETTER PLAYER · BETTER PERSON
-        </div>
-
-        {/* Content */}
-        <div style={{ position:'relative', zIndex:2, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
-
-          {/* Eyebrow row */}
-          <FadeUp>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:20 }}>
-              <div style={{ width:60, height:1, background:'linear-gradient(to right, #1769FF, #7047FF)' }} />
-              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#60708A', textTransform:'uppercase', whiteSpace:'nowrap' }}>PLAYER PROGRESSION</span>
-              <div style={{ width:60, height:1, background:'linear-gradient(to left, #FF2448, #7047FF)' }} />
-            </div>
-
-            <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,5.5vw,72px)', lineHeight:0.92, color:'#080D16', textAlign:'center', margin:'0 0 16px' }}>
-              FROM PLAYER TO{' '}
-              <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>COMPETITOR</span>
+      {/* ══════════════════════════════════════════
+          SECTION 2 — PLAYER PROGRESSION 4 CARDS
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '96px 0' }} className="sect-prog">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }} className="inner-prog">
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
+            <SectionEyebrow
+              left="linear-gradient(to right,#1769FF,#7137FF)"
+              text="PLAYER PROGRESSION"
+              right="linear-gradient(to left,#FF1838,#7137FF)"
+            />
+            <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em', margin: 0 }} className="prog-h2">
+              FROM PLAYER TO <span style={G}>COMPETITOR</span>
             </h2>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', marginTop: 16 }}>A structured path. Real improvement. Measurable results.</p>
+          </motion.div>
 
-            <p style={{ fontFamily:'Inter,sans-serif', fontSize:18, color:'#526078', textAlign:'center', marginTop:16, marginBottom:0 }}>
-              A structured path. Real improvement. Measurable results.
-            </p>
-          </FadeUp>
-
-          {/* Cards */}
-          <div style={{ display:'flex', flexDirection:'row', gap:0, marginTop:56, alignItems:'stretch' }}>
+          {/* 4 Cards */}
+          <div style={{ display: 'flex', gap: 0, alignItems: 'stretch' }} className="prog-cards">
             {[
-              { n:'01', label:'FOUNDATION',  desc:'Build the fundamentals.',                  Icon:Gamepad2,  color:'#1769FF', borderAlpha:'rgba(23,105,255,0.15)'   },
-              { n:'02', label:'MECHANICS',   desc:'Build mechanical consistency.',             Icon:Crosshair, color:'#4A90FF', borderAlpha:'rgba(74,144,255,0.15)'   },
-              { n:'03', label:'GAME IQ',     desc:'Understand situations and decisions.',     Icon:Brain,     color:'#7047FF', borderAlpha:'rgba(112,71,255,0.15)'   },
-              { n:'04', label:'COMPETITION', desc:'Perform under pressure.',                  Icon:Trophy,    color:'#FF2448', borderAlpha:'rgba(255,36,72,0.15)'    },
-            ].map((card, i) => (
-              <div key={card.label} style={{ display:'flex', alignItems:'center', flex:1 }}>
+              { accent: '#1769FF', num: '01', Icon: Gamepad2, title: 'FOUNDATION',  desc: 'Build the fundamentals.' },
+              { accent: '#4A8AFF', num: '02', Icon: Target,   title: 'MECHANICS',   desc: 'Build mechanical consistency.' },
+              { accent: '#7137FF', num: '03', Icon: Brain,    title: 'GAME IQ',     desc: 'Understand situations and decisions.' },
+              { accent: '#FF1838', num: '04', Icon: Trophy,   title: 'COMPETITION', desc: 'Perform under pressure.' },
+            ].map((card, i, arr) => (
+              <div key={card.num} style={{ display: 'flex', alignItems: 'center', flex: 1 }} className="prog-card-wrap">
                 <motion.div
-                  initial={{ opacity:0, y:32 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.2 }}
-                  transition={{ duration:0.55, delay:i*0.1, ease:[0.22,1,0.36,1] }}
-                  whileHover={{ y:-5, transition:{ duration:0.2 } }}
-                  style={{
-                    flex:1,
-                    position:'relative',
-                    display:'flex', flexDirection:'column', alignItems:'flex-start',
-                    padding:'32px',
-                    background:'rgba(255,255,255,0.72)',
-                    backdropFilter:'blur(6px)',
-                    borderRadius:4,
-                    border:`1px solid ${card.borderAlpha}`,
-                    borderLeft:`3px solid ${card.color}`,
-                    boxShadow:'0 8px 32px rgba(7,17,31,0.06)',
-                  }}
+                  initial={{ opacity: 0, transform: 'translateY(30px)' }}
+                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: E, delay: i * 0.1 }}
+                  whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(7,17,31,0.08)', zIndex: 1 }}
+                  style={{ flex: 1, background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: i === 0 ? '16px 0 0 16px' : i === arr.length - 1 ? '0 16px 16px 0' : 0, padding: 32, position: 'relative', overflow: 'hidden', transition: 'box-shadow 0.25s' }}
+                  className="prog-card"
                 >
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:13, color:card.color, opacity:0.6, letterSpacing:'0.1em', marginBottom:12 }}>{card.n}</div>
-                  <card.Icon size={36} strokeWidth={1.8} color={card.color} />
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:26, color:'#080D16', marginTop:12, letterSpacing:'0.02em' }}>{card.label}</div>
-                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, color:'#526078', marginTop:8, lineHeight:1.55 }}>{card.desc}</div>
+                  {/* Top accent bar */}
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: card.accent }} />
+                  <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 13, color: card.accent, opacity: 0.6, letterSpacing: '0.1em', marginBottom: 8 }}>0{i + 1}</div>
+                  <card.Icon size={32} strokeWidth={1.8} color={card.accent} style={{ marginBottom: 12 }} />
+                  <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 24, color: '#111827' }}>{card.title}</div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#536174', marginTop: 8 }}>{card.desc}</div>
                 </motion.div>
-
-                {/* Arrow connector */}
-                {i < 3 && (
-                  <div style={{ flexShrink:0, width:32, display:'flex', alignItems:'center', justifyContent:'center', zIndex:2 }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 6l6 6-6 6" stroke="url(#arrGrad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <defs>
-                        <linearGradient id="arrGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#1769FF"/>
-                          <stop offset="100%" stopColor="#FF2448"/>
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
+                {i < arr.length - 1 && (
+                  <ChevronRight size={20} color="#DCE4EF" strokeWidth={2} style={{ flexShrink: 0 }} className="prog-chevron" />
                 )}
               </div>
             ))}
           </div>
 
-          {/* Bottom tagline */}
-          <FadeUp delay={0.3}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:48 }}>
-              <div style={{ width:80, height:1, background:'linear-gradient(to right, #1769FF, #7047FF)' }} />
-              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.35em', color:'#9BAABB', textTransform:'uppercase', whiteSpace:'nowrap' }}>WHERE GRIND BECOMES GREATNESS</span>
-              <div style={{ width:80, height:1, background:'linear-gradient(to left, #FF2448, #7047FF)' }} />
-            </div>
-          </FadeUp>
-
+          <Tagline text="WHERE GRIND BECOMES GREATNESS" />
         </div>
       </section>
 
-      {/* ══ FOUNDATION / PREREQUISITES ══ */}
-      <section style={{ position:'relative', overflow:'hidden', padding:'100px 0 80px', background:'#F7F9FC' }}>
-        {/* Top fade */}
-        <div style={{ position:'absolute', top:0, left:0, right:0, height:80, background:'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex:1, pointerEvents:'none' }} />
-        {/* Bottom fade */}
-        <div style={{ position:'absolute', bottom:0, left:0, right:0, height:80, background:'linear-gradient(to top, #FFFFFF 0%, transparent 100%)', zIndex:1, pointerEvents:'none' }} />
+      {/* ══════════════════════════════════════════
+          SECTION 3 — BUILD THE FOUNDATION FIRST
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#FFFFFF', padding: '96px 0' }} className="sect-found">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }} className="inner-found">
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
+            <SectionEyebrow
+              left="linear-gradient(to right,#1769FF,#7137FF)"
+              text="BEFORE YOU START"
+              right="linear-gradient(to left,#FF1838,#7137FF)"
+            />
+            <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em', margin: 0 }} className="found-h2">
+              BUILD THE <span style={GB}>FOUNDATION</span> <span style={GR}>FIRST</span>
+            </h2>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', maxWidth: 700, margin: '16px auto 0', lineHeight: 1.65 }}>
+              Elite performance starts with fundamentals. Make sure your setup, mechanics and habits are ready before chasing advanced skills.
+            </p>
+          </motion.div>
 
-        {/* Left vertical text */}
-        <div style={{ position:'absolute', left:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:2 }}>
-          TRAIN · ANALYZE · DOMINATE
-        </div>
-        {/* Right vertical text */}
-        <div style={{ position:'absolute', right:24, top:'50%', transform:'translateY(-50%)', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', writingMode:'vertical-rl', textTransform:'uppercase', userSelect:'none', zIndex:2 }}>
-          BETTER PLAYER · BETTER PERSON
-        </div>
-
-        {/* Content */}
-        <div style={{ position:'relative', zIndex:2, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
-
-          {/* Center text */}
-          <FadeUp>
-            <div style={{ textAlign:'center', marginBottom:48 }}>
-              {/* Eyebrow row */}
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:20 }}>
-                <div style={{ width:60, height:1, background:'linear-gradient(to right, #1769FF, #7047FF)' }} />
-                <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#60708A', textTransform:'uppercase', whiteSpace:'nowrap' }}>BEFORE YOU START</span>
-                <div style={{ width:60, height:1, background:'linear-gradient(to left, #FF2448, #7047FF)' }} />
-              </div>
-              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,5.5vw,72px)', lineHeight:0.92, color:'#080D16', margin:'0 0 16px' }}>
-                BUILD THE{' '}
-                <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>FOUNDATION</span>
-                {' '}
-                <span style={{ background:'linear-gradient(90deg,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>FIRST</span>
-              </h2>
-              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#526078', maxWidth:700, margin:'16px auto 0' }}>
-                Elite performance starts with fundamentals. Make sure your setup, mechanics and habits are ready before chasing advanced skills.
-              </p>
-            </div>
-          </FadeUp>
-
-          {/* 6-card grid */}
-          <div className="prereq-grid">
+          {/* 6 Cards grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="found-grid">
             {[
-              { n:'01', color:'#1769FF', accent:'#1769FF', title:'DEVICE & SETTINGS',   Icon:Settings, bullets:['Stable FPS','Correct sensitivity','Gyroscope setup','Comfortable controls'] },
-              { n:'02', color:'#4A90FF', accent:'#4A90FF', title:'CONTROL & MOVEMENT',  Icon:Move,     bullets:['Movement basics','Camera control','Peeking','Positioning'] },
-              { n:'03', color:'#7047FF', accent:'#7047FF', title:'AIM FUNDAMENTALS',    Icon:Target,   bullets:['Crosshair placement','ADS control','Tracking','Flick control'] },
-              { n:'04', color:'#9B3FFF', accent:'#9B3FFF', title:'RECOIL CONTROL',      Icon:Zap,      bullets:['Weapon familiarity','Spray control','Burst discipline','Vertical recoil'] },
-              { n:'05', color:'#C62DCE', accent:'#C62DCE', title:'GAME ROUTINE',        Icon:Calendar, bullets:['Consistent practice','Warm-up routine','Review sessions','Recovery'] },
-              { n:'06', color:'#FF2448', accent:'#FF2448', title:'MENTAL DISCIPLINE',   Icon:Brain,    bullets:['Patience','Decision making','Composure','Learning mindset'] },
+              { n: '01', accent: '#1769FF', Icon: Settings,  title: 'DEVICE & SETTINGS',  bullets: ['Stable FPS', 'Correct sensitivity', 'Gyroscope setup', 'Comfortable controls'] },
+              { n: '02', accent: '#4A8AFF', Icon: Move,      title: 'CONTROL & MOVEMENT', bullets: ['Movement basics', 'Camera control', 'Peeking', 'Positioning'] },
+              { n: '03', accent: '#7137FF', Icon: Target,    title: 'AIM FUNDAMENTALS',   bullets: ['Crosshair placement', 'ADS control', 'Tracking', 'Flick control'] },
+              { n: '04', accent: '#9B3FFF', Icon: Zap,       title: 'RECOIL CONTROL',     bullets: ['Weapon patterns', 'Spray control', 'Burst discipline', 'Vertical recoil'] },
+              { n: '05', accent: '#C62DCE', Icon: Calendar,  title: 'GAME ROUTINE',       bullets: ['Consistent practice', 'Warm-up routine', 'Review sessions', 'Recovery'] },
+              { n: '06', accent: '#FF1838', Icon: Brain,     title: 'MENTAL DISCIPLINE',  bullets: ['Patience', 'Decision making', 'Composure', 'Learning mindset'] },
             ].map((card, i) => (
-              <motion.div key={card.n}
-                initial={{ opacity:0, y:30 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.15 }}
-                transition={{ duration:0.5, delay:i*0.08, ease:[0.22,1,0.36,1] }}
-                whileHover={{ y:-4, boxShadow:'0 16px 48px rgba(7,17,31,0.13)', transition:{ duration:0.25 } }}
-                style={{
-                  background:'#FFFFFF', borderRadius:16, border:'1px solid #E8EEF5',
-                  boxShadow:'0 4px 24px rgba(7,17,31,0.07)',
-                  padding:'28px', position:'relative', overflow:'hidden', minHeight:280,
-                }}
+              <motion.div
+                key={card.n}
+                initial={{ opacity: 0, transform: 'translateY(30px)' }}
+                whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: E, delay: i * 0.08 }}
+                whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(7,17,31,0.08)', borderColor: 'rgba(23,105,255,0.1)' }}
+                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 16, padding: 28, position: 'relative', overflow: 'hidden', transition: 'border-color 0.25s, box-shadow 0.25s' }}
               >
                 {/* Top accent bar */}
-                <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:card.color, borderRadius:'3px 3px 0 0' }} />
-                {/* Large faded number */}
-                <div style={{ position:'absolute', top:16, left:20, fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:42, color:card.color, opacity:0.25, letterSpacing:'-0.02em', lineHeight:1, userSelect:'none' }}>{card.n}</div>
-                {/* Icon */}
-                <div style={{ marginTop:32, marginBottom:12 }}>
-                  <card.Icon size={28} strokeWidth={1.8} color={card.accent} />
-                </div>
-                {/* Title */}
-                <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:22, color:'#080D16', marginTop:8, letterSpacing:'0.01em' }}>{card.title}</div>
-                {/* Bullets */}
-                <div style={{ display:'flex', flexDirection:'column', gap:6, marginTop:12 }}>
-                  {card.bullets.map(b => (
-                    <div key={b} style={{ display:'flex', alignItems:'center', gap:8 }}>
-                      <Check size={13} color="#1769FF" strokeWidth={2.5} style={{ flexShrink:0 }} />
-                      <span style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#526078' }}>{b}</span>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: card.accent }} />
+                {/* Background number */}
+                <div style={{ position: 'absolute', top: 8, left: 20, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 36, color: card.accent, opacity: 0.25, pointerEvents: 'none', userSelect: 'none' }}>{card.n}</div>
+                <card.Icon size={28} strokeWidth={1.8} color={card.accent} style={{ marginTop: 32, marginBottom: 12, display: 'block' }} />
+                <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 20, color: '#111827' }}>{card.title}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
+                  {card.bullets.map((b) => (
+                    <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Check size={13} color="#1769FF" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174' }}>{b}</span>
                     </div>
                   ))}
                 </div>
-                {/* Learn more */}
-                <div style={{ marginTop:16, fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.08em', color:card.accent, cursor:'pointer', transition:'opacity 0.2s' }}
-                  onMouseEnter={e => { e.currentTarget.style.opacity = '0.6' }}
-                  onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}>
-                  LEARN MORE →
-                </div>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: card.accent, marginTop: 16, cursor: 'pointer', textTransform: 'uppercase' }}>LEARN MORE →</div>
               </motion.div>
             ))}
           </div>
 
-          {/* Bottom tagline */}
-          <FadeUp delay={0.2}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:56 }}>
-              <div style={{ width:80, height:1, background:'#DCE4EF' }} />
-              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.3em', color:'#9BAABB', textTransform:'uppercase', whiteSpace:'nowrap' }}>SMALL HABITS. BIGGER RESULTS.</span>
-              <div style={{ width:80, height:1, background:'#DCE4EF' }} />
-            </div>
-          </FadeUp>
-
+          <Tagline text="SMALL HABITS. BIGGER RESULTS." />
         </div>
       </section>
 
-      {/* ══ 10-STAGE ROADMAP ══ */}
-      <section style={{ background:'#F7F9FC', padding:'100px 0 120px', position:'relative', overflow:'hidden' }}>
-        {/* Background glows */}
-        <div style={{ position:'absolute', top:-200, left:-200, width:600, height:600, background:'radial-gradient(circle, rgba(23,105,255,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ position:'absolute', bottom:-200, right:-200, width:600, height:600, background:'radial-gradient(circle, rgba(255,36,72,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
+      {/* ══════════════════════════════════════════
+          SECTION 4 — 10 STAGES VERTICAL TIMELINE
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }} className="sect-timeline">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }} className="inner-timeline">
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 64 }}>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase', marginBottom: 12 }}>THE PATH</div>
+            <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em', margin: 0 }} className="timeline-h2">
+              10 STAGES. <span style={G}>ONE OBJECTIVE.</span>
+            </h2>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', marginTop: 16, lineHeight: 1.65 }}>Every stage builds on the previous one. Learn the skill, train it, prove it, then move forward.</p>
+          </motion.div>
 
-        <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
+          {/* Timeline container */}
+          <div style={{ position: 'relative' }} className="timeline-wrap">
+            {/* Center line */}
+            <div className="timeline-line" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: 0, bottom: 0, width: 2, background: 'linear-gradient(to bottom,#1769FF,#7137FF 50%,#FF1838)', pointerEvents: 'none' }} />
 
-          {/* Header */}
-          <FadeUp>
-            <div style={{ textAlign:'center', marginBottom:64 }}>
-              <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#6D7B90', textTransform:'uppercase', marginBottom:16 }}>THE PATH</div>
-              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(44px,5.5vw,72px)', lineHeight:0.92, color:'#080D16', margin:'0 0 16px' }}>
-                10 STAGES.{' '}
-                <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>ONE OBJECTIVE.</span>
-              </h2>
-              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#526078', marginTop:16 }}>
-                Every stage builds on the previous one. Learn the skill, train it, prove it, then move forward.
-              </p>
-            </div>
-          </FadeUp>
-
-          {/* Vertical timeline */}
-          <div style={{ position:'relative' }}>
-            {/* Center spine */}
-            <div style={{ position:'absolute', left:'50%', top:0, bottom:0, width:1, background:'linear-gradient(to bottom, #1769FF, #7047FF 50%, #FF2448)', transform:'translateX(-50%)', pointerEvents:'none' }} />
-
-            {[
-              { id:1,  color:'#1769FF', name:'FOUNDATION',       sub:'Build Your Base',         chips:['Controls','Sensitivity','Movement','Camera','Gyroscope'] },
-              { id:2,  color:'#1769FF', name:'AIM FUNDAMENTALS', sub:'Build Reliable Aim',      chips:['Crosshair','ADS','Tracking','Flicks','Switching'] },
-              { id:3,  color:'#4A8AFF', name:'RECOIL & SPRAY',   sub:'Control Your Weapons',    chips:['Patterns','Spray','Burst','Familiarity','Distance'] },
-              { id:4,  color:'#7047FF', name:'CLOSE-RANGE',      sub:'Win The Fight',           chips:['Pre-fire','Peek','Hip fire','Movement','Timing'] },
-              { id:5,  color:'#7047FF', name:'MAP KNOWLEDGE',    sub:'Know The Battlefield',    chips:['POIs','Rotations','Zones','Vehicles','Compounds'] },
-              { id:6,  color:'#9B3FFF', name:'GAME SENSE',       sub:'Make Better Decisions',   chips:['Information','Timing','Risk','Prediction','Position'] },
-              { id:7,  color:'#C62DCE', name:'STRATEGY',         sub:'Control The Game',        chips:['Zone','Rotations','Position','Control','Fallback'] },
-              { id:8,  color:'#FF2448', name:'TEAMPLAY',         sub:'Play As One',             chips:['Communication','Roles','Trading','Spacing','Movement'] },
-              { id:9,  color:'#FF2448', name:'COMPETITIVE',      sub:'Perform Under Pressure',  chips:['Scrims','Adaptation','Pressure','Review','Clutch'] },
-              { id:10, color:'#FF2448', name:'GO ELITE',         sub:'Become Tournament Ready', chips:['Consistency','Decisions','Execution','Analysis','Growth'] },
-            ].map((stage, i) => {
-              const isLeft    = i % 2 === 0
-              const isActive  = activeStage === i
-              const isElite   = stage.id === 10
-              const nodeColor = stage.id <= 3 ? '#1769FF' : stage.id <= 6 ? '#7047FF' : '#FF2448'
-              const nodeOuterBg = stage.id <= 3 ? '#E8F0FF' : stage.id <= 6 ? '#F0EAFF' : '#FFE8EC'
-              const nodeGlow  = stage.id <= 3 ? 'rgba(23,105,255,0.3)' : stage.id <= 6 ? 'rgba(112,71,255,0.3)' : 'rgba(255,36,72,0.3)'
-
-              const card = (
-                <motion.div
-                  key={`card-${stage.id}`}
-                  initial={{ opacity:0, x: isLeft ? -40 : 40 }}
-                  whileInView={{ opacity:1, x:0 }}
-                  viewport={{ once:true, amount:0.15 }}
-                  transition={{ duration:0.6, delay:i*0.07, ease:[0.22,1,0.36,1] }}
-                  onClick={() => toggle(i)}
-                  whileHover={{ y:-3, boxShadow:'0 12px 40px rgba(7,17,31,0.12)', transition:{ duration:0.25 } }}
-                  style={{
-                    background:'#FFFFFF', borderRadius:12, padding:'24px 28px',
-                    border:`1px solid ${isActive ? stage.color+'66' : '#E8EEF5'}`,
-                    boxShadow: isActive ? `0 8px 32px ${stage.color}22` : '0 4px 20px rgba(7,17,31,0.06)',
-                    cursor:'pointer', flex:1, maxWidth:480,
-                    textAlign: isLeft ? 'right' : 'left',
-                    transition:'border-color 0.2s, box-shadow 0.2s',
-                  }}
-                >
-                  <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.25em', color:stage.color, marginBottom:4 }}>
-                    STAGE {String(stage.id).padStart(2,'0')}
-                  </div>
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:24, color:'#080D16', lineHeight:1 }}>{stage.name}</div>
-                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, color:'#526078', marginTop:4 }}>{stage.sub}</div>
-                  <div style={{ display:'flex', flexWrap:'wrap', gap:4, marginTop:12, justifyContent: isLeft ? 'flex-end' : 'flex-start' }}>
-                    {stage.chips.map(chip => (
-                      <span key={chip} style={{ background:`${stage.color}14`, border:`1px solid ${stage.color}33`, padding:'3px 10px', borderRadius:20, fontFamily:'Inter,sans-serif', fontSize:12, color:stage.color, fontWeight:500 }}>{chip}</span>
-                    ))}
-                  </div>
-                </motion.div>
-              )
-
-              const connector = <div style={{ width:24, height:1, background:stage.color, flexShrink:0 }} />
+            {STAGES.map((s, i) => {
+              const isLeft = i % 2 === 0
+              const isActive = activeStage === i
 
               return (
-                <div key={stage.id} style={{ display:'flex', alignItems:'center', minHeight:120, marginBottom:8 }}>
-                  {/* Left half */}
-                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'flex-end' }}>
-                    {isLeft ? <>{card}{connector}</> : null}
+                <div key={s.n} style={{ display: 'flex', alignItems: 'center', minHeight: 110, position: 'relative', marginBottom: 8 }} className="timeline-row">
+                  {/* Left side */}
+                  <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', paddingRight: 32 }} className="tl-left">
+                    {isLeft && (
+                      <motion.div
+                        initial={{ opacity: 0, transform: 'translateX(-40px)' }}
+                        whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.55, ease: E, delay: i * 0.08 }}
+                        whileHover={{ y: -3, borderColor: s.accent, boxShadow: '0 8px 30px rgba(7,17,31,0.08)' }}
+                        onClick={() => setActiveStage(isActive ? null : i)}
+                        style={{ maxWidth: 380, width: '100%', background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, padding: 20, cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.25s' }}
+                      >
+                        <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: s.accent, textTransform: 'uppercase', marginBottom: 4 }}>{s.label}</div>
+                        <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 22, color: '#111827', lineHeight: 1 }}>{s.name}</div>
+                        <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174', marginTop: 4 }}>{s.sub}</div>
+                        <AnimatePresence>
+                          {isActive && (
+                            <motion.div
+                              key="chips"
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
+                                {s.skills.map((sk) => (
+                                  <span key={sk} style={{ background: `${s.accent}14`, border: `1px solid ${s.accent}26`, padding: '4px 10px', borderRadius: 20, fontFamily: 'Inter, sans-serif', fontSize: 12, color: s.accent }}>{sk}</span>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    )}
                   </div>
 
-                  {/* Node */}
-                  <div style={{ width:80, flexShrink:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', position:'relative' }}>
-                    {isElite && <div style={{ position:'absolute', top:-24, fontSize:16, color:'#FF2448', lineHeight:1 }}>♛</div>}
+                  {/* Center node */}
+                  <div style={{ flexShrink: 0, width: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }} className="tl-node-wrap">
+                    {i === 9 && (
+                      <div style={{ position: 'absolute', top: -20, left: '50%', transform: 'translateX(-50%)', fontSize: 14, color: '#FF1838' }}>♛</div>
+                    )}
                     <motion.div
-                      initial={{ scale:0, opacity:0 }}
-                      whileInView={{ scale:1, opacity:1 }}
-                      viewport={{ once:true }}
-                      transition={{ delay:i*0.07+0.1, type:'spring', stiffness:180, damping:16 }}
-                      onClick={() => toggle(i)}
-                      style={{
-                        width:56, height:56, borderRadius:'50%', cursor:'pointer',
-                        background: isElite ? 'linear-gradient(135deg,#E8F0FF,#FFE8EC)' : nodeOuterBg,
-                        border:`2px solid ${isElite ? '#FF2448' : nodeColor}`,
-                        boxShadow:`0 0 ${isElite ? 30 : 20}px ${isElite ? 'rgba(255,36,72,0.4)' : nodeGlow}`,
-                        display:'flex', alignItems:'center', justifyContent:'center',
-                        transform: isActive ? 'scale(1.18)' : 'scale(1)',
-                        transition:'transform 0.2s, box-shadow 0.2s',
-                      }}
+                      whileHover={{ scale: 1.15 }}
+                      animate={isActive ? { scale: 1.15, boxShadow: `0 0 30px ${s.accent}66` } : { scale: 1, boxShadow: `0 0 20px ${s.accent}33` }}
+                      transition={{ duration: 0.2, ease: E }}
+                      style={{ width: 48, height: 48, borderRadius: '50%', border: `2px solid ${s.accent}`, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
+                      onClick={() => setActiveStage(isActive ? null : i)}
                     >
-                      <div style={{
-                        width:40, height:40, borderRadius:'50%',
-                        background: isElite ? 'linear-gradient(135deg,#1769FF,#FF2448)' : nodeColor,
-                        display:'flex', alignItems:'center', justifyContent:'center',
-                      }}>
-                        <span style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:800, fontSize:16, color:'#FFFFFF', lineHeight:1 }}>
-                          {String(stage.id).padStart(2,'0')}
-                        </span>
+                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: s.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 14, color: '#fff' }}>{s.n}</span>
                       </div>
                     </motion.div>
                   </div>
 
-                  {/* Right half */}
-                  <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'flex-start' }}>
-                    {!isLeft ? <>{connector}{card}</> : null}
+                  {/* Right side */}
+                  <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', paddingLeft: 32 }} className="tl-right">
+                    {!isLeft && (
+                      <motion.div
+                        initial={{ opacity: 0, transform: 'translateX(40px)' }}
+                        whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.55, ease: E, delay: i * 0.08 }}
+                        whileHover={{ y: -3, borderColor: s.accent, boxShadow: '0 8px 30px rgba(7,17,31,0.08)' }}
+                        onClick={() => setActiveStage(isActive ? null : i)}
+                        style={{ maxWidth: 380, width: '100%', background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, padding: 20, cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.25s' }}
+                      >
+                        <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: s.accent, textTransform: 'uppercase', marginBottom: 4 }}>{s.label}</div>
+                        <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 22, color: '#111827', lineHeight: 1 }}>{s.name}</div>
+                        <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174', marginTop: 4 }}>{s.sub}</div>
+                        <AnimatePresence>
+                          {isActive && (
+                            <motion.div
+                              key="chips"
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
+                                {s.skills.map((sk) => (
+                                  <span key={sk} style={{ background: `${s.accent}14`, border: `1px solid ${s.accent}26`, padding: '4px 10px', borderRadius: 20, fontFamily: 'Inter, sans-serif', fontSize: 12, color: s.accent }}>{sk}</span>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    )}
                   </div>
                 </div>
               )
             })}
           </div>
-
-          {/* Stage detail panel */}
-          <AnimatePresence mode="wait">
-            {active && (
-              <motion.div key={activeStage}
-                initial={{ opacity:0, y:-16 }}
-                animate={{ opacity:1, y:0 }}
-                exit={{ opacity:0, y:-10 }}
-                transition={{ duration:0.38, ease:[0.22,1,0.36,1] }}
-                style={{ background:'#07111F', borderRadius:20, padding:48, marginTop:32, border:`1px solid ${active.color}33`, boxShadow:'0 30px 80px rgba(23,105,255,0.15)' }}
-              >
-                {/* Header row */}
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:28 }}>
-                  <div>
-                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:11, letterSpacing:'0.28em', color:active.color, textTransform:'uppercase', marginBottom:8 }}>
-                      STAGE {String(active.id).padStart(2,'0')}
-                    </div>
-                    <h3 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:'clamp(28px,4vw,48px)', color:'#FFFFFF', lineHeight:0.92, margin:'0 0 8px' }}>{active.name}</h3>
-                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:11, letterSpacing:'0.22em', color:'#AAB8C8', textTransform:'uppercase', marginBottom:16 }}>{active.sub}</div>
-                    <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:`${active.color}18`, border:`1px solid ${active.color}44`, borderRadius:6, padding:'4px 12px' }}>
-                      <div style={{ width:6, height:6, borderRadius:'50%', background:active.color }} />
-                      <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:10, letterSpacing:'0.22em', color:active.color }}>IN PROGRESS</span>
-                    </div>
-                  </div>
-                  <button onClick={() => setActiveStage(null)}
-                    style={{ width:40, height:40, borderRadius:'50%', background:'#1A2840', border:'none', cursor:'pointer', color:'#FFFFFF', fontSize:18, display:'flex', alignItems:'center', justifyContent:'center', transition:'background 0.2s', flexShrink:0 }}
-                    onMouseEnter={e => { e.currentTarget.style.background = active.color }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#1A2840' }}>
-                    ×
-                  </button>
-                </div>
-
-                <p style={{ fontFamily:'Inter,sans-serif', fontSize:15, color:'#94A3B8', lineHeight:1.7, marginBottom:28 }}>
-                  {active.objective}. {active.why}
-                </p>
-
-                <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:700, fontSize:10, letterSpacing:'0.28em', color:'#AAB8C8', textTransform:'uppercase', marginBottom:14 }}>CORE SKILLS</div>
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(140px,1fr))', gap:10, marginBottom:28 }}>
-                  {active.skills.map(sk => (
-                    <div key={sk} style={{ display:'flex', alignItems:'center', gap:8 }}>
-                      <div style={{ width:18, height:18, borderRadius:'50%', background:`${active.color}18`, border:`1px solid ${active.color}55`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:9, color:active.color, fontWeight:700 }}>✓</div>
-                      <span style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#C8D8F0' }}>{sk}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {active.next && (
-                  <div style={{ paddingTop:20, borderTop:'1px solid #1E2D42' }}>
-                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontSize:10, letterSpacing:'0.22em', color:'#536174', marginBottom:6 }}>NEXT STAGE</div>
-                    <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:700, fontSize:20, color:'#FFFFFF' }}>{active.next} →</div>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
         </div>
       </section>
 
-      {/* ══ DEVELOPMENT LOOP ══ */}
-      <section style={{ background:'#FFFFFF', padding:'100px 0 80px', position:'relative', overflow:'hidden' }}>
-        {/* CSS background decorations */}
-        <div style={{ position:'absolute', top:0, left:0, width:220, height:280, clipPath:'polygon(0 0, 100% 0, 70% 100%, 0 80%)', background:'#1769FF', opacity:0.07, pointerEvents:'none' }} />
-        <div style={{ position:'absolute', bottom:0, left:0, width:200, height:240, clipPath:'polygon(0 20%, 80% 0, 100% 100%, 0 100%)', background:'#1769FF', opacity:0.08, pointerEvents:'none' }} />
-        <div style={{ position:'absolute', top:0, right:0, width:200, height:240, clipPath:'polygon(30% 0, 100% 0, 100% 80%, 0 100%)', background:'#FF2448', opacity:0.07, pointerEvents:'none' }} />
-        <div style={{ position:'absolute', bottom:0, right:0, width:200, height:240, clipPath:'polygon(20% 0, 100% 0, 100% 100%, 0 100%)', background:'#FF2448', opacity:0.08, pointerEvents:'none' }} />
-        <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle, #D9E3F0 1px, transparent 1px)', backgroundSize:'28px 28px', opacity:0.4, pointerEvents:'none' }} />
-
-        {/* Corner microcopy */}
-        <div style={{ position:'absolute', top:64, left:20, zIndex:2, userSelect:'none', pointerEvents:'none' }}>
-          {['TRAIN','ANALYZE','DOMINATE'].map((w,i) => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
-          <div style={{ width:20, height:1, background:'#1769FF', marginTop:6, opacity:0.5 }} />
-        </div>
-        <div style={{ position:'absolute', top:64, right:20, zIndex:2, textAlign:'right', userSelect:'none', pointerEvents:'none' }}>
-          {['SMALL','STEPS','BIG','RESULTS'].map((w,i) => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
-          <div style={{ width:20, height:1, background:'#FF2448', marginTop:6, opacity:0.5, marginLeft:'auto' }} />
-        </div>
-        <div style={{ position:'absolute', top:112, left:32, fontSize:20, fontWeight:300, color:'#1769FF', opacity:0.5, userSelect:'none', pointerEvents:'none' }}>+</div>
-        <div style={{ position:'absolute', top:112, right:32, fontSize:20, fontWeight:300, color:'#FF2448', opacity:0.5, userSelect:'none', pointerEvents:'none' }}>+</div>
-
-        {/* Bottom corner microcopy */}
-        <div style={{ position:'absolute', bottom:64, left:20, zIndex:2, userSelect:'none', pointerEvents:'none' }}>
-          {['DISCIPLINE','CREATES','FREEDOM'].map(w => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
-        </div>
-        <div style={{ position:'absolute', bottom:64, right:20, zIndex:2, textAlign:'right', userSelect:'none', pointerEvents:'none' }}>
-          {['BETTER PLAYERS','BUILD BETTER','FUTURES'].map(w => <div key={w} style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:'#A8B3C4', lineHeight:1.8 }}>{w}</div>)}
-        </div>
-
-        {/* Content */}
-        <div style={{ position:'relative', zIndex:1, maxWidth:1280, margin:'0 auto', padding:'0 clamp(40px,6vw,80px)' }}>
-
-          {/* Header */}
-          <FadeUp>
-            <div style={{ textAlign:'center', marginBottom:56 }}>
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginBottom:20 }}>
-                <div style={{ width:80, height:1, background:'#1769FF' }} />
-                <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:12, letterSpacing:'0.3em', color:'#71829A', textTransform:'uppercase', whiteSpace:'nowrap' }}>THE DEVELOPMENT LOOP</span>
-                <div style={{ width:80, height:1, background:'#FF2448' }} />
-              </div>
-              <h2 style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:'clamp(32px,5vw,64px)', lineHeight:1, letterSpacing:'-0.02em', color:'#08111F', margin:'0 0 16px', textAlign:'center' }}>
-                LEARN → PRACTICE → ASSESS →{' '}
-                <span style={{ background:'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>IMPROVE</span>
-              </h2>
-              <p style={{ fontFamily:'Inter,sans-serif', fontSize:17, color:'#52647D', marginTop:16, maxWidth:700, margin:'16px auto 0' }}>
-                Every stage runs the same cycle. Finish it and the next stage unlocks.
-              </p>
+      {/* ══════════════════════════════════════════
+          SECTION 5 — DEVELOPMENT LOOP
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#FFFFFF', borderTop: '1px solid #DCE4EF', padding: '96px 0' }} className="sect-loop">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }} className="inner-loop">
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 16 }}>
+              <div style={{ width: 60, height: 1, background: '#1769FF' }} />
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase' }}>THE DEVELOPMENT LOOP</span>
+              <div style={{ width: 60, height: 1, background: '#FF1838' }} />
             </div>
-          </FadeUp>
+            <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em', margin: 0 }} className="loop-h2">
+              LEARN → PRACTICE → ASSESS → <span style={G}>IMPROVE</span>
+            </h2>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', marginTop: 16, lineHeight: 1.65 }}>Every stage runs the same cycle. Finish it and the next stage unlocks.</p>
+          </motion.div>
 
-          {/* Cards */}
-          <div style={{ display:'flex', alignItems:'stretch', gap:20, marginTop:56 }}>
+          {/* 5 loop cards */}
+          <div style={{ display: 'flex', gap: 16, alignItems: 'stretch' }} className="loop-cards">
             {[
-              { n:'01', color:'#1769FF', Icon:BookOpen,      title:'LEARN',     desc:'Real material per stage — structured lessons built around what you actually need.',         bottom:'BUILD KNOWLEDGE'     },
-              { n:'02', color:'#4A8AFF', Icon:Gamepad2,      title:'PRACTICE',  desc:'Structured drills directly linked to the concept you just studied.',                        bottom:'DEVELOP CONSISTENCY' },
-              { n:'03', color:'#7047FF', Icon:ClipboardCheck, title:'ASSESS',   desc:'A scored assessment — not a quiz for the sake of it. Real feedback.',                       bottom:'ANALYZE & ADJUST'    },
-              { n:'04', color:'#C62DCE', Icon:BarChart2,      title:'RESULT',   desc:'An honest read on where you stand based on your actual performance.',                       bottom:'TRACK PROGRESS'      },
-              { n:'05', color:'#FF2448', Icon:TrendingUp,     title:'NEXT STEP',desc:'A specific weakness to work on before the next stage unlocks.',                             bottom:'KEEP EVOLVING'       },
-            ].map((step, i) => {
-              const arrowColors = ['#1769FF','#4A8AFF','#7047FF','#C62DCE']
-              return (
-                <React.Fragment key={step.title}>
-                  <motion.div
-                    initial={{ opacity:0, y:40 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.15 }}
-                    transition={{ duration:0.55, delay:i*0.1, ease:[0.22,1,0.36,1] }}
-                    whileHover={{ y:-6, boxShadow:`0 20px 50px rgba(20,50,100,0.12)`, borderColor:`${step.color}4D`, transition:{ duration:0.25 } }}
-                    style={{
-                      flex:1, position:'relative', overflow:'hidden', borderRadius:16, padding:28,
-                      background:'#FFFFFF', border:'1px solid #D9E3F0',
-                      boxShadow:'0 12px 35px rgba(20,50,100,0.06)',
-                      display:'flex', flexDirection:'column',
-                      transition:'border-color 0.3s, box-shadow 0.3s',
-                    }}
-                  >
-                    {/* Top accent */}
-                    <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:step.color, borderRadius:'3px 3px 0 0' }} />
-                    {/* Corner triangle */}
-                    <div style={{ position:'absolute', top:0, right:0, width:0, height:0, borderTop:`40px solid ${step.color}1E`, borderLeft:'40px solid transparent' }} />
-                    {/* Number */}
-                    <div style={{ position:'absolute', top:16, left:20, fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:32, color:step.color, opacity:0.75, letterSpacing:'-0.02em', lineHeight:1, userSelect:'none' }}>{step.n}</div>
-                    {/* Icon */}
-                    <div style={{ width:52, height:52, borderRadius:12, background:`${step.color}1A`, border:`1px solid ${step.color}33`, display:'flex', alignItems:'center', justifyContent:'center', marginTop:40, marginBottom:16 }}>
-                      <step.Icon size={24} strokeWidth={1.8} color={step.color} />
-                    </div>
-                    {/* Step label */}
-                    <div style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.25em', color:step.color, marginBottom:4 }}>STEP {step.n}</div>
-                    {/* Title */}
-                    <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:24, color:'#08111F', lineHeight:1, marginTop:4 }}>{step.title}</div>
-                    {/* Desc */}
-                    <div style={{ fontFamily:'Inter,sans-serif', fontSize:14, lineHeight:1.55, color:'#52647D', marginTop:12, flex:1 }}>{step.desc}</div>
-                    {/* Bottom label */}
-                    <div style={{ marginTop:'auto', paddingTop:20, borderTop:'1px solid #E8EEF5', fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.3em', color:'#71829A' }}>{step.bottom}</div>
-                  </motion.div>
-                  {i < 4 && (
-                    <div style={{ display:'flex', alignItems:'center', flexShrink:0, alignSelf:'center' }}>
-                      <ArrowRight size={18} strokeWidth={1.5} color={arrowColors[i]} />
-                    </div>
-                  )}
-                </React.Fragment>
-              )
-            })}
-          </div>
-
-          {/* Stats row */}
-          <div style={{ marginTop:56, display:'flex', alignItems:'center', justifyContent:'center', gap:0 }}>
-            {[
-              { value:'10K+', label:'Players on the journey', color:'#1769FF', g:'linear-gradient(90deg,#1769FF,#7047FF)' },
-              { value:'10',   label:'Structured stages',       color:'#7047FF', g:'linear-gradient(90deg,#7047FF,#FF2448)' },
-              { value:'1',    label:'Clear objective',          color:'#FF2448', g:'#FF2448' },
-            ].map((stat, i) => (
-              <React.Fragment key={stat.label}>
-                {i > 0 && <div style={{ width:1, height:50, background:'#D9E3F0', flexShrink:0, margin:'0 48px' }} />}
+              { step: 'STEP 01', accent: '#1769FF', Icon: BookOpen,      title: 'LEARN',     desc: 'Real material per stage — structured lessons built around what you actually need.', bottom: 'BUILD KNOWLEDGE' },
+              { step: 'STEP 02', accent: '#4A8AFF', Icon: Dumbbell,      title: 'PRACTICE',  desc: 'Structured drills directly linked to the concept you just studied.', bottom: 'DEVELOP CONSISTENCY' },
+              { step: 'STEP 03', accent: '#7137FF', Icon: ClipboardCheck, title: 'ASSESS',   desc: 'A scored assessment — not a quiz for the sake of it. Real feedback.', bottom: 'ANALYZE & ADJUST' },
+              { step: 'STEP 04', accent: '#C62DCE', Icon: BarChart2,     title: 'RESULT',    desc: 'An honest read on where you stand based on your actual performance.', bottom: 'TRACK PROGRESS' },
+              { step: 'STEP 05', accent: '#FF1838', Icon: TrendingUp,    title: 'NEXT STEP', desc: 'A specific weakness to work on before the next stage unlocks.', bottom: 'KEEP EVOLVING' },
+            ].map((card, i, arr) => (
+              <div key={card.step} style={{ display: 'flex', alignItems: 'center', flex: 1 }} className="loop-card-wrap">
                 <motion.div
-                  initial={{ scale:0.9, opacity:0 }} whileInView={{ scale:1, opacity:1 }} viewport={{ once:true }}
-                  transition={{ delay:i*0.1+0.2, duration:0.5, ease:[0.22,1,0.36,1] }}
-                  style={{ textAlign:'center', flexShrink:0 }}
+                  initial={{ opacity: 0, transform: 'translateY(30px)' }}
+                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.55, ease: E, delay: i * 0.1 }}
+                  whileHover={{ y: -5, borderColor: card.accent, boxShadow: '0 16px 48px rgba(7,17,31,0.1)' }}
+                  style={{ flex: 1, background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 16, padding: 28, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color 0.25s, box-shadow 0.25s' }}
+                  className="loop-card"
                 >
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:44, lineHeight:1, background:stat.g, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>{stat.value}</div>
-                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#687990', marginTop:6 }}>{stat.label}</div>
+                  {/* Top accent bar */}
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: card.accent }} />
+                  {/* Big bg number */}
+                  <div style={{ position: 'absolute', top: 8, right: 12, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 64, color: '#F7F9FC', pointerEvents: 'none', userSelect: 'none', lineHeight: 1 }}>{String(i + 1).padStart(2, '0')}</div>
+
+                  <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: card.accent, textTransform: 'uppercase', marginBottom: 8 }}>{card.step}</div>
+                  <div style={{ width: 44, height: 44, borderRadius: 10, background: `${card.accent}1A`, border: `1px solid ${card.accent}26`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <card.Icon size={22} color={card.accent} strokeWidth={2} />
+                  </div>
+                  <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 22, color: '#111827' }}>{card.title}</div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#536174', lineHeight: 1.6, marginTop: 8, flex: 1 }}>{card.desc}</div>
+                  <div style={{ marginTop: 'auto', paddingTop: 16, borderTop: '1px solid #DCE4EF', fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#9BAABB', textTransform: 'uppercase' }}>{card.bottom}</div>
                 </motion.div>
-              </React.Fragment>
+                {i < arr.length - 1 && (
+                  <div style={{ flexShrink: 0, padding: '0 4px' }} className="loop-arrow">
+                    <ArrowRight size={16} color="#DCE4EF" strokeWidth={1.5} />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
-          {/* Bottom tagline */}
-          <FadeUp delay={0.2}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, marginTop:48 }}>
-              <div style={{ width:100, height:1, background:'#D9E3F0' }} />
-              <span style={{ fontFamily:'Rajdhani,sans-serif', fontWeight:600, fontSize:10, letterSpacing:'0.35em', color:'#71829A', textTransform:'uppercase', whiteSpace:'nowrap' }}>CONSISTENT EFFORT CREATES ELITE PLAYERS</span>
-              <div style={{ width:100, height:1, background:'#D9E3F0' }} />
-            </div>
-          </FadeUp>
+          {/* Stats row */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E, delay: 0.2 }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 56, flexWrap: 'wrap' }}>
+            {[
+              { num: '10K+', label: 'Players on the journey' },
+              { num: '10',   label: 'Structured stages' },
+              { num: '1',    label: 'Clear objective' },
+            ].map((stat, i, arr) => (
+              <div key={stat.num} style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ padding: '0 48px', textAlign: 'center' }} className="stat-item">
+                  <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 44, ...G }}>{stat.num}</div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174', marginTop: 4 }}>{stat.label}</div>
+                </div>
+                {i < arr.length - 1 && <div style={{ width: 1, height: 56, background: '#DCE4EF', flexShrink: 0 }} />}
+              </div>
+            ))}
+          </motion.div>
 
+          <Tagline text="CONSISTENT EFFORT CREATES ELITE PLAYERS" />
         </div>
       </section>
 
-      {/* ══ ELITE CTA ══ */}
-      <section style={{ position:'relative',minHeight:380,overflow:'hidden',background:'#080D15' }}>
-        <div style={{ position:'absolute',bottom:-100,left:-100,width:600,height:600,background:'radial-gradient(circle,rgba(23,105,255,0.20) 0%,transparent 70%)',zIndex:1 }} />
-        <div style={{ position:'absolute',top:-100,right:-100,width:600,height:600,background:'radial-gradient(circle,rgba(255,24,56,0.20) 0%,transparent 70%)',zIndex:1 }} />
+      {/* ══════════════════════════════════════════
+          SECTION 6 — CTA
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }} className="sect-cta">
+        {/* Blue glow */}
+        <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
+        {/* Red glow */}
+        <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ position:'relative',zIndex:2,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:380,padding:'80px clamp(20px,5vw,64px)',textAlign:'center' }}>
-          <motion.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once:true,amount:0.3 }}
-            style={{ display:'flex',flexDirection:'column',alignItems:'center' }}>
-            <motion.div variants={child} style={{ fontFamily:'Rajdhani,sans-serif',fontWeight:600,fontSize:11,letterSpacing:'0.35em',color:'#AAB8C8',textTransform:'uppercase',marginBottom:20 }}>
-              DISCIPLINE BUILDS FREEDOM
-            </motion.div>
-            <motion.h2 variants={child} style={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:'clamp(40px,6.5vw,68px)',lineHeight:0.9,color:'#FFFFFF',margin:'0 0 16px' }}>
-              ARE YOU READY TO GO <GradSpan>ELITE?</GradSpan>
-            </motion.h2>
-            <motion.p variants={child} style={{ fontFamily:'Inter,sans-serif',fontSize:15,color:'#AAB8C8',maxWidth:560,lineHeight:1.7,margin:'0 0 32px' }}>
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 800, margin: '0 auto', padding: '0 32px', textAlign: 'center' }}>
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.7, ease: E }}>
+            <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '-0.01em', margin: 0 }} className="cta-h2">
+              <span style={{ color: '#FFFFFF', display: 'block' }}>ARE YOU READY TO</span>
+              <span style={G}>GO ELITE?</span>
+            </h2>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, color: '#AAB8C8', marginTop: 16, lineHeight: 1.65 }} className="cta-desc">
               Master the fundamentals. Build your mechanics. Understand the game. Execute under pressure.
-            </motion.p>
-            <motion.div variants={child} style={{ display:'flex',gap:16,flexWrap:'wrap',justifyContent:'center' }}>
-              <RadialRevealButton label="START YOUR JOURNEY →" padding="16px 44px" rounded={8}
-                font={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:18,letterSpacing:'0.06em' }}
-                colors={{ fill:'#FFFFFF',textColor:'#0B1220',hoverFill:'#1769FF',hoverTextColor:'#FFFFFF' }}
-                border={{ borderWidth:0 }} />
-              <RadialRevealButton label="EXPLORE FEATURES →" padding="16px 36px" rounded={8}
-                font={{ fontFamily:'Barlow Condensed,sans-serif',fontWeight:700,fontSize:18,letterSpacing:'0.06em' }}
-                colors={{ fill:'transparent',textColor:'#FFFFFF',hoverFill:'#FFFFFF',hoverTextColor:'#0B1220' }}
-                border={{ borderWidth:2,borderStyle:'solid',borderColor:'rgba(255,255,255,0.28)' }} />
-            </motion.div>
+            </p>
+            <div style={{ marginTop: 40 }}>
+              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                <RadialRevealButton
+                  fill="#FFFFFF" hoverFill="#1769FF"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 56px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer' }}
+                >
+                  JOIN NOW — ₹149/MONTH <ArrowRight size={18} strokeWidth={2.5} />
+                </RadialRevealButton>
+              </Link>
+            </div>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>GST inclusive · Cancel anytime</p>
           </motion.div>
         </div>
       </section>
@@ -958,20 +493,58 @@ export default function RoadmapPage() {
       <Footer />
 
       <style>{`
-        .prereq-grid {
-          display: grid;
-          grid-template-columns: repeat(3,1fr);
-          gap: 20px;
+        /* ── Hero responsive ── */
+        .hero-inner { padding: 128px 64px !important; }
+        .hero-h1    { font-size: 80px; }
+        .hero-desc  { font-size: 18px; }
+        .hero-btns  { flex-direction: row; }
+
+        /* ── Section headings responsive ── */
+        .prog-h2, .found-h2, .timeline-h2, .loop-h2, .cta-h2 { font-size: 64px; }
+
+        /* ── Timeline mobile ── */
+        @media (max-width: 768px) {
+          .hero-inner  { padding: 80px 20px !important; }
+          .hero-h1     { font-size: 44px !important; }
+          .hero-desc   { font-size: 16px !important; }
+          .hero-btns   { flex-direction: column !important; }
+          .inner-prog, .inner-found, .inner-timeline, .inner-loop { padding: 0 20px !important; }
+          .sect-prog, .sect-found, .sect-timeline, .sect-loop { padding: 64px 0 !important; }
+          .prog-h2, .found-h2, .timeline-h2, .cta-h2 { font-size: 36px !important; }
+          .loop-h2     { font-size: 32px !important; }
+          .cta-h2      { font-size: 44px !important; }
+          .cta-desc    { font-size: 16px !important; }
+
+          /* Progression cards: stack */
+          .prog-cards  { flex-direction: column !important; }
+          .prog-card   { border-radius: 16px !important; }
+          .prog-chevron { display: none !important; }
+          .prog-card-wrap { flex: none !important; }
+
+          /* Foundation grid: 1 col */
+          .found-grid  { grid-template-columns: 1fr !important; }
+
+          /* Timeline: single column left-aligned */
+          .timeline-line { left: 20px !important; transform: none !important; }
+          .tl-left  { flex: none !important; padding-right: 0 !important; display: block !important; }
+          .tl-right { flex: 1 !important; padding-left: 12px !important; }
+          .tl-node-wrap { flex-shrink: 0 !important; }
+          .timeline-row { align-items: flex-start !important; padding-left: 0 !important; }
+
+          /* Loop cards: stack */
+          .loop-cards    { flex-direction: column !important; }
+          .loop-card-wrap { flex: none !important; }
+          .loop-arrow    { display: none !important; }
+
+          /* Stats */
+          .stat-item { padding: 0 24px !important; }
         }
-        @media (max-width: 1023px) { .prereq-grid { grid-template-columns: repeat(2,1fr); } }
-        @media (max-width: 639px)  { .prereq-grid { grid-template-columns: 1fr; } }
-        @media (max-width: 767px) {
-          svg text { font-size: 9px !important; }
-        }
+
+        /* ── Reduce motion ── */
         @media (prefers-reduced-motion: reduce) {
-          * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+          * { animation: none !important; transition: none !important; }
         }
       `}</style>
-    </div>
+    </>
   )
 }
