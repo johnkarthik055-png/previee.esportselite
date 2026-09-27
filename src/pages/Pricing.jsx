@@ -1,19 +1,51 @@
-import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Zap, BarChart2, Activity, Trophy, Check, Plus, Minus, Info } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Check, Zap, BarChart2, Activity, Trophy, Plus, Minus, Users, Shield, Star, Map, Brain, PenTool } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
 
-const GRAD = 'linear-gradient(90deg,#1769FF,#7047FF,#FF2448)'
+/* ─── Constants ─── */
+const squadPricing = {
+  2: { per: 129, total: 258,  save: 20 },
+  3: { per: 119, total: 357,  save: 30 },
+  4: { per: 109, total: 436,  save: 40 },
+  5: { per:  99, total: 495,  save: 50 },
+  6: { per:  89, total: 534,  save: 60 },
+}
+
+const faqs = [
+  { q: "What's included in the ₹149/month plan?",  a: "Everything — Map Knowledge for all maps, Strategy Maker with unlimited saves, Match Logger with AI screenshot import, AI Coach with personalized feedback, full analytics, and access to all 10 roadmap stages." },
+  { q: "Is there a free trial?",                   a: "No free trial currently. Full access from day one for ₹149/month. Cancel anytime from your account settings." },
+  { q: "How does squad payment work?",             a: "Each squad member pays their own subscription independently via their own payment link. Squad features activate when teammates are also subscribed." },
+  { q: "Can I cancel anytime?",                    a: "Yes. Cancel anytime from your account settings. No questions, no cancellation fees." },
+  { q: "Is GST included in the price?",            a: "Yes. ₹149/month is GST inclusive. No surprise charges at checkout." },
+]
+
+const G = {
+  background: 'linear-gradient(90deg,#1769FF,#7137FF,#FF1838)',
+  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+}
+
+const E = [0.23, 1, 0.32, 1]
+
+const INCLUDED = [
+  { accent: '#1769FF', Icon: Map,      title: 'MAP KNOWLEDGE',   desc: 'All 3 maps covered with zone breakdowns and rotation paths.' },
+  { accent: '#7137FF', Icon: Brain,    title: 'AI COACH',        desc: 'Upload your screenshot and get personalized improvement feedback.' },
+  { accent: '#00C48C', Icon: BarChart2, title: 'MATCH LOGGER',   desc: 'Auto-import stats from screenshots. No manual entry.' },
+  { accent: '#FF1838', Icon: PenTool,  title: 'STRATEGY MAKER',  desc: 'Draw and save unlimited custom squad strategies.' },
+  { accent: '#4A8AFF', Icon: Shield,   title: '10-STAGE ROADMAP',desc: 'Structured path from foundation to tournament-ready.' },
+  { accent: '#C62DCE', Icon: Star,     title: 'SQUAD TOOLS',     desc: 'Strategy sharing, team analytics and squad coordination.' },
+]
 
 const SOLO_FEATURES = [
   'Full Map Knowledge — all maps',
   'Strategy Maker — unlimited saves',
   'Match Logger with AI import',
   'AI Coach — personalized feedback',
-  'Performance analytics',
-  'All 10 roadmap stages',
+  'Performance analytics dashboard',
+  'Access to all 10 roadmap stages',
 ]
 
 const SQUAD_FEATURES = [
@@ -25,443 +57,470 @@ const SQUAD_FEATURES = [
   'Priority AI Coach responses',
 ]
 
-const SQUAD_TIERS = {
-  2: { perMember: 129, total: 258,  save: 20  },
-  3: { perMember: 119, total: 357,  save: 30  },
-  4: { perMember: 109, total: 436,  save: 40  },
-  5: { perMember: 99,  total: 495,  save: 50  },
-  6: { perMember: 89,  total: 534,  save: 60  },
+/* ─── Hero right: floating preview card ─── */
+function PreviewCard() {
+  const bars = [
+    { label: 'MAP KNOWLEDGE', pct: '85%', accent: '#1769FF', light: '#4A8AFF' },
+    { label: 'AI COACH',      pct: '92%', accent: '#7137FF', light: '#9B6AFF' },
+    { label: 'MATCH LOGGER',  pct: '78%', accent: '#00C48C', light: '#33D9B0' },
+  ]
+  return (
+    <motion.div
+      animate={{ y: [-8, 8, -8] }}
+      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 24, padding: 40, maxWidth: 380, width: '100%', boxShadow: '0 40px 80px rgba(7,17,31,0.08)', position: 'relative', overflow: 'hidden' }}
+    >
+      {/* Pulsing border glow */}
+      <div className="pr-border-glow" style={{ position: 'absolute', inset: 0, borderRadius: 24, border: '1px solid rgba(23,105,255,0.2)', pointerEvents: 'none' }} />
+
+      {/* Top row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 16, ...G }}>ESPORTS ELITE</span>
+        <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 16, color: '#1769FF' }}>₹149<span style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 13, color: '#9BAABB' }}>/mo</span></span>
+      </div>
+
+      {/* Progress bars */}
+      {bars.map((b, i) => (
+        <div key={b.label} style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', color: '#536174' }}>{b.label}</span>
+            <span style={{ fontFamily: 'Inter,sans-serif', fontWeight: 600, fontSize: 12, color: '#111827' }}>{b.pct}</span>
+          </div>
+          <div style={{ background: '#F7F9FC', borderRadius: 4, height: 6, overflow: 'hidden' }}>
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: b.pct }}
+              transition={{ duration: 1.2, delay: 0.8 + i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ height: '100%', background: `linear-gradient(90deg,${b.accent},${b.light})`, borderRadius: 4 }}
+            />
+          </div>
+        </div>
+      ))}
+
+      {/* Divider */}
+      <div style={{ borderTop: '1px solid #DCE4EF', margin: '24px 0' }} />
+
+      {/* Price display */}
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 56, ...G, lineHeight: 1 }}>₹149</div>
+        <div style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 16, color: '#536174', marginTop: 4 }}>/month</div>
+        <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#9BAABB', marginTop: 4 }}>GST inclusive</div>
+      </div>
+
+      {/* Shimmer overlay */}
+      <div className="pr-shimmer" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.6) 50%,transparent 60%)', backgroundSize: '200% 100%', pointerEvents: 'none', borderRadius: 24 }} />
+    </motion.div>
+  )
 }
 
-const FAQ_DATA = [
-  {
-    q: "What’s included in the ₹149/month plan?",
-    a: 'Everything — Map Knowledge for all maps, Strategy Maker with unlimited saves, Match Logger with AI screenshot import, AI Coach with personalized feedback, full analytics, and all 10 roadmap stages.',
-  },
-  {
-    q: 'Is there a free trial?',
-    a: 'No free trial currently. Full access from day one for ₹149/month. Cancel anytime.',
-  },
-  {
-    q: 'How does squad payment work?',
-    a: 'Each squad member pays their own share independently. For a 6-member squad, each member pays ₹89/month. Squad features activate when teammates are also subscribed.',
-  },
-  {
-    q: 'Can I cancel anytime?',
-    a: 'Yes. Cancel anytime from your account settings. No questions, no cancellation fees.',
-  },
-  {
-    q: 'Is GST included?',
-    a: 'Yes. All prices are GST inclusive. No surprise charges.',
-  },
-]
-
-const heroContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
-}
-const heroItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
-}
-
-const ctaContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-}
-const ctaItem = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+/* ─── FAQ item ─── */
+function FaqItem({ faq, idx, open, onToggle }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, transform: 'translateY(20px)' }}
+      whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: E, delay: idx * 0.08 }}
+      whileHover={{ borderColor: 'rgba(23,105,255,0.2)' }}
+      onClick={onToggle}
+      style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', transition: 'border-color 0.2s' }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px' }}>
+        <span style={{ fontFamily: 'Inter,sans-serif', fontWeight: 600, fontSize: 16, color: '#111827', paddingRight: 16 }}>{faq.q}</span>
+        <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.3, ease: E }} style={{ flexShrink: 0 }}>
+          <Plus size={20} color="#1769FF" strokeWidth={1.5} />
+        </motion.div>
+      </div>
+      <AnimatePresence>
+        {open && (
+          <motion.div key="a" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }} style={{ overflow: 'hidden' }}>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, lineHeight: 1.6, color: '#536174', padding: '0 24px 20px', margin: 0 }}>{faq.a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
 }
 
 export default function Pricing() {
-  const [openIndex, setOpenIndex] = useState(null)
   const [selectedSize, setSelectedSize] = useState(4)
+  const [openFaq, setOpenFaq] = useState(null)
 
-  const tier = SQUAD_TIERS[selectedSize]
+  const sp = squadPricing[selectedSize]
 
   return (
-    <>
-      <Navbar activePage="pricing" />
+    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      <Navbar />
 
-      {/* ══ HERO ══ */}
-      <section style={{ background: '#FFFFFF', minHeight: '760px', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
-        {/* CSS-only decorations */}
-        <div style={{ position: 'absolute', top: 0, left: 0, width: 300, height: 400, clipPath: 'polygon(0 0, 100% 0, 60% 100%, 0 100%)', background: '#1769FF', opacity: 0.07, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, width: 200, height: 300, clipPath: 'polygon(0 20%, 80% 0, 100% 100%, 0 100%)', background: '#1769FF', opacity: 0.06, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: 0, right: 0, width: 280, height: 360, clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)', background: '#FF2448', opacity: 0.07, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', left: 40, top: 120, width: 120, height: 120, backgroundImage: 'radial-gradient(circle, #1769FF 1.5px, transparent 1.5px)', backgroundSize: '16px 16px', opacity: 0.25, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: 112, left: 112, color: '#1769FF', fontSize: 22, fontWeight: 300, opacity: 0.5, pointerEvents: 'none', userSelect: 'none' }}>+</div>
-        <div style={{ position: 'absolute', top: '50%', right: '43%', color: '#1769FF', fontSize: 18, opacity: 0.4, pointerEvents: 'none', userSelect: 'none' }}>+</div>
+      {/* ══════════════════════════════════════════
+          SECTION 1 — HERO
+      ══════════════════════════════════════════ */}
+      <section style={{ position: 'relative', overflow: 'hidden', minHeight: '80vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', paddingTop: 64 }}>
+        {/* BG elements */}
+        <div style={{ position: 'absolute', left: -200, top: -200, width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.09) 0%,transparent 60%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', right: -200, bottom: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.07) 0%,transparent 60%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, width: 300, height: 380, clipPath: 'polygon(0 0,100% 0,55% 100%,0 85%)', background: '#1769FF', opacity: 0.05, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: 0, right: 0, width: 260, height: 340, clipPath: 'polygon(45% 0,100% 0,100% 85%,0 100%)', background: '#FF1838', opacity: 0.05, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '28px 28px', opacity: 0.6, pointerEvents: 'none' }} />
 
-        {/* Right artwork */}
-        <div style={{ position: 'absolute', right: 0, top: 0, width: '52%', height: '100%', zIndex: 0, overflow: 'hidden' }}>
-          <img src="/pricing-hero.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block' }} />
-          <div style={{ position: 'absolute', top: 0, left: 0, width: 250, height: '100%', background: 'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.9) 50%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', textAlign: 'right', zIndex: 2 }}>
-            {['MORE', 'SKILLS', 'A BRIGHTER', 'TOMORROW'].map(line => (
-              <div key={line} style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#FF2448', opacity: 0.5, lineHeight: 2 }}>{line}</div>
-            ))}
-            <div style={{ width: 24, height: 1, background: '#FF2448', marginTop: 8, marginLeft: 'auto' }} />
-          </div>
-        </div>
-
-        {/* Left content */}
-        <div style={{ position: 'relative', zIndex: 1, width: '46%', minWidth: '500px', paddingLeft: '64px', paddingRight: '32px', paddingTop: '120px', paddingBottom: '80px' }}>
-          <motion.div variants={heroContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column' }}>
-
-            <motion.div variants={heroItem} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-              <div style={{ width: 40, height: 2, background: '#1769FF', flexShrink: 0 }} />
-              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 13, letterSpacing: '0.35em', color: '#1769FF' }}>PRICING</span>
+        <div className="pr-hero-inner">
+          {/* LEFT */}
+          <div style={{ flex: 1, maxWidth: 600 }}>
+            {/* Eyebrow */}
+            <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+              <div style={{ width: 40, height: 2, background: '#1769FF', borderRadius: 1 }} />
+              <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 13, letterSpacing: '0.35em', color: '#1769FF', textTransform: 'uppercase' }}>PRICING</span>
             </motion.div>
 
-            <motion.h1 variants={heroItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: '64px', lineHeight: 0.94, letterSpacing: '-0.02em', margin: 0, color: '#08111F' }}>
-              ONE PLAN.
-              <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', display: 'block' }}>EVERYTHING</span>
-              IN IT.
-            </motion.h1>
+            {/* H1 */}
+            <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.1 }} className="pr-h1" style={{ color: '#111827' }}>ONE PLAN.</motion.div>
+            <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.2 }} className="pr-h1"><span style={G}>EVERYTHING</span></motion.div>
+            <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.7, ease: E, delay: 0.3 }} className="pr-h1" style={{ color: '#111827' }}>IN IT.</motion.div>
 
-            <motion.p variants={heroItem} style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.55, color: '#52647D', maxWidth: 520, marginTop: 22, marginBottom: 0 }}>
+            {/* Desc */}
+            <motion.p initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.4 }} className="pr-desc">
               Whether you grind solo or as a squad, Esports Elite gives you the tools, data, and guidance to improve, compete, and go further. No hidden fees. No limits on your grind.
             </motion.p>
 
-            <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginTop: 28, flexWrap: 'nowrap', gap: 0 }}>
+            {/* Feature strip */}
+            <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.5 }} style={{ display: 'flex', gap: 0, marginTop: 32, flexWrap: 'wrap' }}>
               {[
-                { Icon: Zap,       color: '#1769FF', label: 'TRAIN',   sub: 'Build skills' },
-                { Icon: BarChart2, color: '#4A8AFF', label: 'ANALYZE', sub: 'Track progress' },
-                { Icon: Activity,  color: '#7047FF', label: 'IMPROVE', sub: 'See results' },
-                { Icon: Trophy,    color: '#FF2448', label: 'COMPETE', sub: 'Reach higher' },
-              ].map(({ Icon, color, label, sub }, i) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center' }}>
-                  {i > 0 && <div style={{ width: 1, height: 32, background: '#D9E3F0', flexShrink: 0 }} />}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, paddingLeft: i === 0 ? 0 : 16, paddingRight: i === 3 ? 0 : 16 }}>
-                    <Icon size={16} color={color} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 11, color: '#08111F', lineHeight: 1.2, whiteSpace: 'nowrap' }}>{label}</span>
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#71829A', whiteSpace: 'nowrap' }}>{sub}</span>
-                    </div>
+                { Icon: Zap,      color: '#1769FF', label: 'TRAIN',   sub: 'Build skills' },
+                { Icon: BarChart2,color: '#4A8AFF', label: 'ANALYZE', sub: 'Track progress' },
+                { Icon: Activity, color: '#7137FF', label: 'IMPROVE', sub: 'See results' },
+                { Icon: Trophy,   color: '#FF1838', label: 'COMPETE', sub: 'Reach higher' },
+              ].map((item, i) => (
+                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 20px', borderRight: i < 3 ? '1px solid #DCE4EF' : 'none', paddingLeft: i === 0 ? 0 : undefined }}>
+                  <item.Icon size={16} color={item.color} strokeWidth={1.8} style={{ flexShrink: 0 }} />
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 13, color: '#111827', letterSpacing: '0.05em' }}>{item.label}</span>
+                    <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#536174', marginTop: 2 }}>{item.sub}</span>
                   </div>
                 </div>
               ))}
             </motion.div>
 
-            <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', gap: 24, marginTop: 28 }}>
+            {/* Buttons */}
+            <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.6 }} style={{ display: 'flex', alignItems: 'center', gap: 32, marginTop: 32, flexWrap: 'wrap' }}>
               <motion.button
-                whileHover={{ scale: 1.03, boxShadow: '0 8px 32px rgba(23,105,255,0.4)', transition: { duration: 0.2 } }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => document.getElementById('pricing-cards')?.scrollIntoView({ behavior: 'smooth' })}
-                style={{ background: GRAD, color: '#FFFFFF', padding: '14px 28px', borderRadius: 30, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', flexShrink: 0 }}
+                style={{ background: 'linear-gradient(90deg,#1769FF,#FF1838)', color: '#FFFFFF', padding: '16px 36px', borderRadius: 30, fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
               >
-                VIEW PLANS &rarr;
+                VIEW PLANS →
               </motion.button>
               <button
-                onClick={() => document.getElementById('pricing-cards')?.scrollIntoView({ behavior: 'smooth' })}
-                style={{ background: 'transparent', color: '#08111F', fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0, whiteSpace: 'nowrap' }}
+                onClick={() => document.getElementById('included')?.scrollIntoView({ behavior: 'smooth' })}
+                style={{ fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, color: '#111827', textDecoration: 'underline', background: 'transparent', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
               >
-                SEE WHAT&apos;S INCLUDED
+                SEE WHAT'S INCLUDED
               </button>
             </motion.div>
 
-            <motion.div variants={heroItem} style={{ marginTop: 44, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 40, height: 1, background: '#A8B3C4', flexShrink: 0 }} />
-              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.3em', color: '#71829A' }}>SAME GAME. DIFFERENT MINDSET.</span>
+            {/* Microcopy */}
+            <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: E, delay: 0.7 }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 48, paddingTop: 16 }}>
+              <div style={{ width: 40, height: 1, background: '#DCE4EF' }} />
+              <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.3em', color: '#9BAABB', textTransform: 'uppercase' }}>SAME GAME. DIFFERENT MINDSET.</span>
             </motion.div>
+          </div>
 
-          </motion.div>
+          {/* RIGHT — floating preview card */}
+          <div className="pr-hero-right">
+            <PreviewCard />
+          </div>
         </div>
       </section>
 
-      {/* ══ PRICING CARDS ══ */}
-      <section id="pricing-cards" style={{ background: '#F7F9FC', padding: '100px 0' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 clamp(20px,5vw,64px)' }}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#6D7B90', marginBottom: 12 }}>CHOOSE YOUR PLAN</div>
-            <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(36px,4vw,56px)', color: '#08111F', margin: 0 }}>
-              ONE PRICE.{' '}
-              <span style={{ background: 'linear-gradient(90deg,#1769FF,#FF2448)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>EVERYTHING INCLUDED.</span>
-            </h2>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#526078', marginTop: 16, marginBottom: 0, maxWidth: 480, marginLeft: 'auto', marginRight: 'auto' }}>
-              Solo or squad — pay only what your team needs.
-            </p>
-          </div>
+      {/* ══════════════════════════════════════════
+          SECTION 2 — PRICING CARDS
+      ══════════════════════════════════════════ */}
+      <section id="pricing-cards" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+        <div className="pr-inner">
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase', marginBottom: 12 }}>CHOOSE YOUR PLAN</div>
+            <div className="pr-section-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em' }}>
+              ONE PRICE. <span style={G}>EVERYTHING INCLUDED.</span>
+            </div>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, color: '#536174', marginTop: 16 }}>₹149/month. No hidden fees. No tiers. Everything in one plan.</p>
+          </motion.div>
 
+          {/* Two cards */}
           <div style={{ display: 'flex', gap: 32, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'flex-start' }}>
 
-            {/* INDIVIDUAL ELITE */}
+            {/* CARD 1 — Individual */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
-              className="solo-glow-anim"
-              style={{ background: '#FFFFFF', borderRadius: 20, padding: 40, border: '1px solid #E8EEF5', width: 460, flexShrink: 0, display: 'flex', flexDirection: 'column' }}
+              initial={{ opacity: 0, transform: 'translateY(40px)' }}
+              whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: E, delay: 0.1 }}
+              whileHover={{ y: -6, boxShadow: '0 24px 64px rgba(7,17,31,0.1)' }}
+              style={{ background: '#FFFFFF', borderRadius: 20, padding: 40, border: '1px solid #DCE4EF', width: 460, boxShadow: '0 8px 40px rgba(7,17,31,0.06)', position: 'relative', maxWidth: '100%', transition: 'box-shadow 0.25s' }}
+              className="pr-card"
             >
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', marginBottom: 4 }}>INDIVIDUAL ELITE</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4, marginTop: 12 }}>
-                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 64, color: '#08111F', lineHeight: 1 }}>&#x20B9;149</span>
-                <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 18, color: '#526078' }}>/month</span>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, borderRadius: '3px 3px 0 0', background: '#1769FF' }} />
+
+              <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', textTransform: 'uppercase', marginBottom: 4 }}>INDIVIDUAL ELITE</div>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#536174', marginBottom: 20 }}>For the solo grinder.</div>
+
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, marginBottom: 4 }}>
+                <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 64, color: '#111827', lineHeight: 1 }}>₹149</span>
+                <span style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 18, color: '#536174', marginBottom: 10 }}>/month</span>
               </div>
-              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#9BAABB', marginBottom: 16 }}>GST inclusive &middot; Cancel anytime</div>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#526078', marginTop: 0, marginBottom: 24 }}>
-                Full access to every Esports Elite feature. Train, analyze and improve on your own terms.
-              </p>
-              <div style={{ height: 1, background: '#E8EEF5', marginBottom: 24 }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#9BAABB', marginBottom: 24 }}>GST inclusive · Cancel anytime</div>
+
+              <div style={{ borderTop: '1px solid #DCE4EF', marginBottom: 24 }} />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 32 }}>
                 {SOLO_FEATURES.map(f => (
-                  <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                    <Check size={16} color="#1769FF" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#374151' }}>{f}</span>
+                  <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ width: 22, height: 22, borderRadius: 6, background: '#EEF5FF', border: '1px solid rgba(23,105,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Check size={13} color="#1769FF" strokeWidth={2.5} />
+                    </div>
+                    <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#374151' }}>{f}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: 32 }}>
-                <RadialRevealButton
-                  label="GET STARTED →"
-                  padding="14px 24px"
-                  rounded={10}
-                  font={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14 }}
-                  style={{ width: '100%', justifyContent: 'center' }}
-                  colors={{ fill: '#0B0F16', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
-                  border={{ borderWidth: 0 }}
-                />
-              </div>
+
+              <RadialRevealButton fill="#0B1220" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em', color: '#FFFFFF', cursor: 'pointer', width: '100%', justifyContent: 'center' }}>
+                GET STARTED →
+              </RadialRevealButton>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#9BAABB', textAlign: 'center', marginTop: 12 }}>GST inclusive</div>
             </motion.div>
 
-            {/* SQUAD ELITE */}
+            {/* CARD 2 — Squad */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              style={{ position: 'relative', paddingTop: 16, flexShrink: 0, width: 480 }}
+              initial={{ opacity: 0, transform: 'translateY(40px)' }}
+              whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: E, delay: 0.2 }}
+              whileHover={{ y: -6, boxShadow: '0 24px 64px rgba(23,105,255,0.2)' }}
+              style={{ background: '#07111F', borderRadius: 20, padding: 40, border: '2px solid #1769FF', width: 460, boxShadow: '0 20px 60px rgba(23,105,255,0.15)', position: 'relative', maxWidth: '100%', transition: 'box-shadow 0.25s' }}
+              className="pr-card"
             >
-              {/* Badge */}
-              <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', background: GRAD, color: '#FFFFFF', fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', padding: '6px 20px', borderRadius: 20, whiteSpace: 'nowrap', zIndex: 10 }}>
-                BEST VALUE
+              {/* Best value badge */}
+              <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(90deg,#1769FF,#FF1838)', color: '#FFFFFF', fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', padding: '6px 20px', borderRadius: 20, whiteSpace: 'nowrap', textTransform: 'uppercase' }}>BEST VALUE</div>
+
+              <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', textTransform: 'uppercase', marginBottom: 4 }}>SQUAD ELITE</div>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#AAB8C8', marginBottom: 20 }}>1 Owner/Coach + up to 5 Players</div>
+
+              <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 52, color: '#FFFFFF', lineHeight: 1, marginBottom: 2 }}>FROM ₹89</div>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontWeight: 400, fontSize: 14, color: '#AAB8C8', marginBottom: 4 }}>/member/month</div>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginBottom: 20 }}>Each member pays their own share</div>
+
+              {/* Squad size selector */}
+              <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#AAB8C8', textTransform: 'uppercase', marginBottom: 12 }}>SELECT SQUAD SIZE</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+                {[2, 3, 4, 5, 6].map(size => (
+                  <motion.button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.97 }}
+                    style={{
+                      padding: '8px 16px', borderRadius: 8, fontFamily: 'Inter,sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer', transition: 'background 0.2s,color 0.2s,border-color 0.2s',
+                      background: selectedSize === size ? '#1769FF' : '#0D1F35',
+                      color: selectedSize === size ? '#FFFFFF' : '#AAB8C8',
+                      border: `1px solid ${selectedSize === size ? '#1769FF' : '#1A2840'}`,
+                    }}
+                  >
+                    {size} Players
+                  </motion.button>
+                ))}
               </div>
 
-              <div className="squad-glow-anim" style={{ background: '#07111F', borderRadius: 20, padding: 40, border: '2px solid #1769FF', display: 'flex', flexDirection: 'column' }}>
-
-                {/* Label + tagline */}
-                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF' }}>SQUAD ELITE</div>
-                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#AAB8C8', marginTop: 4 }}>2 to 6 members &middot; Owner + Players</div>
-
-                {/* Price */}
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 16 }}>
-                  <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 52, color: '#FFFFFF', lineHeight: 1 }}>FROM &#x20B9;89</span>
-                </div>
-                <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 14, color: '#AAB8C8', marginTop: 2 }}>/member/month</div>
-                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 4 }}>Each member pays their own share</div>
-
-                {/* Squad size selector */}
-                <div style={{ marginTop: 24 }}>
-                  <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#AAB8C8', marginBottom: 12 }}>SELECT SQUAD SIZE</div>
-                  <div style={{ display: 'flex', flexWrap: 'nowrap', gap: 6 }}>
-                    {[2, 3, 4, 5, 6].map(n => (
-                      <motion.button
-                        key={n}
-                        onClick={() => setSelectedSize(n)}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{ duration: 0.14, ease: [0.23, 1, 0.32, 1] }}
-                        style={{
-                          flex: 1,
-                          minWidth: 0,
-                          padding: '8px 0',
-                          borderRadius: 8,
-                          fontFamily: 'Inter, sans-serif',
-                          fontWeight: 600,
-                          fontSize: 13,
-                          cursor: 'pointer',
-                          whiteSpace: 'nowrap',
-                          border: selectedSize === n ? '1px solid #1769FF' : '1px solid #1A2840',
-                          background: selectedSize === n ? '#1769FF' : '#0D1F35',
-                          color: selectedSize === n ? '#FFFFFF' : '#AAB8C8',
-                          transition: 'background 0.18s cubic-bezier(0.23,1,0.32,1), border-color 0.18s cubic-bezier(0.23,1,0.32,1), color 0.18s cubic-bezier(0.23,1,0.32,1)',
-                        }}
-                      >
-                        {n} Players
-                      </motion.button>
-                    ))}
+              {/* Price breakdown */}
+              <div style={{ background: '#0B1828', borderRadius: 12, padding: 20, border: '1px solid rgba(23,105,255,0.15)', marginBottom: 12 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', textTransform: 'uppercase', marginBottom: 4 }}>PER PLAYER</div>
+                    <AnimatePresence mode="wait">
+                      <motion.div key={`per-${selectedSize}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }}>
+                        <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 40, color: '#FFFFFF', lineHeight: 1 }}>₹{sp.per}</span>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', textTransform: 'uppercase', marginBottom: 4 }}>TOTAL/MONTH</div>
+                    <AnimatePresence mode="wait">
+                      <motion.div key={`total-${selectedSize}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }}>
+                        <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 40, ...G, lineHeight: 1 }}>₹{sp.total}</span>
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 </div>
-
-                {/* Price breakdown */}
-                <div style={{ marginTop: 20, background: '#0B1828', borderRadius: 12, padding: 20, border: '1px solid rgba(23,105,255,0.13)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', marginBottom: 4 }}>PER PLAYER</div>
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={`per-${selectedSize}`}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                          style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, color: '#FFFFFF', lineHeight: 1 }}
-                        >
-                          &#x20B9;{tier.perMember}
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', marginBottom: 4 }}>TOTAL/MONTH</div>
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={`total-${selectedSize}`}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                          style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, background: 'linear-gradient(90deg,#1769FF,#FF2448)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}
-                        >
-                          &#x20B9;{tier.total}
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
-                    <Info size={12} color="#6B7B8D" style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#6B7B8D' }}>Each member pays their own &#x20B9;{tier.perMember} share</span>
-                  </div>
-                </div>
-
-                {/* Savings badge */}
-                <div style={{ marginTop: 12, textAlign: 'center' }}>
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={`save-${selectedSize}`}
-                      initial={{ opacity: 0, scale: 0.92 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.92 }}
-                      transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-                      style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: '#00C48C', display: 'inline-block' }}
-                    >
-                      Save &#x20B9;{tier.save}/member vs individual
-                    </motion.span>
-                  </AnimatePresence>
-                </div>
-
-                {/* Divider */}
-                <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }} />
-
-                {/* Features */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {SQUAD_FEATURES.map(f => (
-                    <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                      <Check size={16} color="#1769FF" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#C8D8F0' }}>{f}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Button */}
-                <div style={{ marginTop: 24 }}>
-                  <RadialRevealButton
-                    label="START YOUR SQUAD →"
-                    padding="14px 24px"
-                    rounded={10}
-                    font={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14 }}
-                    style={{ width: '100%', justifyContent: 'center' }}
-                    colors={{ fill: '#1769FF', textColor: '#FFFFFF', hoverFill: '#FF2448', hoverTextColor: '#FFFFFF' }}
-                    border={{ borderWidth: 0 }}
-                  />
-                </div>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#6B7B8D', textAlign: 'center', marginTop: 12, marginBottom: 0 }}>All prices GST inclusive</p>
+                <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#6B7B8D', marginTop: 12 }}>Each member pays their own ₹{sp.per} share</div>
               </div>
+
+              {/* Savings badge */}
+              <div style={{ textAlign: 'center', marginBottom: 12 }}>
+                <AnimatePresence mode="wait">
+                  <motion.div key={`save-${selectedSize}`} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.25 }}>
+                    <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.1em', color: '#00C48C', textTransform: 'uppercase' }}>Save ₹{sp.save}/member vs individual</span>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', margin: '20px 0' }} />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+                {SQUAD_FEATURES.map(f => (
+                  <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <Check size={14} color="#1769FF" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#C8D8F0' }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              <RadialRevealButton fill="#1769FF" hoverFill="#FF1838" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 32px', borderRadius: 8, background: '#1769FF', border: 'none', fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em', color: '#FFFFFF', cursor: 'pointer', width: '100%', justifyContent: 'center' }}>
+                START YOUR SQUAD →
+              </RadialRevealButton>
+              <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#6B7B8D', textAlign: 'center', marginTop: 12 }}>All prices GST inclusive</div>
             </motion.div>
-
           </div>
         </div>
       </section>
 
-      {/* ══ FAQ ══ */}
-      <section style={{ background: '#FFFFFF', padding: '80px 0' }}>
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 clamp(20px,5vw,64px)' }}>
-          <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(32px,4vw,48px)', color: '#08111F', textAlign: 'center', marginBottom: 40 }}>COMMON QUESTIONS</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {FAQ_DATA.map((faq, i) => (
+      {/* ══════════════════════════════════════════
+          SECTION 3 — WHAT'S INCLUDED
+      ══════════════════════════════════════════ */}
+      <section id="included" style={{ background: '#FFFFFF', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+        <div className="pr-inner">
+          {/* Heading */}
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.3em', color: '#536174', textTransform: 'uppercase', marginBottom: 12 }}>EVERY PLAN INCLUDES</div>
+            <div className="pr-section-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.93, letterSpacing: '0.01em', ...G }}>EVERYTHING.</div>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 17, color: '#536174', marginTop: 16 }}>No hidden tiers. No locked features. ₹149 gets you the full platform.</p>
+          </motion.div>
+
+          {/* 6 cards */}
+          <div className="pr-feat-grid">
+            {INCLUDED.map((item, i) => (
               <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                style={{
-                  background: '#FFFFFF',
-                  borderWidth: 1,
-                  borderStyle: 'solid',
-                  borderColor: openIndex === i ? 'rgba(23,105,255,0.3)' : '#E8EEF5',
-                  borderRadius: 12,
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'border-color 0.2s ease',
-                }}
+                key={item.title}
+                initial={{ opacity: 0, transform: 'translateY(30px)' }}
+                whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: E, delay: i * 0.08 }}
+                whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(7,17,31,0.08)', borderColor: `${item.accent}33` }}
+                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 16, padding: 28, position: 'relative', overflow: 'hidden', transition: 'border-color 0.2s,box-shadow 0.25s' }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px' }}>
-                  <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 16, color: '#08111F' }}>{faq.q}</span>
-                  {openIndex === i
-                    ? <Minus size={18} color="#1769FF" style={{ flexShrink: 0 }} />
-                    : <Plus size={18} color="#1769FF" style={{ flexShrink: 0 }} />
-                  }
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: item.accent }} />
+                <div style={{ width: 48, height: 48, borderRadius: 10, background: `${item.accent}1A`, border: `1px solid ${item.accent}26`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                  <item.Icon size={22} color={item.accent} strokeWidth={1.8} />
                 </div>
-                <AnimatePresence initial={false}>
-                  {openIndex === i && (
-                    <motion.div
-                      key="answer"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      style={{ overflow: 'hidden' }}
-                    >
-                      <p style={{ padding: '0 24px 20px', fontFamily: 'Inter, sans-serif', fontSize: 15, lineHeight: 1.6, color: '#526078', margin: 0 }}>{faq.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 20, color: '#111827', marginBottom: 8 }}>{item.title}</div>
+                <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, lineHeight: 1.5, color: '#536174' }}>{item.desc}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══ CTA ══ */}
-      <section style={{ background: '#080D15', minHeight: 320, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', bottom: -100, left: -100, width: 500, height: 500, background: 'radial-gradient(circle, rgba(23,105,255,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: -100, right: -100, width: 500, height: 500, background: 'radial-gradient(circle, rgba(255,36,72,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 320, paddingTop: 80, paddingBottom: 80, textAlign: 'center' }}>
-          <motion.div
-            variants={ctaContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-          >
-            <motion.h2 variants={ctaItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(40px,5vw,64px)', color: '#FFFFFF', margin: 0, lineHeight: 1 }}>
-              READY TO{' '}
-              <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>LEVEL UP?</span>
-            </motion.h2>
-            <motion.p variants={ctaItem} style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, color: '#AAB8C8', marginTop: 16, marginBottom: 0 }}>
-              Join thousands of players already on the path to greatness.
-            </motion.p>
-            <motion.div variants={ctaItem} style={{ marginTop: 32 }}>
-              <RadialRevealButton
-                label="START FOR &#x20B9;149/MONTH →"
-                padding="16px 44px"
-                rounded={8}
-                font={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15 }}
-                colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
-                border={{ borderWidth: 0 }}
-              />
-            </motion.div>
+      {/* ══════════════════════════════════════════
+          SECTION 4 — FAQ
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+        <div className="pr-inner-narrow">
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} className="pr-faq-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, color: '#111827', textAlign: 'center', marginBottom: 48 }}>
+            COMMON QUESTIONS
+          </motion.div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {faqs.map((faq, i) => (
+              <FaqItem key={i} faq={faq} idx={i} open={openFaq === i} onToggle={() => setOpenFaq(openFaq === i ? null : i)} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SECTION 5 — FINAL CTA
+      ══════════════════════════════════════════ */}
+      <section style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 800, margin: '0 auto', padding: '0 32px', textAlign: 'center' }}>
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.7, ease: E }}>
+            <div className="pr-cta-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, lineHeight: 0.92, letterSpacing: '-0.01em' }}>
+              <span style={{ color: '#FFFFFF', display: 'block' }}>READY TO</span>
+              <span style={G}>LEVEL UP?</span>
+            </div>
+            <p className="pr-cta-desc" style={{ fontFamily: 'Inter,sans-serif', color: '#AAB8C8', marginTop: 16, lineHeight: 1.65 }}>
+              Join India's most serious BGMI training platform.
+            </p>
+            <div style={{ marginTop: 40 }}>
+              <RadialRevealButton fill="#FFFFFF" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 48px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer' }}>
+                START FOR ₹149/MONTH →
+              </RadialRevealButton>
+            </div>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>GST inclusive · Cancel anytime</p>
           </motion.div>
         </div>
       </section>
 
       <Footer />
-    </>
+
+      <style>{`
+        /* ── Layout ── */
+        .pr-hero-inner {
+          max-width: 1280px; margin: 0 auto;
+          display: flex; flex-direction: row; align-items: center; gap: 64px;
+          padding: 128px 64px; position: relative; z-index: 1; width: 100%;
+        }
+        .pr-inner        { max-width: 1280px; margin: 0 auto; padding: 0 64px; }
+        .pr-inner-narrow { max-width: 800px;  margin: 0 auto; padding: 0 64px; }
+        .pr-h1 {
+          font-family: 'Barlow Condensed', sans-serif;
+          font-weight: 900; font-size: 80px; line-height: 0.92;
+          letter-spacing: -0.01em; display: block;
+        }
+        .pr-desc {
+          font-family: 'Inter', sans-serif; font-size: 18px;
+          line-height: 1.6; color: #536174; max-width: 520px; margin-top: 20px;
+        }
+        .pr-hero-right { flex: 1; display: flex; align-items: center; justify-content: center; }
+        .pr-section-h2 { font-size: 56px; }
+        .pr-faq-h2     { font-size: 48px; }
+        .pr-cta-h2     { font-size: 88px; }
+        .pr-cta-desc   { font-size: 18px; }
+        .pr-feat-grid  { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+        /* ── Card ── */
+        @keyframes borderGlow {
+          0%,100% { box-shadow: 0 0 0 0 rgba(23,105,255,0); }
+          50%      { box-shadow: 0 0 20px 0 rgba(23,105,255,0.2); }
+        }
+        .pr-border-glow { animation: borderGlow 3s ease-in-out infinite; }
+
+        @keyframes shimmerSlide {
+          0%   { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+        .pr-shimmer { animation: shimmerSlide 3s ease-in-out infinite 2s; }
+
+        /* ── Mobile ── */
+        @media (max-width: 960px) {
+          .pr-hero-inner  { flex-direction: column !important; padding: 80px 20px !important; gap: 40px !important; }
+          .pr-hero-right  { display: none !important; }
+          .pr-inner       { padding: 0 20px !important; }
+          .pr-inner-narrow{ padding: 0 20px !important; }
+          .pr-h1          { font-size: 48px !important; }
+          .pr-desc        { font-size: 15px !important; }
+          .pr-section-h2  { font-size: 36px !important; }
+          .pr-faq-h2      { font-size: 32px !important; }
+          .pr-cta-h2      { font-size: 48px !important; }
+          .pr-cta-desc    { font-size: 16px !important; }
+          .pr-feat-grid   { grid-template-columns: 1fr !important; }
+          .pr-card        { width: 100% !important; max-width: 100% !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * { animation: none !important; transition: none !important; }
+        }
+      `}</style>
+    </div>
   )
 }
