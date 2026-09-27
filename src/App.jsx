@@ -80,7 +80,6 @@ function Layout() {
       <Navbar />
       <main style={{ paddingTop: '64px' }}>
         <Routes>
-          <Route path="/about"     element={<About />} />
           <Route path="/products"  element={<Products />} />
           <Route path="/community" element={<Community />} />
           <Route path="/blog"      element={<Blog />} />
@@ -114,6 +113,7 @@ export default function App() {
           <Route path="/features" element={<Features />} />
           <Route path="/roadmap"  element={<Roadmap />} />
           <Route path="/pricing"  element={<Pricing />} />
+          <Route path="/about"    element={<About />} />
           <Route path="/*"        element={<Layout />} />
         </Routes>
       </BrowserRouter>
