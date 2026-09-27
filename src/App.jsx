@@ -55,7 +55,6 @@ function Layout() {
           <Route path="/contact"   element={<Contact />} />
           <Route path="/help"      element={<Help />} />
           <Route path="/faq"       element={<FAQ />} />
-          <Route path="/pricing"   element={<Pricing />} />
           {/* direct-URL-only demo of the receipt-printer widget — not in any nav */}
           <Route path="/receipt-preview" element={<ReceiptPreview />} />
           <Route path="/privacy"        element={<Privacy />} />
@@ -80,6 +79,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/features" element={<Features />} />
           <Route path="/roadmap" element={<Roadmap />} />
+          <Route path="/pricing" element={<Pricing />} />
           {/* All other routes go through the full Layout */}
           <Route path="/*" element={<Layout />} />
         </Routes>
