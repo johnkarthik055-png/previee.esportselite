@@ -27,7 +27,7 @@ const SQUAD_FEATURES = [
 
 const FAQ_DATA = [
   {
-    q: "What's included in the ₹149/month plan?",
+    q: "What’s included in the ₹149/month plan?",
     a: 'Everything — Map Knowledge for all maps, Strategy Maker with unlimited saves, Match Logger with AI screenshot import, AI Coach with personalized feedback, full analytics, and all 10 roadmap stages.',
   },
   {
@@ -74,7 +74,7 @@ export default function Pricing() {
       <Navbar activePage="pricing" />
 
       {/* ══ HERO ══ */}
-      <section style={{ background: '#FFFFFF', minHeight: 800, position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: '#FFFFFF', minHeight: '760px', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         {/* CSS-only decorations */}
         <div style={{ position: 'absolute', top: 0, left: 0, width: 300, height: 400, clipPath: 'polygon(0 0, 100% 0, 60% 100%, 0 100%)', background: '#1769FF', opacity: 0.07, pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, width: 200, height: 300, clipPath: 'polygon(0 20%, 80% 0, 100% 100%, 0 100%)', background: '#1769FF', opacity: 0.06, pointerEvents: 'none' }} />
@@ -84,44 +84,45 @@ export default function Pricing() {
         <div style={{ position: 'absolute', top: '50%', right: '43%', color: '#1769FF', fontSize: 18, opacity: 0.4, pointerEvents: 'none', userSelect: 'none' }}>+</div>
 
         {/* Right artwork */}
-        <div style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%', zIndex: 0 }}>
+        <div style={{ position: 'absolute', right: 0, top: 0, width: '56%', height: '100%', zIndex: 0 }}>
           <img src="/pricing-hero.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'left center', display: 'block' }} />
-          <div style={{ position: 'absolute', top: 0, left: 0, width: 320, height: '100%', background: 'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.9) 50%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
+          {/* Left fade — tighter than before so image is visible at 1366px */}
+          <div style={{ position: 'absolute', top: 0, left: 0, width: 280, height: '100%', background: 'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.95) 40%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
+          {/* Right microcopy */}
           <div style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', textAlign: 'right', zIndex: 2 }}>
             {['MORE', 'SKILLS', 'A BRIGHTER', 'TOMORROW'].map(line => (
               <div key={line} style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#FF2448', opacity: 0.5, lineHeight: 2 }}>{line}</div>
             ))}
             <div style={{ width: 24, height: 1, background: '#FF2448', marginTop: 8, marginLeft: 'auto' }} />
           </div>
-          <div style={{ position: 'absolute', right: '46%', top: '50%', transform: 'translateY(-50%)', zIndex: 2 }}>
-            {['DISCIPLINE', 'CREATES', 'FREEDOM'].map(line => (
-              <div key={line} style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#1769FF', opacity: 0.5, lineHeight: 2 }}>{line}</div>
-            ))}
-          </div>
         </div>
 
         {/* Left content */}
-        <div style={{ position: 'relative', zIndex: 1, width: '46%', minHeight: 800, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 'clamp(24px,6vw,64px)', paddingRight: 32, paddingTop: 96, paddingBottom: 96 }}>
+        <div style={{ position: 'relative', zIndex: 1, width: '48%', minWidth: '500px', paddingLeft: '64px', paddingRight: '32px', paddingTop: '120px', paddingBottom: '80px' }}>
           <motion.div variants={heroContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column' }}>
 
+            {/* Eyebrow */}
             <motion.div variants={heroItem} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
               <div style={{ width: 40, height: 2, background: '#1769FF', flexShrink: 0 }} />
               <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 13, letterSpacing: '0.35em', color: '#1769FF' }}>PRICING</span>
             </motion.div>
 
-            <motion.h1 variants={heroItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(52px,5.5vw,80px)', lineHeight: 0.94, letterSpacing: '-0.02em', margin: 0, color: '#08111F' }}>
+            {/* H1 — capped at 68px to fit at 1366px */}
+            <motion.h1 variants={heroItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(48px,5vw,68px)', lineHeight: 0.94, letterSpacing: '-0.02em', margin: 0, color: '#08111F' }}>
               ONE PLAN.
               <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', display: 'block' }}>EVERYTHING</span>
               IN IT.
             </motion.h1>
 
-            <motion.p variants={heroItem} style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, lineHeight: 1.55, color: '#52647D', maxWidth: 560, marginTop: 24, marginBottom: 0 }}>
+            {/* Description */}
+            <motion.p variants={heroItem} style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.55, color: '#52647D', maxWidth: 520, marginTop: 22, marginBottom: 0 }}>
               Whether you grind solo or as a squad, Esports Elite gives you the tools, data, and guidance to improve, compete, and go further. No hidden fees. No limits on your grind.
             </motion.p>
 
-            <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginTop: 32, flexWrap: 'wrap', gap: 0 }}>
+            {/* Feature strip — nowrap, 16px icons, 11px labels */}
+            <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginTop: 28, flexWrap: 'nowrap', gap: 0 }}>
               {[
                 { Icon: Zap,       color: '#1769FF', label: 'TRAIN',   sub: 'Build skills' },
                 { Icon: BarChart2, color: '#4A8AFF', label: 'ANALYZE', sub: 'Track progress' },
@@ -129,36 +130,38 @@ export default function Pricing() {
                 { Icon: Trophy,    color: '#FF2448', label: 'COMPETE', sub: 'Reach higher' },
               ].map(({ Icon, color, label, sub }, i) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center' }}>
-                  {i > 0 && <div style={{ width: 1, height: 36, background: '#D9E3F0', flexShrink: 0 }} />}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: i === 0 ? 0 : 20, paddingRight: i === 3 ? 0 : 20 }}>
-                    <Icon size={18} color={color} strokeWidth={1.8} />
+                  {i > 0 && <div style={{ width: 1, height: 32, background: '#D9E3F0', flexShrink: 0 }} />}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, paddingLeft: i === 0 ? 0 : 16, paddingRight: i === 3 ? 0 : 16 }}>
+                    <Icon size={16} color={color} strokeWidth={1.8} style={{ flexShrink: 0 }} />
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 14, color: '#08111F', lineHeight: 1.2 }}>{label}</span>
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#71829A' }}>{sub}</span>
+                      <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 11, color: '#08111F', lineHeight: 1.2, whiteSpace: 'nowrap' }}>{label}</span>
+                      <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#71829A', whiteSpace: 'nowrap' }}>{sub}</span>
                     </div>
                   </div>
                 </div>
               ))}
             </motion.div>
 
-            <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 40, marginTop: 32 }}>
+            {/* Buttons — nowrap, smaller, gap 24 */}
+            <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', gap: 24, marginTop: 28 }}>
               <motion.button
                 whileHover={{ scale: 1.03, boxShadow: '0 8px 32px rgba(23,105,255,0.4)', transition: { duration: 0.2 } }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => document.getElementById('pricing-cards')?.scrollIntoView({ behavior: 'smooth' })}
-                style={{ background: GRAD, color: '#FFFFFF', padding: '16px 36px', borderRadius: 30, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', flexShrink: 0 }}
+                style={{ background: GRAD, color: '#FFFFFF', padding: '14px 28px', borderRadius: 30, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', flexShrink: 0 }}
               >
                 VIEW PLANS &rarr;
               </motion.button>
               <button
                 onClick={() => document.getElementById('pricing-cards')?.scrollIntoView({ behavior: 'smooth' })}
-                style={{ background: 'transparent', color: '#08111F', fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                style={{ background: 'transparent', color: '#08111F', fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0, whiteSpace: 'nowrap' }}
               >
                 SEE WHAT&apos;S INCLUDED
               </button>
             </motion.div>
 
-            <motion.div variants={heroItem} style={{ marginTop: 48, display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* Bottom microcopy */}
+            <motion.div variants={heroItem} style={{ marginTop: 44, display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 40, height: 1, background: '#A8B3C4', flexShrink: 0 }} />
               <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.3em', color: '#71829A' }}>SAME GAME. DIFFERENT MINDSET.</span>
             </motion.div>
