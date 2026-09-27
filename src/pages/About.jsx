@@ -200,15 +200,16 @@ export default function About() {
               <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 36, color: '#FFFFFF' }}>KR</span>
             </div>
 
-            <div className="ab-founder-name" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, color: '#111827', lineHeight: 1 }}>KARTHIK REDDY</div>
-            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 14, letterSpacing: '0.15em', color: '#536174', marginTop: 8, textTransform: 'uppercase' }}>Founder · BGMI Player · Builder</div>
+            <div className="ab-founder-name" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, color: '#111827', lineHeight: 1 }}>KARTHIK</div>
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 18, letterSpacing: '0.1em', marginTop: 4, background: 'linear-gradient(90deg,#1769FF,#FF1838)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>SparkOp</div>
+            <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 14, letterSpacing: '0.15em', color: '#536174', marginTop: 8, textTransform: 'uppercase' }}>Founder · BGMI Player · SparkOp</div>
 
             {/* Divider */}
             <div style={{ width: 60, height: 2, background: 'linear-gradient(to right,#1769FF,#FF1838)', margin: '24px auto' }} />
 
             {/* Quote */}
             <p className="ab-founder-quote" style={{ fontFamily: 'Inter,sans-serif', color: '#536174', lineHeight: 1.7, maxWidth: 560, margin: '0 auto', fontStyle: 'italic' }}>
-              "I've been playing BGMI competitively for years. The biggest thing holding players back isn't talent — it's the lack of a proper improvement system. I built Esports Elite to fix that."
+              "I've been playing BGMI as SparkOp for years. The biggest thing holding players back isn't talent — it's the lack of a proper improvement system. I built Esports Elite to fix that."
             </p>
 
             {/* Location */}
@@ -219,7 +220,7 @@ export default function About() {
 
             {/* Social pills */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-              {['🎮 BGMI Player', '💻 Builder', '📍 Karnataka'].map(pill => (
+              {['🎮 SparkOp', '💻 Builder', '📍 Karnataka'].map(pill => (
                 <motion.div
                   key={pill}
                   whileHover={{ y: -2, boxShadow: '0 4px 16px rgba(7,17,31,0.08)' }}
