@@ -258,26 +258,31 @@ export default function Pricing() {
                 {/* Squad size selector */}
                 <div style={{ marginTop: 24 }}>
                   <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#AAB8C8', marginBottom: 12 }}>SELECT SQUAD SIZE</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div style={{ display: 'flex', flexWrap: 'nowrap', gap: 6 }}>
                     {[2, 3, 4, 5, 6].map(n => (
-                      <button
+                      <motion.button
                         key={n}
                         onClick={() => setSelectedSize(n)}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.14, ease: [0.23, 1, 0.32, 1] }}
                         style={{
-                          padding: '8px 16px',
+                          flex: 1,
+                          minWidth: 0,
+                          padding: '8px 0',
                           borderRadius: 8,
                           fontFamily: 'Inter, sans-serif',
                           fontWeight: 600,
                           fontSize: 13,
                           cursor: 'pointer',
+                          whiteSpace: 'nowrap',
                           border: selectedSize === n ? '1px solid #1769FF' : '1px solid #1A2840',
                           background: selectedSize === n ? '#1769FF' : '#0D1F35',
                           color: selectedSize === n ? '#FFFFFF' : '#AAB8C8',
-                          transition: 'background 0.2s, border-color 0.2s, color 0.2s',
+                          transition: 'background 0.18s cubic-bezier(0.23,1,0.32,1), border-color 0.18s cubic-bezier(0.23,1,0.32,1), color 0.18s cubic-bezier(0.23,1,0.32,1)',
                         }}
                       >
                         {n} Players
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
