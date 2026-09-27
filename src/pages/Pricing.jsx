@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Zap, BarChart2, Activity, Trophy, Check, Plus, Minus } from 'lucide-react'
+import { Zap, BarChart2, Activity, Trophy, Check, Plus, Minus, Info } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
@@ -17,13 +17,21 @@ const SOLO_FEATURES = [
 ]
 
 const SQUAD_FEATURES = [
-  'Everything in Solo plan',
-  'Squad strategy sharing',
+  'Everything in Individual Elite',
+  'Squad strategy sharing & library',
   'Team performance comparison',
-  'Shared strategy library',
-  'Squad match analysis',
+  '1 Owner/Coach + up to 5 Players',
+  'Per-member payment links',
   'Priority AI Coach responses',
 ]
+
+const SQUAD_TIERS = {
+  2: { perMember: 129, total: 258,  save: 20  },
+  3: { perMember: 119, total: 357,  save: 30  },
+  4: { perMember: 109, total: 436,  save: 40  },
+  5: { perMember: 99,  total: 495,  save: 50  },
+  6: { perMember: 89,  total: 534,  save: 60  },
+}
 
 const FAQ_DATA = [
   {
@@ -36,7 +44,7 @@ const FAQ_DATA = [
   },
   {
     q: 'How does squad payment work?',
-    a: 'Each squad member pays their own ₹149/month subscription independently. Squad features activate when teammates are also subscribed.',
+    a: 'Each squad member pays their own share independently. For a 6-member squad, each member pays ₹89/month. Squad features activate when teammates are also subscribed.',
   },
   {
     q: 'Can I cancel anytime?',
@@ -44,7 +52,7 @@ const FAQ_DATA = [
   },
   {
     q: 'Is GST included?',
-    a: 'Yes. ₹149/month is GST inclusive. No surprise charges.',
+    a: 'Yes. All prices are GST inclusive. No surprise charges.',
   },
 ]
 
@@ -68,6 +76,9 @@ const ctaItem = {
 
 export default function Pricing() {
   const [openIndex, setOpenIndex] = useState(null)
+  const [selectedSize, setSelectedSize] = useState(4)
+
+  const tier = SQUAD_TIERS[selectedSize]
 
   return (
     <>
@@ -89,7 +100,6 @@ export default function Pricing() {
           <div style={{ position: 'absolute', top: 0, left: 0, width: 250, height: '100%', background: 'linear-gradient(to right, #FFFFFF 0%, rgba(255,255,255,0.9) 50%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to bottom, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, #FFFFFF 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
-          {/* Right microcopy */}
           <div style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', textAlign: 'right', zIndex: 2 }}>
             {['MORE', 'SKILLS', 'A BRIGHTER', 'TOMORROW'].map(line => (
               <div key={line} style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#FF2448', opacity: 0.5, lineHeight: 2 }}>{line}</div>
@@ -102,25 +112,21 @@ export default function Pricing() {
         <div style={{ position: 'relative', zIndex: 1, width: '46%', minWidth: '500px', paddingLeft: '64px', paddingRight: '32px', paddingTop: '120px', paddingBottom: '80px' }}>
           <motion.div variants={heroContainer} initial="hidden" animate="visible" style={{ display: 'flex', flexDirection: 'column' }}>
 
-            {/* Eyebrow */}
             <motion.div variants={heroItem} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
               <div style={{ width: 40, height: 2, background: '#1769FF', flexShrink: 0 }} />
               <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 13, letterSpacing: '0.35em', color: '#1769FF' }}>PRICING</span>
             </motion.div>
 
-            {/* H1 — capped at 68px to fit at 1366px */}
             <motion.h1 variants={heroItem} style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: '64px', lineHeight: 0.94, letterSpacing: '-0.02em', margin: 0, color: '#08111F' }}>
               ONE PLAN.
               <span style={{ background: GRAD, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', display: 'block' }}>EVERYTHING</span>
               IN IT.
             </motion.h1>
 
-            {/* Description */}
             <motion.p variants={heroItem} style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, lineHeight: 1.55, color: '#52647D', maxWidth: 520, marginTop: 22, marginBottom: 0 }}>
               Whether you grind solo or as a squad, Esports Elite gives you the tools, data, and guidance to improve, compete, and go further. No hidden fees. No limits on your grind.
             </motion.p>
 
-            {/* Feature strip — nowrap, 16px icons, 11px labels */}
             <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginTop: 28, flexWrap: 'nowrap', gap: 0 }}>
               {[
                 { Icon: Zap,       color: '#1769FF', label: 'TRAIN',   sub: 'Build skills' },
@@ -141,7 +147,6 @@ export default function Pricing() {
               ))}
             </motion.div>
 
-            {/* Buttons — nowrap, smaller, gap 24 */}
             <motion.div variants={heroItem} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', gap: 24, marginTop: 28 }}>
               <motion.button
                 whileHover={{ scale: 1.03, boxShadow: '0 8px 32px rgba(23,105,255,0.4)', transition: { duration: 0.2 } }}
@@ -159,7 +164,6 @@ export default function Pricing() {
               </button>
             </motion.div>
 
-            {/* Bottom microcopy */}
             <motion.div variants={heroItem} style={{ marginTop: 44, display: 'flex', alignItems: 'center', gap: 12 }}>
               <div style={{ width: 40, height: 1, background: '#A8B3C4', flexShrink: 0 }} />
               <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.3em', color: '#71829A' }}>SAME GAME. DIFFERENT MINDSET.</span>
@@ -179,13 +183,13 @@ export default function Pricing() {
               <span style={{ background: 'linear-gradient(90deg,#1769FF,#FF2448)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>EVERYTHING INCLUDED.</span>
             </h2>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#526078', marginTop: 16, marginBottom: 0, maxWidth: 480, marginLeft: 'auto', marginRight: 'auto' }}>
-              &#x20B9;149/month. No hidden fees. No tiers. Everything in one plan.
+              Solo or squad — pay only what your team needs.
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: 32, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 32, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'flex-start' }}>
 
-            {/* SOLO PLAYER */}
+            {/* INDIVIDUAL ELITE */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -194,13 +198,14 @@ export default function Pricing() {
               whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
               style={{ background: '#FFFFFF', borderRadius: 20, padding: 40, border: '1px solid #E8EEF5', boxShadow: '0 8px 40px rgba(7,17,31,0.08)', width: 460, flexShrink: 0, display: 'flex', flexDirection: 'column' }}
             >
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', marginBottom: 16 }}>SOLO PLAYER</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', marginBottom: 4 }}>INDIVIDUAL ELITE</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4, marginTop: 12 }}>
                 <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 64, color: '#08111F', lineHeight: 1 }}>&#x20B9;149</span>
                 <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 18, color: '#526078' }}>/month</span>
               </div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#9BAABB', marginBottom: 16 }}>GST inclusive &middot; Cancel anytime</div>
               <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#526078', marginTop: 0, marginBottom: 24 }}>
-                Perfect for the individual grinder who wants to improve systematically.
+                Full access to every Esports Elite feature. Train, analyze and improve on your own terms.
               </p>
               <div style={{ height: 1, background: '#E8EEF5', marginBottom: 24 }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
@@ -213,7 +218,7 @@ export default function Pricing() {
               </div>
               <div style={{ marginTop: 32 }}>
                 <RadialRevealButton
-                  label="GET STARTED &rarr;"
+                  label="GET STARTED →"
                   padding="14px 24px"
                   rounded={10}
                   font={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14 }}
@@ -222,32 +227,91 @@ export default function Pricing() {
                   border={{ borderWidth: 0 }}
                 />
               </div>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#9BAABB', textAlign: 'center', marginTop: 12, marginBottom: 0 }}>GST inclusive</p>
             </motion.div>
 
-            {/* SQUAD */}
+            {/* SQUAD ELITE */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
-              style={{ position: 'relative', paddingTop: 16, flexShrink: 0 }}
+              style={{ position: 'relative', paddingTop: 16, flexShrink: 0, width: 480 }}
             >
+              {/* Badge */}
               <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', background: GRAD, color: '#FFFFFF', fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', padding: '6px 20px', borderRadius: 20, whiteSpace: 'nowrap', zIndex: 10 }}>
-                MOST POPULAR
+                BEST VALUE
               </div>
-              <div style={{ background: '#07111F', borderRadius: 20, padding: 40, border: '2px solid #1769FF', boxShadow: '0 20px 60px rgba(23,105,255,0.2)', width: 460, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF', marginBottom: 16 }}>SQUAD</div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
-                  <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 64, color: '#FFFFFF', lineHeight: 1 }}>&#x20B9;149</span>
-                  <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, color: '#AAB8C8' }}>/member/month</span>
+
+              <div style={{ background: '#07111F', borderRadius: 20, padding: 40, border: '2px solid #1769FF', boxShadow: '0 20px 60px rgba(23,105,255,0.2)', display: 'flex', flexDirection: 'column' }}>
+
+                {/* Label + tagline */}
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.25em', color: '#1769FF' }}>SQUAD ELITE</div>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#AAB8C8', marginTop: 4 }}>2 to 6 members &middot; Owner + Players</div>
+
+                {/* Price */}
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 16 }}>
+                  <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 52, color: '#FFFFFF', lineHeight: 1 }}>FROM &#x20B9;89</span>
                 </div>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#AAB8C8', marginTop: 0, marginBottom: 24 }}>
-                  For squads who train together. Each member pays their own subscription.
-                </p>
-                <div style={{ height: 1, background: 'rgba(255,255,255,0.1)', marginBottom: 24 }} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 14, color: '#AAB8C8', marginTop: 2 }}>/member/month</div>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 4 }}>Each member pays their own share</div>
+
+                {/* Squad size selector */}
+                <div style={{ marginTop: 24 }}>
+                  <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#AAB8C8', marginBottom: 12 }}>SELECT SQUAD SIZE</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {[2, 3, 4, 5, 6].map(n => (
+                      <button
+                        key={n}
+                        onClick={() => setSelectedSize(n)}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: 8,
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 600,
+                          fontSize: 13,
+                          cursor: 'pointer',
+                          border: selectedSize === n ? '1px solid #1769FF' : '1px solid #1A2840',
+                          background: selectedSize === n ? '#1769FF' : '#0D1F35',
+                          color: selectedSize === n ? '#FFFFFF' : '#AAB8C8',
+                          transition: 'background 0.2s, border-color 0.2s, color 0.2s',
+                        }}
+                      >
+                        {n} Players
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price breakdown */}
+                <div style={{ marginTop: 20, background: '#0B1828', borderRadius: 12, padding: 20, border: '1px solid rgba(23,105,255,0.13)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', marginBottom: 4 }}>PER PLAYER</div>
+                      <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, color: '#FFFFFF', lineHeight: 1 }}>&#x20B9;{tier.perMember}</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.2em', color: '#AAB8C8', marginBottom: 4 }}>TOTAL/MONTH</div>
+                      <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 36, background: 'linear-gradient(90deg,#1769FF,#FF2448)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}>&#x20B9;{tier.total}</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
+                    <Info size={12} color="#6B7B8D" style={{ flexShrink: 0 }} />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#6B7B8D' }}>Each member pays their own &#x20B9;{tier.perMember} share</span>
+                  </div>
+                </div>
+
+                {/* Savings badge */}
+                <div style={{ marginTop: 12, textAlign: 'center' }}>
+                  <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.15em', color: '#00C48C' }}>
+                    Save &#x20B9;{tier.save}/member vs individual
+                  </span>
+                </div>
+
+                {/* Divider */}
+                <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '20px 0' }} />
+
+                {/* Features */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {SQUAD_FEATURES.map(f => (
                     <div key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                       <Check size={16} color="#1769FF" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
@@ -255,18 +319,20 @@ export default function Pricing() {
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 32 }}>
+
+                {/* Button */}
+                <div style={{ marginTop: 24 }}>
                   <RadialRevealButton
-                    label="START YOUR SQUAD &rarr;"
+                    label="START YOUR SQUAD →"
                     padding="14px 24px"
                     rounded={10}
                     font={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14 }}
                     style={{ width: '100%', justifyContent: 'center' }}
-                    colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                    colors={{ fill: '#1769FF', textColor: '#FFFFFF', hoverFill: '#FF2448', hoverTextColor: '#FFFFFF' }}
                     border={{ borderWidth: 0 }}
                   />
                 </div>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#6B7B8D', textAlign: 'center', marginTop: 12, marginBottom: 0 }}>Per member &middot; GST inclusive</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#6B7B8D', textAlign: 'center', marginTop: 12, marginBottom: 0 }}>All prices GST inclusive</p>
               </div>
             </motion.div>
 
@@ -346,7 +412,7 @@ export default function Pricing() {
             </motion.p>
             <motion.div variants={ctaItem} style={{ marginTop: 32 }}>
               <RadialRevealButton
-                label="START FOR &#x20B9;149/MONTH &rarr;"
+                label="START FOR &#x20B9;149/MONTH →"
                 padding="16px 44px"
                 rounded={8}
                 font={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15 }}
