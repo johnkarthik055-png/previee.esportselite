@@ -12,15 +12,15 @@ const faqs = [
   { q: 'WHO IS ESPORTS ELITE FOR?', a: 'Esports Elite is built for BGMI players who want a more structured approach to improvement — from players developing their fundamentals to competitive players preparing for scrims and tournaments.' },
   { q: 'WHICH MAPS ARE COVERED?', a: 'Map coverage depends on the training and analysis features currently available on the platform. We continue expanding coverage as the platform evolves.' },
   { q: 'DO I NEED TO BE A GOOD PLAYER TO JOIN?', a: 'No. Esports Elite is not built around your current rank. It is built around helping you improve from wherever you are.' },
-  { q: 'IS THERE A FREE TRIAL?', a: 'Yes. New users can explore the available trial experience before choosing a subscription.' },
+  { q: 'IS THERE A FREE TRIAL?', a: 'We are currently in development. Join the waitlist to get early access when we launch.' },
   { q: 'HOW IS THIS DIFFERENT FROM WATCHING YOUTUBE GUIDES?', a: 'YouTube can teach you individual concepts. Esports Elite is designed to connect those concepts into a structured improvement process — training, tracking, analysis and progression in one place.' },
 ]
 
 const timeline = [
-  { year: '2023', accent: '#1769FF', title: 'THE PROBLEM', desc: 'We were grinding BGMI every day but kept running into the same problem: more hours did not always mean more improvement. YouTube had information. The game had practice modes. But there was no clear system connecting practice, performance and progression.' },
-  { year: 'EARLY 2024', accent: '#4A8AFF', title: 'THE IDEA', desc: 'The first version started as a personal practice tracker. We began mapping the skills that actually needed to be developed and turned them into a structured progression system. That became the foundation of the 10-stage roadmap.' },
-  { year: 'MID 2024', accent: '#7137FF', title: 'THE BUILD', desc: 'The idea grew into a complete platform. We built the first versions of the training system, Match Logger, Map Knowledge, Strategy Maker and AI-powered analysis — then started testing with BGMI players.' },
-  { year: '2025', accent: '#FF1838', title: 'THE LAUNCH', desc: 'Esports Elite launched publicly at ₹149/month, bringing structured training, performance tracking and progression into one platform. And we are still building.' },
+  { year: 'THE PROBLEM', accent: '#1769FF', title: 'THE PROBLEM', desc: 'We were grinding BGMI every day but kept running into the same problem: more hours did not always mean more improvement. YouTube had information. The game had practice modes. But there was no clear system connecting practice, performance and progression.' },
+  { year: 'THE IDEA', accent: '#4A8AFF', title: 'THE IDEA', desc: 'The first version started as a personal practice tracker. We began mapping the skills that actually needed to be developed and turned them into a structured progression system. That became the foundation of the 10-stage roadmap.' },
+  { year: 'THE BUILD', accent: '#7137FF', title: 'THE BUILD', desc: 'The idea grew into a complete platform. We built the first versions of the training system, Match Logger, Map Knowledge, Strategy Maker and AI-powered analysis — then started testing with BGMI players.' },
+  { year: '2025', accent: '#FF1838', title: 'THE BUILD CONTINUES', desc: 'We are still building. The platform is in development — being tested, refined and shaped around what BGMI players actually need before we open the doors.' },
 ]
 
 const G = {
@@ -100,7 +100,7 @@ export default function About() {
             transition={{ duration: 0.8, ease, delay: 0.7 }}
             style={{ display: 'flex', flexDirection: 'row', gap: 64, marginTop: 64 }}
           >
-            {[{ num: '2024', label: 'FOUNDED' }, { num: 'INDIA', label: 'BASED' }].map(stat => (
+            {[{ num: 'BGMI', label: 'FOCUSED' }, { num: 'INDIA', label: 'BASED' }].map(stat => (
               <div key={stat.label} style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ width: 32, height: 1, background: '#DCE4EF', marginBottom: 12 }} />
                 <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 40, color: '#111827', lineHeight: 1 }}>{stat.num}</span>
@@ -287,9 +287,9 @@ export default function About() {
             {/* Metrics */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', paddingTop: 32, paddingBottom: 32, marginBottom: 40 }}>
               {[
-                { val: '2024', label: 'Year Esports Elite was founded' },
-                { val: '10',   label: 'Stage structured roadmap' },
-                { val: '₹149', label: 'Monthly individual plan' },
+                { val: 'BGMI', label: 'Platform focus' },
+                { val: '10',   label: 'Stage training roadmap' },
+                { val: '₹149', label: 'Planned monthly price' },
               ].map((m, i) => (
                 <motion.div
                   key={m.val}
@@ -452,7 +452,7 @@ export default function About() {
               <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 14, letterSpacing: '0.2em', color: '#AAB8C8', marginLeft: 8, verticalAlign: 'middle' }}>/MONTH</span>
             </div>
 
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 8 }}>GST inclusive · Cancel anytime</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 8 }}>Launching soon · Join the waitlist</p>
 
             <div style={{ marginTop: 32 }}>
               <Link to="/pricing" style={{ textDecoration: 'none' }}>
@@ -461,7 +461,7 @@ export default function About() {
                   hoverFill="#1769FF"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 56px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
-                  START TRAINING →
+                  JOIN THE WAITLIST →
                 </RadialRevealButton>
               </Link>
             </div>
