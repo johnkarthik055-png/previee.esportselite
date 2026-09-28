@@ -161,13 +161,23 @@ export default function Roadmap() {
           {/* Buttons */}
           <motion.div initial={{ opacity:0, transform:'translateY(20px)' }} animate={{ opacity:1, transform:'translateY(0px)' }} transition={{ duration:0.6, ease:E, delay:0.5 }} className="rm-btns">
             <Link to="/pricing" style={{ textDecoration:'none' }}>
-              <RadialRevealButton fill="#0B1220" hoverFill="#1769FF" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'14px 32px', borderRadius:8, background:'#0B1220', border:'none', fontFamily:'Inter,sans-serif', fontWeight:700, fontSize:15, color:'#FFFFFF', cursor:'pointer', whiteSpace:'nowrap' }}>
-                START YOUR JOURNEY <ArrowRight size={15} strokeWidth={2.5} />
-              </RadialRevealButton>
+              <RadialRevealButton
+                label="START YOUR JOURNEY →"
+                padding="14px 32px"
+                rounded={8}
+                font={{ fontFamily:'Inter', fontWeight:700, fontSize:15 }}
+                colors={{ fill:'#0B1220', textColor:'#FFFFFF', hoverFill:'#1769FF', hoverTextColor:'#FFFFFF' }}
+                border={{ borderWidth:0 }}
+              />
             </Link>
-            <button aria-label="Watch how it works" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'14px 32px', borderRadius:8, background:'#FFFFFF', border:'1.5px solid #DCE4EF', fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:15, color:'#111827', cursor:'pointer', whiteSpace:'nowrap' }}>
-              ▶ WATCH HOW IT WORKS
-            </button>
+            <RadialRevealButton
+              label="▶ WATCH HOW IT WORKS"
+              padding="14px 32px"
+              rounded={8}
+              font={{ fontFamily:'Inter', fontWeight:600, fontSize:15 }}
+              colors={{ fill:'#FFFFFF', textColor:'#111827', hoverFill:'#111827', hoverTextColor:'#FFFFFF' }}
+              border={{ borderWidth:1.5, borderColor:'#DCE4EF' }}
+            />
           </motion.div>
         </div>
       </section>
@@ -406,23 +416,6 @@ export default function Roadmap() {
             ))}
           </div>
 
-          {/* Stats */}
-          <motion.div initial={{ opacity:0, transform:'translateY(30px)' }} whileInView={{ opacity:1, transform:'translateY(0px)' }} viewport={{ once:true }} transition={{ duration:0.6, ease:E, delay:0.2 }} style={{ display:'flex', alignItems:'center', justifyContent:'center', marginTop:56, flexWrap:'wrap' }}>
-            {[
-              { num:'10K+', label:'Players on the journey' },
-              { num:'10',   label:'Structured stages' },
-              { num:'1',    label:'Clear objective' },
-            ].map((stat, i, arr) => (
-              <div key={stat.num} style={{ display:'flex', alignItems:'center' }}>
-                <div style={{ padding:'0 48px', textAlign:'center' }} className="rm-stat">
-                  <div style={{ fontFamily:'Barlow Condensed,sans-serif', fontWeight:900, fontSize:44, ...G }}>{stat.num}</div>
-                  <div style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#536174', marginTop:4 }}>{stat.label}</div>
-                </div>
-                {i < arr.length - 1 && <div style={{ width:1, height:56, background:'#DCE4EF', flexShrink:0 }} />}
-              </div>
-            ))}
-          </motion.div>
-
           <Tagline text="CONSISTENT EFFORT CREATES ELITE PLAYERS" lineW={100} />
         </div>
       </section>
@@ -445,9 +438,14 @@ export default function Roadmap() {
             </p>
             <div style={{ marginTop:40 }}>
               <Link to="/pricing" style={{ textDecoration:'none' }}>
-                <RadialRevealButton fill="#FFFFFF" hoverFill="#1769FF" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'18px 56px', borderRadius:8, background:'#FFFFFF', border:'none', fontFamily:'Inter,sans-serif', fontWeight:800, fontSize:18, color:'#0B1220', cursor:'pointer' }}>
-                  JOIN NOW — ₹149/MONTH <ArrowRight size={18} strokeWidth={2.5} />
-                </RadialRevealButton>
+                <RadialRevealButton
+                  label="JOIN NOW — ₹149/MONTH →"
+                  padding="18px 56px"
+                  rounded={8}
+                  font={{ fontFamily:'Inter', fontWeight:800, fontSize:18 }}
+                  colors={{ fill:'#FFFFFF', textColor:'#0B1220', hoverFill:'#1769FF', hoverTextColor:'#FFFFFF' }}
+                  border={{ borderWidth:0 }}
+                />
               </Link>
             </div>
             <p style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#6B7B8D', marginTop:16 }}>GST inclusive · Cancel anytime</p>

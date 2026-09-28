@@ -284,36 +284,16 @@ export default function About() {
               </p>
             </div>
 
-            {/* Metrics */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', paddingTop: 32, paddingBottom: 32, marginBottom: 40 }}>
-              {[
-                { val: 'BGMI', label: 'Platform focus' },
-                { val: '10',   label: 'Stage training roadmap' },
-                { val: '₹149', label: 'Planned monthly price' },
-              ].map((m, i) => (
-                <motion.div
-                  key={m.val}
-                  initial={{ opacity: 0, transform: 'translateY(20px)' }}
-                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, ease, delay: i * 0.1 }}
-                  style={{ textAlign: 'center', paddingLeft: 16, paddingRight: 16, ...(i < 2 ? { borderRight: '1px solid #DCE4EF' } : {}) }}
-                >
-                  <div style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, fontSize: 40, ...G }}>{m.val}</div>
-                  <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#536174', marginTop: 8, lineHeight: 1.4 }}>{m.label}</div>
-                </motion.div>
-              ))}
-            </div>
-
             {/* CTA */}
             <Link to="/pricing" style={{ textDecoration: 'none' }}>
               <RadialRevealButton
-                fill="#0B1220"
-                hoverFill="#1769FF"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, color: '#FFFFFF', cursor: 'pointer', whiteSpace: 'nowrap' }}
-              >
-                JOIN THE PLATFORM →
-              </RadialRevealButton>
+                label="JOIN THE PLATFORM →"
+                padding="14px 32px"
+                rounded={8}
+                font={{ fontFamily: 'Inter', fontWeight: 700, fontSize: 15 }}
+                colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                border={{ borderWidth: 0 }}
+              />
             </Link>
           </motion.div>
         </div>
@@ -460,12 +440,13 @@ export default function About() {
             <div style={{ marginTop: 32 }}>
               <Link to="/pricing" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
-                  fill="#FFFFFF"
-                  hoverFill="#1769FF"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 56px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                >
-                  JOIN THE WAITLIST →
-                </RadialRevealButton>
+                  label="START TRAINING →"
+                  padding="18px 56px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 800, fontSize: 18 }}
+                  colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                />
               </Link>
             </div>
 

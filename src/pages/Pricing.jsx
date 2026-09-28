@@ -214,7 +214,7 @@ export default function Pricing() {
                 VIEW PLANS →
               </motion.button>
               <button
-                onClick={() => document.getElementById('included')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('whats-included')?.scrollIntoView({ behavior: 'smooth' })}
                 style={{ fontFamily: 'Inter,sans-serif', fontWeight: 700, fontSize: 15, color: '#111827', textDecoration: 'underline', background: 'transparent', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
               >
                 SEE WHAT'S INCLUDED
@@ -286,9 +286,17 @@ export default function Pricing() {
                 ))}
               </div>
 
-              <RadialRevealButton fill="#0B1220" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 32px', borderRadius: 8, background: '#0B1220', border: 'none', fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em', color: '#FFFFFF', cursor: 'pointer', width: '100%', justifyContent: 'center' }}>
-                GET STARTED →
-              </RadialRevealButton>
+              <Link to="/pricing" style={{ textDecoration: 'none', display: 'block' }}>
+                <RadialRevealButton
+                  label="GET STARTED →"
+                  padding="15px 32px"
+                  rounded={8}
+                  font={{ fontFamily: 'Barlow Condensed', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em' }}
+                  colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                  style={{ width: '100%', justifyContent: 'center' }}
+                />
+              </Link>
               <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#9BAABB', textAlign: 'center', marginTop: 12 }}>GST inclusive</div>
             </motion.div>
 
@@ -379,9 +387,17 @@ export default function Pricing() {
                 ))}
               </div>
 
-              <RadialRevealButton fill="#1769FF" hoverFill="#FF1838" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 32px', borderRadius: 8, background: '#1769FF', border: 'none', fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em', color: '#FFFFFF', cursor: 'pointer', width: '100%', justifyContent: 'center' }}>
-                START YOUR SQUAD →
-              </RadialRevealButton>
+              <Link to="/pricing" style={{ textDecoration: 'none', display: 'block' }}>
+                <RadialRevealButton
+                  label="START YOUR SQUAD →"
+                  padding="15px 32px"
+                  rounded={8}
+                  font={{ fontFamily: 'Barlow Condensed', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em' }}
+                  colors={{ fill: '#1769FF', textColor: '#FFFFFF', hoverFill: '#FF1838', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                  style={{ width: '100%', justifyContent: 'center' }}
+                />
+              </Link>
               <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#6B7B8D', textAlign: 'center', marginTop: 12 }}>All prices GST inclusive</div>
             </motion.div>
           </div>
@@ -391,7 +407,7 @@ export default function Pricing() {
       {/* ══════════════════════════════════════════
           SECTION 3 — WHAT'S INCLUDED
       ══════════════════════════════════════════ */}
-      <section id="included" aria-label="What is included" style={{ background: '#FFFFFF', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+      <section id="whats-included" aria-label="What is included" style={{ background: '#FFFFFF', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
         <div className="pr-inner">
           {/* Heading */}
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -458,9 +474,16 @@ export default function Pricing() {
               Join India's most serious BGMI training platform.
             </p>
             <div style={{ marginTop: 40 }}>
-              <RadialRevealButton fill="#FFFFFF" hoverFill="#1769FF" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '18px 48px', borderRadius: 8, background: '#FFFFFF', border: 'none', fontFamily: 'Inter,sans-serif', fontWeight: 800, fontSize: 18, color: '#0B1220', cursor: 'pointer' }}>
-                START FOR ₹149/MONTH →
-              </RadialRevealButton>
+              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                <RadialRevealButton
+                  label="START FOR ₹149/MONTH →"
+                  padding="18px 48px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 800, fontSize: 18 }}
+                  colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                />
+              </Link>
             </div>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>GST inclusive · Cancel anytime</p>
           </motion.div>

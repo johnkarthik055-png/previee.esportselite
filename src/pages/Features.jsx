@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Map, Brain, BarChart2, PenTool,
@@ -16,6 +16,8 @@ const G = {
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
 }
+
+const SECTION_IDS = ['feature-map', 'feature-ai', 'feature-logger', 'feature-strategy']
 
 const TABS = [
   {
@@ -43,7 +45,7 @@ const TABS = [
   {
     id: 2, icon: BarChart2, label: 'Stats Tracker', accent: '#00C48C',
     eyebrow: 'FEATURE 03', title: 'YOUR NUMBERS.\nYOUR EDGE.',
-    desc: 'Log matches manually or import them. Watch your K/D, damage, and survive-rate trend over every session — and know exactly where you\'re improving.',
+    desc: "Log matches manually or import them. Watch your K/D, damage, and survive-rate trend over every session — and know exactly where you're improving.",
     bullets: [
       { icon: BarChart2,  text: 'K/D, damage & win-rate dashboards' },
       { icon: TrendingUp, text: 'Weekly and monthly trend lines' },
@@ -80,11 +82,11 @@ const FAQS = [
   },
   {
     q: 'How does the AI coach analyse my screenshots?',
-    a: 'You upload an end-of-match screenshot and our model reads your damage, kills, placement, and survival time. It cross-references your recent session history and flags the metrics that are dragging your rank down — then prescribes targeted drills.',
+    a: "You upload an end-of-match screenshot and our model reads your damage, kills, placement, and survival time. It cross-references your recent session history and flags the metrics that are dragging your rank down — then prescribes targeted drills.",
   },
   {
     q: 'Is my squad data shared with anyone?',
-    a: 'Never. All squad rosters, strategies, and match logs are private to your account. We don\'t sell data or surface individual stats to other users without explicit opt-in.',
+    a: "Never. All squad rosters, strategies, and match logs are private to your account. We don't sell data or surface individual stats to other users without explicit opt-in.",
   },
   {
     q: 'What does the free tier include?',
@@ -92,6 +94,7 @@ const FAQS = [
   },
 ]
 
+/* ─── Mockup components ─── */
 function MapMockup({ accent }) {
   const cells = Array.from({ length: 24 })
   const markers = [
@@ -227,11 +230,27 @@ function FaqItem({ q, a, open, onToggle }) {
 }
 
 export default function Features() {
-  const [activeTab, setActiveTab] = useState(0)
+  const [activeSection, setActiveSection] = useState(0)
   const [openFaq, setOpenFaq]     = useState(null)
-  const tab = TABS[activeTab]
-  const MockupComp = MOCKUPS[activeTab]
-  const visualLeft = activeTab % 2 === 0
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = SECTION_IDS.indexOf(entry.target.id)
+            if (idx !== -1) setActiveSection(idx)
+          }
+        })
+      },
+      { threshold: 0.35, rootMargin: '-80px 0px -200px 0px' }
+    )
+    SECTION_IDS.forEach(id => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <>
@@ -239,11 +258,11 @@ export default function Features() {
 
       {/* ── Hero ── */}
       <section aria-label="Hero" style={{ minHeight: '65vh', display: 'flex', alignItems: 'center', background: '#fff', position: 'relative', overflow: 'hidden', paddingTop: 64 }}>
-        <div className="glow-blue" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none', willChange: 'transform, opacity' }} />
-        <div className="glow-red"  style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none', willChange: 'transform, opacity' }} />
-        <div className="dot-grid"  style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '15%', right: '8%', width: 3, height: 120, background: 'linear-gradient(to bottom, #1769FF, transparent)', borderRadius: 2, opacity: 0.18, transform: 'rotate(22deg)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: '55%', left: '5%', width: 2, height: 100, background: 'linear-gradient(to bottom, #FF1838, transparent)', borderRadius: 2, opacity: 0.12, transform: 'rotate(30deg)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, #DCE4EF 1.5px, transparent 1.5px)', backgroundSize: '28px 28px', opacity: 0.5, pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: '15%', right: '8%', width: 3, height: 120, background: 'linear-gradient(to bottom, #1769FF, transparent)', borderRadius: 2, opacity: 0.18, transform: 'rotate(22deg)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: '55%', left: '5%', width: 2, height: 100, background: 'linear-gradient(to bottom, #FF1838, transparent)', borderRadius: 2, opacity: 0.12, transform: 'rotate(30deg)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 64px', position: 'relative', zIndex: 1, width: '100%' }}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
@@ -259,12 +278,27 @@ export default function Features() {
             Four tools — maps, AI coaching, stat tracking, and strategy building — designed around how the top 1% of BGMI and PUBG players actually improve.
           </motion.p>
 
+          {/* Pills — scroll anchors */}
           <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.3 }} style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             {TABS.map((t) => {
               const Icon = t.icon
-              const active = activeTab === t.id
+              const active = activeSection === t.id
               return (
-                <button key={t.id} role="tab" aria-selected={active} onClick={() => { setActiveTab(t.id); document.getElementById('feat-tabs')?.scrollIntoView({ behavior: 'smooth' }) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 50, background: active ? t.accent : '#F7F9FC', border: `1.5px solid ${active ? t.accent : '#DCE4EF'}`, cursor: 'pointer', transition: 'all 0.2s ease', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14, color: active ? '#fff' : '#536174' }}>
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => document.getElementById(SECTION_IDS[t.id])?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    padding: '10px 18px', borderRadius: 50,
+                    background: active ? t.accent : '#F7F9FC',
+                    border: `1.5px solid ${active ? t.accent : '#DCE4EF'}`,
+                    cursor: 'pointer', transition: 'background 0.2s ease, color 0.2s ease, border-color 0.2s ease',
+                    fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14,
+                    color: active ? '#fff' : '#536174',
+                  }}
+                >
                   <Icon size={15} strokeWidth={2} />{t.label}<ChevronRight size={13} strokeWidth={2.5} />
                 </button>
               )
@@ -273,66 +307,73 @@ export default function Features() {
         </div>
       </section>
 
-      {/* ── Feature Tabs ── */}
-      <section id="feat-tabs" aria-label="Feature details" style={{ background: '#F7F9FC' }}>
-        {/* Sticky nav */}
-        <div style={{ position: 'sticky', top: 72, zIndex: 20, background: 'rgba(247,249,252,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #DCE4EF' }}>
-          <div role="tablist" aria-label="Feature tabs" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px', display: 'flex', overflowX: 'auto' }} className="feat-nav">
-            {TABS.map((t) => {
-              const Icon = t.icon
-              const isActive = activeTab === t.id
-              return (
-                <button key={t.id} role="tab" aria-selected={isActive} onClick={() => setActiveTab(t.id)} style={{ position: 'relative', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14, color: isActive ? t.accent : '#536174', transition: 'color 0.2s', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  <Icon size={15} strokeWidth={2} />{t.label}
-                  {isActive && <motion.div layoutId="tab-underline" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: t.accent, borderRadius: 1 }} transition={{ type: 'spring', duration: 0.4, bounce: 0.15 }} />}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Panel */}
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 64px' }}>
-          <AnimatePresence mode="wait">
-            <motion.div key={activeTab} role="tabpanel" aria-label={tab.label} initial={{ opacity: 0, transform: 'translateY(24px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} exit={{ opacity: 0, transform: 'translateY(-16px)' }} transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="feat-grid">
-              {/* Visual */}
-              <div style={{ order: visualLeft ? 0 : 1 }} className="feat-vis">
-                <div style={{ background: '#fff', border: `2px solid ${tab.accent}22`, borderRadius: 20, padding: 24, height: 380, boxShadow: `0 20px 60px ${tab.accent}14` }}>
-                  <MockupComp accent={tab.accent} />
-                </div>
-              </div>
-
-              {/* Text */}
-              <div style={{ order: visualLeft ? 1 : 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                  <div style={{ width: 32, height: 2, background: tab.accent, borderRadius: 1 }} />
-                  <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.16em', color: tab.accent, textTransform: 'uppercase' }}>{tab.eyebrow}</span>
-                </div>
-                <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(38px, 4vw, 58px)', lineHeight: 0.95, letterSpacing: '0.01em', color: '#111827', whiteSpace: 'pre-line', marginBottom: 20 }}>{tab.title}</h2>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginBottom: 32 }}>{tab.desc}</p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
-                  {tab.bullets.map((b, i) => {
-                    const BIcon = b.icon
-                    return (
-                      <motion.div key={i} initial={{ opacity: 0, transform: 'translateX(-16px)' }} animate={{ opacity: 1, transform: 'translateX(0px)' }} transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.1 + i * 0.07 }} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: 8, background: `${tab.accent}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <BIcon size={15} color={tab.accent} strokeWidth={2} />
-                        </div>
-                        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#111827', fontWeight: 500 }}>{b.text}</span>
-                      </motion.div>
-                    )
-                  })}
+      {/* ── Feature sections (all 4 visible, scroll-based) ── */}
+      {TABS.map((tab, idx) => {
+        const MockupComp = MOCKUPS[idx]
+        const visualLeft = idx % 2 === 0
+        const bg = idx % 2 === 0 ? '#F7F9FC' : '#FFFFFF'
+        return (
+          <section
+            key={tab.id}
+            id={SECTION_IDS[idx]}
+            aria-label={tab.label}
+            style={{ background: bg, padding: '96px 0', borderBottom: '1px solid #DCE4EF' }}
+          >
+            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
+              <motion.div
+                initial={{ opacity: 0, transform: 'translateY(24px)' }}
+                whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}
+                className="feat-grid"
+              >
+                {/* Visual */}
+                <div style={{ order: visualLeft ? 0 : 1 }} className="feat-vis">
+                  <div style={{ background: '#fff', border: `2px solid ${tab.accent}22`, borderRadius: 20, padding: 24, height: 380, boxShadow: `0 20px 60px ${tab.accent}14` }}>
+                    <MockupComp accent={tab.accent} />
+                  </div>
                 </div>
 
-                <Link to="/pricing" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 8, border: `1.5px solid ${tab.accent}`, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 15, color: tab.accent, textDecoration: 'none' }}>
-                  Get Started Free <ChevronRight size={16} strokeWidth={2.5} />
-                </Link>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </section>
+                {/* Text */}
+                <div style={{ order: visualLeft ? 1 : 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                    <div style={{ width: 32, height: 2, background: tab.accent, borderRadius: 1 }} />
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.16em', color: tab.accent, textTransform: 'uppercase' }}>{tab.eyebrow}</span>
+                  </div>
+                  <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(38px, 4vw, 58px)', lineHeight: 0.95, letterSpacing: '0.01em', color: '#111827', whiteSpace: 'pre-line', marginBottom: 20 }}>{tab.title}</h2>
+                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginBottom: 32 }}>{tab.desc}</p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
+                    {tab.bullets.map((b, i) => {
+                      const BIcon = b.icon
+                      return (
+                        <motion.div key={i} initial={{ opacity: 0, transform: 'translateX(-16px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }} viewport={{ once: true }} transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.1 + i * 0.07 }} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          <div style={{ width: 32, height: 32, borderRadius: 8, background: `${tab.accent}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <BIcon size={15} color={tab.accent} strokeWidth={2} />
+                          </div>
+                          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#111827', fontWeight: 500 }}>{b.text}</span>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+
+                  <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                    <RadialRevealButton
+                      label="GET STARTED →"
+                      padding="13px 28px"
+                      rounded={8}
+                      font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.1em' }}
+                      colors={{ fill: '#F7F9FC', textColor: '#111827', hoverFill: '#0B1220', hoverTextColor: '#FFFFFF' }}
+                      border={{ borderWidth: 1, borderColor: '#DCE4EF' }}
+                    />
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+        )
+      })}
 
       {/* ── Comparison Table ── */}
       <section aria-label="Feature comparison" style={{ background: '#fff', padding: '100px 0' }}>
@@ -371,8 +412,15 @@ export default function Features() {
                 <tr>
                   <td style={{ padding: '24px 20px' }} />
                   <td style={{ padding: '24px 20px', textAlign: 'center', background: 'rgba(23,105,255,0.03)' }}>
-                    <Link to="/pricing" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#1769FF', color: '#fff', fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, padding: '10px 22px', borderRadius: 8, textDecoration: 'none' }}>
-                      Start Free <ChevronRight size={14} strokeWidth={2.5} />
+                    <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                      <RadialRevealButton
+                        label="GET ESPORTS ELITE →"
+                        padding="10px 22px"
+                        rounded={8}
+                        font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.08em' }}
+                        colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
+                        border={{ borderWidth: 0 }}
+                      />
                     </Link>
                   </td>
                   <td /><td />
@@ -406,8 +454,8 @@ export default function Features() {
 
       {/* ── CTA ── */}
       <section aria-label="Join Esports Elite" style={{ background: '#07111F', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none', animation: 'glow-pulse-blue 4s ease-in-out infinite' }} />
-        <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none', animation: 'glow-pulse-red 5s ease-in-out infinite 2s' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: '-20%', left: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}>
@@ -423,11 +471,25 @@ export default function Features() {
               Join thousands of BGMI and PUBG players already training smarter. Free to start. No credit card needed.
             </p>
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <RadialRevealButton as={Link} to="/pricing" fill="#1769FF" hoverFill="#0E54CC" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 36px', borderRadius: 8, background: '#1769FF', border: 'none', fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 16, color: '#fff', textDecoration: 'none', cursor: 'pointer' }}>
-                Start Free Today <Zap size={16} strokeWidth={2.5} />
-              </RadialRevealButton>
-              <Link to="/roadmap" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', borderRadius: 8, border: '1.5px solid rgba(255,255,255,0.15)', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 16, color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
-                View Roadmap <ChevronRight size={16} strokeWidth={2.5} />
+              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                <RadialRevealButton
+                  label="START FREE TODAY →"
+                  padding="15px 36px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 700, fontSize: 16 }}
+                  colors={{ fill: '#1769FF', textColor: '#FFFFFF', hoverFill: '#0E54CC', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 0 }}
+                />
+              </Link>
+              <Link to="/roadmap" style={{ textDecoration: 'none' }}>
+                <RadialRevealButton
+                  label="VIEW ROADMAP →"
+                  padding="14px 32px"
+                  rounded={8}
+                  font={{ fontFamily: 'Inter', fontWeight: 600, fontSize: 16 }}
+                  colors={{ fill: 'transparent', textColor: 'rgba(255,255,255,0.7)', hoverFill: 'rgba(255,255,255,0.1)', hoverTextColor: '#FFFFFF' }}
+                  border={{ borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)' }}
+                />
               </Link>
             </div>
           </motion.div>
@@ -448,9 +510,6 @@ export default function Features() {
         @media (max-width: 900px) {
           .feat-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .feat-vis  { order: 0 !important; }
-        }
-        @media (max-width: 768px) {
-          .feat-nav { padding: 0 20px !important; }
         }
         @media (prefers-reduced-motion: reduce) {
           .feat-grid * { animation: none !important; }
