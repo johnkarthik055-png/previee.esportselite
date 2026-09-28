@@ -1,117 +1,118 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import RadialRevealButton from '../components/ui/RadialRevealButton'
+
+const ease = [0.23, 1, 0.32, 1]
+
+const G = {
+  background: 'linear-gradient(90deg,#1769FF,#7137FF,#FF1838)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+}
 
 export default function NotFound() {
-  useEffect(() => { document.title = 'Page Not Found | Esports Elite' }, [])
-
   return (
-    <section style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(160deg, #050816 0%, #0A1428 45%, #050816 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      padding: 'clamp(80px, 10vw, 120px) clamp(16px, 5vw, 48px)',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Radial glow */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 65%)',
-      }} />
+    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      <Navbar />
 
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <p style={{
-          fontFamily: "'Oxanium', sans-serif",
-          fontWeight: 800,
-          fontSize: 'clamp(96px, 20vw, 180px)',
-          color: '#3B82F6',
-          lineHeight: 1,
-          letterSpacing: '-0.04em',
-          marginBottom: '8px',
-          textShadow: '0 0 60px rgba(59,130,246,0.4)',
-        }}>
-          404
-        </p>
+      <section style={{
+        minHeight: '80vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: '64px 20px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Dot grid */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '32px 32px', opacity: 0.5, pointerEvents: 'none' }} />
+        {/* Blue glow top-left */}
+        <div style={{ position: 'absolute', top: -80, left: -80, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.08) 0%,transparent 70%)', pointerEvents: 'none' }} />
+        {/* Red glow bottom-right */}
+        <div style={{ position: 'absolute', bottom: -80, right: -80, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.08) 0%,transparent 70%)', pointerEvents: 'none' }} />
 
-        <h1 style={{
-          fontFamily: "'Oxanium', sans-serif",
-          fontWeight: 800,
-          fontSize: 'clamp(20px, 3vw, 32px)',
-          color: '#F8FAFC',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          marginBottom: '16px',
-        }}>
-          Page Not Found
-        </h1>
+        <motion.div
+          initial={{ opacity: 0, transform: 'translateY(30px)' }}
+          animate={{ opacity: 1, transform: 'translateY(0px)' }}
+          transition={{ duration: 0.8, ease }}
+          style={{ position: 'relative', zIndex: 1 }}
+        >
+          {/* 404 number */}
+          <div style={{
+            fontFamily: 'Barlow Condensed, sans-serif',
+            fontWeight: 900,
+            fontSize: 'clamp(120px,20vw,200px)',
+            lineHeight: 1,
+            ...G,
+          }}>
+            404
+          </div>
 
-        <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: 'clamp(15px, 1.5vw, 17px)',
-          color: '#94A3B8',
-          lineHeight: 1.7,
-          maxWidth: '420px',
-          marginBottom: '40px',
-        }}>
-          The page you're looking for doesn't exist or has been moved.
-        </p>
+          {/* Title */}
+          <div style={{
+            fontFamily: 'Barlow Condensed, sans-serif',
+            fontWeight: 900,
+            fontSize: 'clamp(28px,4vw,40px)',
+            color: '#111827',
+            marginTop: 8,
+            letterSpacing: '0.02em',
+          }}>
+            PAGE NOT FOUND
+          </div>
 
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link
-            to="/"
-            style={{
-              fontFamily: "'Oxanium', sans-serif",
-              fontWeight: 700,
-              fontSize: '15px',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              background: '#2563EB',
-              color: '#FFFFFF',
-              padding: '13px 28px',
-              borderRadius: '10px',
-              border: '1px solid #3B82F6',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'background 0.2s ease',
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = '#1D4ED8'}
-            onMouseLeave={e => e.currentTarget.style.background = '#2563EB'}
-          >
-            GO HOME →
-          </Link>
+          {/* Divider */}
+          <div style={{
+            width: 60, height: 2,
+            background: 'linear-gradient(90deg,#1769FF,#FF1838)',
+            margin: '24px auto',
+            borderRadius: 2,
+          }} />
 
-          <Link
-            to="/features"
-            style={{
-              fontFamily: "'Oxanium', sans-serif",
-              fontWeight: 700,
-              fontSize: '15px',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              background: 'transparent',
-              color: '#F8FAFC',
-              padding: '13px 28px',
-              borderRadius: '10px',
-              border: '1px solid #334155',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'border-color 0.2s ease',
-            }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = '#3B82F6'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#334155'}
-          >
-            VIEW FEATURES →
-          </Link>
-        </div>
-      </div>
-    </section>
+          {/* Body */}
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: 'clamp(15px,1.5vw,18px)',
+            color: '#536174',
+            lineHeight: 1.7,
+            maxWidth: 400,
+            margin: '0 auto',
+          }}>
+            The page you are looking for does not exist or has been moved.
+          </p>
+
+          {/* CTA */}
+          <div style={{ marginTop: 40 }}>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <RadialRevealButton
+                fill="#0B1220"
+                hoverFill="#1769FF"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '14px 32px',
+                  borderRadius: 8,
+                  background: '#0B1220',
+                  border: 'none',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 700,
+                  fontSize: 15,
+                  color: '#FFFFFF',
+                  cursor: 'pointer',
+                }}
+              >
+                GO HOME →
+              </RadialRevealButton>
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
+      <Footer />
+    </div>
   )
 }
