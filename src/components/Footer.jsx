@@ -68,6 +68,7 @@ export default function Footer() {
               <Link
                 key={label}
                 to={to}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 style={{
                   fontFamily: 'Inter, sans-serif',
                   fontSize: 14,

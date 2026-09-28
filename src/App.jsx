@@ -11,6 +11,10 @@ import Home       from './pages/Home'
 import Features   from './pages/Features'
 import About      from './pages/About'
 import Roadmap    from './pages/Roadmap'
+import MapKnowledge  from './pages/features/MapKnowledge'
+import AiCoach       from './pages/features/AiCoach'
+import MatchLogger    from './pages/features/MatchLogger'
+import StrategyMaker  from './pages/features/StrategyMaker'
 import Products   from './pages/Products'
 import Community  from './pages/Community'
 import Blog       from './pages/Blog'
@@ -110,6 +114,10 @@ export default function App() {
         <Routes>
           <Route path="/"         element={<Home />} />
           <Route path="/home"     element={<Home />} />
+          <Route path="/features/map-knowledge" element={<MapKnowledge />} />
+          <Route path="/features/ai-coach"      element={<AiCoach />} />
+          <Route path="/features/match-logger"  element={<MatchLogger />} />
+          <Route path="/features/strategy-maker" element={<StrategyMaker />} />
           <Route path="/features" element={<Features />} />
           <Route path="/roadmap"  element={<Roadmap />} />
           <Route path="/pricing"  element={<Pricing />} />

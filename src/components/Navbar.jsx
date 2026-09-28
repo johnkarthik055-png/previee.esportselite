@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react'
 import { motion, useScroll } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
 const LINKS = ['Home', 'Features', 'Roadmap', 'Pricing', 'About']
 const PAGE_MAP = { Home: 'home', Features: 'features', Roadmap: 'roadmap', Pricing: 'pricing', About: 'about' }
 
+const scrollTop = () => window.scrollTo({ top: 0, behavior: 'instant' })
+
 function NavLink({ link, activePage }) {
   const isActive = activePage ? PAGE_MAP[link] === activePage : link === 'Home'
-  const href = link === 'Home' ? '/' : `/${link.toLowerCase()}`
+  const to = link === 'Home' ? '/' : `/${link.toLowerCase()}`
   const [hov, setHov] = useState(false)
 
   return (
-    <a
-      href={href}
+    <Link
+      to={to}
+      onClick={scrollTop}
       aria-current={isActive ? 'page' : undefined}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
@@ -26,6 +30,7 @@ function NavLink({ link, activePage }) {
         paddingBottom: 6,
         transition: 'color 0.2s ease',
         cursor: 'pointer',
+        textDecoration: 'none',
       }}
     >
       {link}
@@ -53,7 +58,7 @@ function NavLink({ link, activePage }) {
           }}
         />
       )}
-    </a>
+    </Link>
   )
 }
 
@@ -97,13 +102,13 @@ export default function Navbar({ activePage }) {
           className="nav-inner"
         >
           {/* Logo */}
-          <a href="/" aria-label="Esports Elite home" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+          <Link to="/" onClick={scrollTop} aria-label="Esports Elite home" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <img src="/hero-art.png" alt="Esports Elite" style={{ width: 44, height: 44, objectFit: 'contain' }} />
             <div>
               <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 20, color: '#111827', letterSpacing: '0.06em' }}>ESPORTS </span>
               <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 20, background: 'linear-gradient(90deg, #1769FF, #FF1838)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', letterSpacing: '0.06em' }}>ELITE</span>
             </div>
-          </a>
+          </Link>
 
           {/* Center links */}
           <nav className="nav-links" aria-label="Main navigation" style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
@@ -115,6 +120,7 @@ export default function Navbar({ activePage }) {
             <div className="nav-cta">
               <motion.a
                 href="/pricing"
+                onClick={scrollTop}
                 aria-label="Join Waitlist"
                 whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
                 whileTap={{ scale: 0.97 }}
@@ -165,7 +171,7 @@ export default function Navbar({ activePage }) {
           <motion.a
             key={link}
             href={link === 'Home' ? '/' : `/${link.toLowerCase()}`}
-            onClick={() => setMenuOpen(false)}
+            onClick={() => { setMenuOpen(false); scrollTop() }}
             aria-current={activePage && PAGE_MAP[link] === activePage ? 'page' : undefined}
             initial={{ y: 16, opacity: 0 }}
             animate={menuOpen ? { y: 0, opacity: 1 } : { y: 16, opacity: 0 }}
@@ -190,6 +196,7 @@ export default function Navbar({ activePage }) {
         >
           <motion.a
             href="/pricing"
+            onClick={scrollTop}
             aria-label="Join Waitlist"
             whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
             whileTap={{ scale: 0.97 }}

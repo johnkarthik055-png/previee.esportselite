@@ -21,7 +21,7 @@ const SECTION_IDS = ['feature-map', 'feature-ai', 'feature-logger', 'feature-str
 
 const TABS = [
   {
-    id: 0, icon: Map, label: 'Map Knowledge', accent: '#1769FF',
+    id: 0, icon: Map, label: 'Map Knowledge', accent: '#1769FF', detailPath: '/features/map-knowledge',
     eyebrow: 'FEATURE 01', title: 'MASTER EVERY\nDROP ZONE.',
     desc: 'Interactive layered maps for every BGMI and PUBG arena. Study rotations, mark hot zones, and memorize high-loot paths before you ever land.',
     bullets: [
@@ -32,7 +32,7 @@ const TABS = [
     ],
   },
   {
-    id: 1, icon: Brain, label: 'AI Coach', accent: '#7137FF',
+    id: 1, icon: Brain, label: 'AI Coach', accent: '#7137FF', detailPath: '/features/ai-coach',
     eyebrow: 'FEATURE 02', title: 'A COACH THAT\nNEVER SLEEPS.',
     desc: 'Upload your screenshots. Our AI parses damage dealt, survival time, and weapon accuracy — then delivers sharp, actionable feedback in seconds.',
     bullets: [
@@ -43,7 +43,7 @@ const TABS = [
     ],
   },
   {
-    id: 2, icon: BarChart2, label: 'Stats Tracker', accent: '#00C48C',
+    id: 2, icon: BarChart2, label: 'Stats Tracker', accent: '#00C48C', detailPath: '/features/match-logger',
     eyebrow: 'FEATURE 03', title: 'YOUR NUMBERS.\nYOUR EDGE.',
     desc: "Log matches manually or import them. Watch your K/D, damage, and survive-rate trend over every session — and know exactly where you're improving.",
     bullets: [
@@ -54,7 +54,7 @@ const TABS = [
     ],
   },
   {
-    id: 3, icon: PenTool, label: 'Strategy Maker', accent: '#FF1838',
+    id: 3, icon: PenTool, label: 'Strategy Maker', accent: '#FF1838', detailPath: '/features/strategy-maker',
     eyebrow: 'FEATURE 04', title: 'DRAW IT.\nDRILL IT. WIN.',
     desc: 'Build play blueprints on a live map canvas. Assign roles, sketch rotations, and share with your squad — all in one place before the lobby opens.',
     bullets: [
@@ -358,9 +358,9 @@ export default function Features() {
                     })}
                   </div>
 
-                  <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                  <Link to={tab.detailPath} onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })} style={{ textDecoration: 'none' }}>
                     <RadialRevealButton
-                      label="GET STARTED →"
+                      label="EXPLORE FEATURE →"
                       padding="13px 28px"
                       rounded={8}
                       font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.1em' }}
