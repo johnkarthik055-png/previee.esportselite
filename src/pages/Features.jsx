@@ -17,6 +17,9 @@ const G = {
   backgroundClip: 'text',
 }
 
+const innerStyle = { maxWidth: 1280, margin: '0 auto', padding: '0 clamp(20px, 5vw, 64px)' }
+const faqInnerStyle = { maxWidth: 800, margin: '0 auto', padding: '0 clamp(20px, 5vw, 64px)' }
+
 const SECTION_IDS = ['feature-map', 'feature-ai', 'feature-logger', 'feature-strategy']
 
 const TABS = [
@@ -264,7 +267,7 @@ export default function Features() {
         <div aria-hidden="true" style={{ position: 'absolute', top: '15%', right: '8%', width: 3, height: 120, background: 'linear-gradient(to bottom, #1769FF, transparent)', borderRadius: 2, opacity: 0.18, transform: 'rotate(22deg)', pointerEvents: 'none' }} />
         <div aria-hidden="true" style={{ position: 'absolute', top: '55%', left: '5%', width: 2, height: 100, background: 'linear-gradient(to bottom, #FF1838, transparent)', borderRadius: 2, opacity: 0.12, transform: 'rotate(30deg)', pointerEvents: 'none' }} />
 
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 64px', position: 'relative', zIndex: 1, width: '100%' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(48px,8vw,80px) clamp(20px,5vw,64px)', position: 'relative', zIndex: 1, width: '100%' }}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
             <div style={{ width: 40, height: 2, background: '#1769FF', borderRadius: 1 }} />
             <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 13, letterSpacing: '0.16em', color: '#1769FF', textTransform: 'uppercase' }}>PLATFORM FEATURES</span>
@@ -319,7 +322,7 @@ export default function Features() {
             aria-label={tab.label}
             style={{ background: bg, padding: '96px 0', borderBottom: '1px solid #DCE4EF' }}
           >
-            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
+            <div style={innerStyle}>
               <motion.div
                 initial={{ opacity: 0, transform: 'translateY(24px)' }}
                 whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
@@ -377,7 +380,7 @@ export default function Features() {
 
       {/* ── Comparison Table ── */}
       <section aria-label="Feature comparison" style={{ background: '#fff', padding: '100px 0' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
+        <div style={innerStyle}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }} style={{ marginBottom: 60, textAlign: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 20 }}>
               <div style={{ width: 32, height: 2, background: '#1769FF', borderRadius: 1 }} />
@@ -390,7 +393,7 @@ export default function Features() {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', maxWidth: 500, margin: '0 auto' }}>Every tool here you could hunt across four different apps, four subscriptions. Or do it in one place.</p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.15 }} style={{ overflowX: 'auto' }}>
+          <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.15 }} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: 560 }}>
               <thead>
                 <tr>
@@ -427,13 +430,14 @@ export default function Features() {
                 </tr>
               </tbody>
             </table>
+            <p style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, color: '#9BAABB', textAlign: 'center', marginTop: 8, letterSpacing: '0.1em' }}>← Scroll to see more</p>
           </motion.div>
         </div>
       </section>
 
       {/* ── FAQ ── */}
       <section aria-label="Frequently asked questions" style={{ background: '#F7F9FC', padding: '100px 0' }}>
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 64px' }}>
+        <div style={faqInnerStyle}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }} style={{ marginBottom: 56 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
               <div style={{ width: 32, height: 2, background: '#1769FF', borderRadius: 1 }} />
@@ -457,7 +461,7 @@ export default function Features() {
         <div aria-hidden="true" style={{ position: 'absolute', top: '-20%', left: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div aria-hidden="true" style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div style={{ ...innerStyle, textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(40px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 24 }}>
               <div style={{ width: 32, height: 1, background: 'rgba(255,255,255,0.2)' }} />

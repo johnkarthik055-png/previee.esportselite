@@ -44,6 +44,7 @@ const values = [
 
 export default function About() {
   const [openFaq, setOpenFaq] = useState(null)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   return (
     <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
@@ -220,8 +221,8 @@ export default function About() {
         <div className="ab-inner ab-founder-grid">
           {/* LEFT — heading + image */}
           <motion.div
-            initial={{ opacity: 0, transform: 'translateX(-40px)' }}
-            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+            initial={{ opacity: 0, transform: isMobile ? 'translateY(30px)' : 'translateX(-40px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease }}
           >
@@ -266,8 +267,8 @@ export default function About() {
 
           {/* RIGHT — quote + metrics + CTA */}
           <motion.div
-            initial={{ opacity: 0, transform: 'translateX(40px)' }}
-            whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+            initial={{ opacity: 0, transform: isMobile ? 'translateY(30px)' : 'translateX(40px)' }}
+            whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease, delay: 0.15 }}
           >
@@ -324,8 +325,8 @@ export default function About() {
             {timeline.map((item, i) => (
               <div key={item.title} style={{ paddingLeft: 48, position: 'relative', marginBottom: i < timeline.length - 1 ? 64 : 0 }}>
                 <motion.div
-                  initial={{ opacity: 0, transform: 'translateX(-30px)' }}
-                  whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
+                  initial={{ opacity: 0, transform: isMobile ? 'translateY(20px)' : 'translateX(-30px)' }}
+                  whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, ease, delay: i * 0.15 }}
                 >
