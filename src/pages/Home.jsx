@@ -127,7 +127,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 1 — HERO
       ══════════════════════════════════════════════ */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', background: '#FFFFFF', display: 'flex', alignItems: 'center' }}>
+      <section aria-label="Hero" style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', background: '#FFFFFF', display: 'flex', alignItems: 'center' }}>
 
         {/* Background decorations */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
@@ -201,34 +201,37 @@ export default function Home() {
             </motion.div>
 
             {/* H1 */}
-            {[
-              { text: 'WHERE GRIND', grad: false },
-              { text: 'BECOMES',     grad: true  },
-              { text: 'GREATNESS.',  grad: false },
-            ].map((line, i) => (
-              <motion.div
-                key={line.text}
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.1 + i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                <div
-                  className="hero-h1"
-                  style={{
-                    fontFamily: 'Barlow Condensed, sans-serif',
-                    fontWeight: 900,
-                    fontSize: 88,
-                    lineHeight: 0.90,
-                    letterSpacing: '-0.02em',
-                    textTransform: 'uppercase',
-                    marginBottom: i < 2 ? 2 : 0,
-                    ...(line.grad ? G : { color: '#111827' }),
-                  }}
+            <h1 style={{ margin: 0 }}>
+              {[
+                { text: 'WHERE GRIND', grad: false },
+                { text: 'BECOMES',     grad: true  },
+                { text: 'GREATNESS.',  grad: false },
+              ].map((line, i) => (
+                <motion.div
+                  key={line.text}
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 0.1 + i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
-                  {line.text}
-                </div>
-              </motion.div>
-            ))}
+                  <span
+                    className="hero-h1"
+                    style={{
+                      display: 'block',
+                      fontFamily: 'Barlow Condensed, sans-serif',
+                      fontWeight: 900,
+                      fontSize: 88,
+                      lineHeight: 0.90,
+                      letterSpacing: '-0.02em',
+                      textTransform: 'uppercase',
+                      marginBottom: i < 2 ? 2 : 0,
+                      ...(line.grad ? G : { color: '#111827' }),
+                    }}
+                  >
+                    {line.text}
+                  </span>
+                </motion.div>
+              ))}
+            </h1>
 
             {/* Accent line */}
             <motion.div
@@ -265,6 +268,7 @@ export default function Home() {
                   font={{ fontFamily: 'Inter', fontWeight: 700, fontSize: 15, letterSpacing: '0.02em' }}
                   colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
+                  aria-label="Join Esports Elite"
                 />
               </Link>
 
@@ -276,6 +280,7 @@ export default function Home() {
                   font={{ fontFamily: 'Inter', fontWeight: 600, fontSize: 15 }}
                   colors={{ fill: '#FFFFFF', textColor: '#111827', hoverFill: '#111827', hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 1.5, borderColor: '#DCE4EF' }}
+                  aria-label="Explore features"
                 />
               </Link>
             </motion.div>
@@ -308,7 +313,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 2 — FEATURE STRIP
       ══════════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '20px 0' }}>
+      <section aria-label="Platform features list" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '20px 0' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', display: 'flex', justifyContent: 'center', gap: 48, flexWrap: 'wrap' }}>
           {[
             { Icon: Map,       label: 'MAP KNOWLEDGE'  },
@@ -333,7 +338,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 3 — FEATURES GRID
       ══════════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
+      <section aria-label="Platform features" style={{ background: '#FFFFFF', padding: '128px 0' }}>
         <div className="feat-wrap" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
 
           {/* Heading */}
@@ -356,20 +361,21 @@ export default function Home() {
           {/* 2x2 grid */}
           <div className="feat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 24 }}>
             {FEATURES.map((f, i) => (
-              <motion.div
+              <motion.article
                 key={f.num}
                 initial={{ y: 40, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.65, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -6, boxShadow: '0 20px 60px rgba(7,17,31,0.1)', borderColor: 'rgba(23,105,255,0.15)', transition: { duration: 0.3 } }}
+                aria-label={f.title}
                 style={{ background: 'white', border: '1px solid #DCE4EF', borderRadius: 16, padding: 40, position: 'relative', overflow: 'hidden', boxShadow: '0 4px 24px rgba(7,17,31,0.06)', cursor: 'default' }}
               >
                 {/* Top accent bar */}
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: f.accent }} />
 
                 {/* Big bg number */}
-                <div style={{ position: 'absolute', top: 16, right: 24, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 100, color: '#F0F4F8', lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>
+                <div aria-hidden="true" style={{ position: 'absolute', top: 16, right: 24, fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 100, color: '#F0F4F8', lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>
                   {f.num}
                 </div>
 
@@ -393,7 +399,7 @@ export default function Home() {
                     <ChevronRight size={14} color={f.color} />
                   </motion.div>
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -402,10 +408,10 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 4 — ROADMAP TEASER
       ══════════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
+      <section aria-label="Training roadmap overview" style={{ background: '#FFFFFF', padding: '128px 0' }}>
         <div className="road-wrap" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
 
-          {/* Heading — unchanged */}
+          {/* Heading */}
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -435,6 +441,8 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: i * 0.15 }}
                 whileHover={{ transform: 'translateX(6px)', boxShadow: c.hoverShadow, transition: { duration: 0.25, ease: [0.23, 1, 0.32, 1] } }}
+                role="article"
+                aria-label={`${c.title}: ${c.stages}`}
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -582,6 +590,7 @@ export default function Home() {
                 font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.1em' }}
                 colors={{ fill: '#F7F9FC', textColor: '#111827', hoverFill: '#0B1220', hoverTextColor: '#FFFFFF' }}
                 border={{ borderWidth: 1, borderColor: '#DCE4EF' }}
+                aria-label="View full training roadmap"
               />
             </Link>
           </motion.div>
@@ -591,14 +600,14 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 5 — FINAL CTA
       ══════════════════════════════════════════════ */}
-      <section className="cta-sect" style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" className="cta-sect" style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
 
         {/* Glows */}
-        <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Watermark */}
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'min(40vw,400px)', color: 'white', opacity: 0.015, pointerEvents: 'none', userSelect: 'none', lineHeight: 1, whiteSpace: 'nowrap' }}>
+        <div aria-hidden="true" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'min(40vw,400px)', color: 'white', opacity: 0.015, pointerEvents: 'none', userSelect: 'none', lineHeight: 1, whiteSpace: 'nowrap' }}>
           EE
         </div>
 
@@ -629,6 +638,7 @@ export default function Home() {
                   font={{ fontFamily: 'Inter', fontWeight: 800, fontSize: 18 }}
                   colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
+                  aria-label="Join Esports Elite for ₹149 per month"
                 />
               </Link>
             </div>

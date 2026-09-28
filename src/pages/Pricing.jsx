@@ -122,6 +122,9 @@ function FaqItem({ faq, idx, open, onToggle }) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease: E, delay: idx * 0.08 }}
       whileHover={{ borderColor: 'rgba(23,105,255,0.2)' }}
+      role="button"
+      aria-expanded={open}
+      aria-label={faq.q}
       onClick={onToggle}
       style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', transition: 'border-color 0.2s' }}
     >
@@ -155,7 +158,7 @@ export default function Pricing() {
       {/* ══════════════════════════════════════════
           SECTION 1 — HERO
       ══════════════════════════════════════════ */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: '80vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', paddingTop: 64 }}>
+      <section aria-label="Hero" style={{ position: 'relative', overflow: 'hidden', minHeight: '80vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', paddingTop: 64 }}>
         {/* BG elements */}
         <div style={{ position: 'absolute', left: -200, top: -200, width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.09) 0%,transparent 60%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', right: -200, bottom: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.07) 0%,transparent 60%)', pointerEvents: 'none' }} />
@@ -235,7 +238,7 @@ export default function Pricing() {
       {/* ══════════════════════════════════════════
           SECTION 2 — PRICING CARDS
       ══════════════════════════════════════════ */}
-      <section id="pricing-cards" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+      <section id="pricing-cards" aria-label="Pricing plans" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
         <div className="pr-inner">
           {/* Heading */}
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -311,10 +314,13 @@ export default function Pricing() {
 
               {/* Squad size selector */}
               <div style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#AAB8C8', textTransform: 'uppercase', marginBottom: 12 }}>SELECT SQUAD SIZE</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+              <div role="radiogroup" aria-label="Select squad size" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
                 {[2, 3, 4, 5, 6].map(size => (
                   <motion.button
                     key={size}
+                    role="radio"
+                    aria-checked={selectedSize === size}
+                    aria-label={`${size} players`}
                     onClick={() => setSelectedSize(size)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.97 }}
@@ -385,7 +391,7 @@ export default function Pricing() {
       {/* ══════════════════════════════════════════
           SECTION 3 — WHAT'S INCLUDED
       ══════════════════════════════════════════ */}
-      <section id="included" style={{ background: '#FFFFFF', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+      <section id="included" aria-label="What is included" style={{ background: '#FFFFFF', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
         <div className="pr-inner">
           {/* Heading */}
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -421,7 +427,7 @@ export default function Pricing() {
       {/* ══════════════════════════════════════════
           SECTION 4 — FAQ
       ══════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
+      <section aria-label="Frequently asked questions" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '96px 0' }}>
         <div className="pr-inner-narrow">
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: E }} className="pr-faq-h2" style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 900, color: '#111827', textAlign: 'center', marginBottom: 48 }}>
             COMMON QUESTIONS
@@ -438,7 +444,7 @@ export default function Pricing() {
       {/* ══════════════════════════════════════════
           SECTION 5 — FINAL CTA
       ══════════════════════════════════════════ */}
-      <section style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
 

@@ -207,7 +207,7 @@ const MOCKUPS = [MapMockup, AIChatMockup, BarChartMockup, StrategyMockup]
 function FaqItem({ q, a, open, onToggle }) {
   return (
     <div style={{ borderBottom: '1px solid #DCE4EF' }}>
-      <button onClick={onToggle} style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+      <button onClick={onToggle} aria-expanded={open} aria-label={q} style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', padding: '22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
         <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 20, color: '#111827', textAlign: 'left', letterSpacing: '0.02em' }}>{q}</span>
         <motion.span
           animate={{ rotate: open ? 45 : 0 }}
@@ -238,7 +238,7 @@ export default function Features() {
       <Navbar />
 
       {/* ── Hero ── */}
-      <section style={{ minHeight: '65vh', display: 'flex', alignItems: 'center', background: '#fff', position: 'relative', overflow: 'hidden', paddingTop: 64 }}>
+      <section aria-label="Hero" style={{ minHeight: '65vh', display: 'flex', alignItems: 'center', background: '#fff', position: 'relative', overflow: 'hidden', paddingTop: 64 }}>
         <div className="glow-blue" style={{ position: 'absolute', top: '-10%', left: '-8%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none', willChange: 'transform, opacity' }} />
         <div className="glow-red"  style={{ position: 'absolute', bottom: '-15%', right: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none', willChange: 'transform, opacity' }} />
         <div className="dot-grid"  style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
@@ -264,7 +264,7 @@ export default function Features() {
               const Icon = t.icon
               const active = activeTab === t.id
               return (
-                <button key={t.id} onClick={() => { setActiveTab(t.id); document.getElementById('feat-tabs')?.scrollIntoView({ behavior: 'smooth' }) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 50, background: active ? t.accent : '#F7F9FC', border: `1.5px solid ${active ? t.accent : '#DCE4EF'}`, cursor: 'pointer', transition: 'all 0.2s ease', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14, color: active ? '#fff' : '#536174' }}>
+                <button key={t.id} role="tab" aria-selected={active} onClick={() => { setActiveTab(t.id); document.getElementById('feat-tabs')?.scrollIntoView({ behavior: 'smooth' }) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 50, background: active ? t.accent : '#F7F9FC', border: `1.5px solid ${active ? t.accent : '#DCE4EF'}`, cursor: 'pointer', transition: 'all 0.2s ease', fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14, color: active ? '#fff' : '#536174' }}>
                   <Icon size={15} strokeWidth={2} />{t.label}<ChevronRight size={13} strokeWidth={2.5} />
                 </button>
               )
@@ -274,15 +274,15 @@ export default function Features() {
       </section>
 
       {/* ── Feature Tabs ── */}
-      <section id="feat-tabs" style={{ background: '#F7F9FC' }}>
+      <section id="feat-tabs" aria-label="Feature details" style={{ background: '#F7F9FC' }}>
         {/* Sticky nav */}
         <div style={{ position: 'sticky', top: 72, zIndex: 20, background: 'rgba(247,249,252,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #DCE4EF' }}>
-          <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px', display: 'flex', overflowX: 'auto' }} className="feat-nav">
+          <div role="tablist" aria-label="Feature tabs" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px', display: 'flex', overflowX: 'auto' }} className="feat-nav">
             {TABS.map((t) => {
               const Icon = t.icon
               const isActive = activeTab === t.id
               return (
-                <button key={t.id} onClick={() => setActiveTab(t.id)} style={{ position: 'relative', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14, color: isActive ? t.accent : '#536174', transition: 'color 0.2s', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                <button key={t.id} role="tab" aria-selected={isActive} onClick={() => setActiveTab(t.id)} style={{ position: 'relative', background: 'none', border: 'none', cursor: 'pointer', padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14, color: isActive ? t.accent : '#536174', transition: 'color 0.2s', whiteSpace: 'nowrap', flexShrink: 0 }}>
                   <Icon size={15} strokeWidth={2} />{t.label}
                   {isActive && <motion.div layoutId="tab-underline" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: t.accent, borderRadius: 1 }} transition={{ type: 'spring', duration: 0.4, bounce: 0.15 }} />}
                 </button>
@@ -294,7 +294,7 @@ export default function Features() {
         {/* Panel */}
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 64px' }}>
           <AnimatePresence mode="wait">
-            <motion.div key={activeTab} initial={{ opacity: 0, transform: 'translateY(24px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} exit={{ opacity: 0, transform: 'translateY(-16px)' }} transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="feat-grid">
+            <motion.div key={activeTab} role="tabpanel" aria-label={tab.label} initial={{ opacity: 0, transform: 'translateY(24px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} exit={{ opacity: 0, transform: 'translateY(-16px)' }} transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="feat-grid">
               {/* Visual */}
               <div style={{ order: visualLeft ? 0 : 1 }} className="feat-vis">
                 <div style={{ background: '#fff', border: `2px solid ${tab.accent}22`, borderRadius: 20, padding: 24, height: 380, boxShadow: `0 20px 60px ${tab.accent}14` }}>
@@ -335,7 +335,7 @@ export default function Features() {
       </section>
 
       {/* ── Comparison Table ── */}
-      <section style={{ background: '#fff', padding: '100px 0' }}>
+      <section aria-label="Feature comparison" style={{ background: '#fff', padding: '100px 0' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 64px' }}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }} style={{ marginBottom: 60, textAlign: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 20 }}>
@@ -384,7 +384,7 @@ export default function Features() {
       </section>
 
       {/* ── FAQ ── */}
-      <section style={{ background: '#F7F9FC', padding: '100px 0' }}>
+      <section aria-label="Frequently asked questions" style={{ background: '#F7F9FC', padding: '100px 0' }}>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 64px' }}>
           <motion.div initial={{ opacity: 0, transform: 'translateY(30px)' }} whileInView={{ opacity: 1, transform: 'translateY(0px)' }} viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }} style={{ marginBottom: 56 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
@@ -405,7 +405,7 @@ export default function Features() {
       </section>
 
       {/* ── CTA ── */}
-      <section style={{ background: '#07111F', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" style={{ background: '#07111F', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-20%', left: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none', animation: 'glow-pulse-blue 4s ease-in-out infinite' }} />
         <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none', animation: 'glow-pulse-red 5s ease-in-out infinite 2s' }} />
 

@@ -52,7 +52,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 1 — HERO
       ════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', borderBottom: '1px solid #DCE4EF' }}>
+      <section aria-label="Hero" style={{ background: '#FFFFFF', minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', borderBottom: '1px solid #DCE4EF' }}>
         {/* Dot grid */}
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '32px 32px', opacity: 0.5, pointerEvents: 'none' }} />
         {/* Blue tint top-left */}
@@ -114,7 +114,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 2 — MISSION
       ════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '128px 0' }}>
+      <section aria-label="Our mission" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '128px 0' }}>
         <div className="ab-inner ab-mission-grid">
           {/* LEFT */}
           <motion.div
@@ -169,7 +169,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 3 — VALUES
       ════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
+      <section aria-label="Our values" style={{ background: '#FFFFFF', padding: '128px 0' }}>
         <div className="ab-inner">
           {/* Heading */}
           <motion.div
@@ -216,7 +216,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 4 — FOUNDER
       ════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '128px 0' }}>
+      <section aria-label="The founder" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', borderBottom: '1px solid #DCE4EF', padding: '128px 0' }}>
         <div className="ab-inner ab-founder-grid">
           {/* LEFT — heading + image */}
           <motion.div
@@ -322,7 +322,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 5 — TIMELINE
       ════════════════════════════════════════ */}
-      <section style={{ background: '#FFFFFF', padding: '128px 0' }}>
+      <section aria-label="Our journey" style={{ background: '#FFFFFF', padding: '128px 0' }}>
         <div className="ab-inner-narrow">
           {/* Heading */}
           <motion.div
@@ -365,7 +365,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 6 — FAQ
       ════════════════════════════════════════ */}
-      <section style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '128px 0' }}>
+      <section aria-label="Frequently asked questions" style={{ background: '#F7F9FC', borderTop: '1px solid #DCE4EF', padding: '128px 0' }}>
         <div className="ab-inner-narrow">
           {/* Heading */}
           <motion.div
@@ -390,6 +390,9 @@ export default function About() {
               whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease, delay: i * 0.08 }}
+              role="button"
+              aria-expanded={openFaq === i}
+              aria-label={faq.q}
               onClick={() => setOpenFaq(openFaq === i ? null : i)}
               style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', marginBottom: 8 }}
               className="ab-faq-item"
@@ -427,7 +430,7 @@ export default function About() {
       {/* ════════════════════════════════════════
           SECTION 7 — CTA
       ════════════════════════════════════════ */}
-      <section style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
 

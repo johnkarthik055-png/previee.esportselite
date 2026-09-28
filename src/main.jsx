@@ -1,3 +1,6 @@
+if (import.meta.env.DEV) {
+  import('@reticlehq/react').then(m => m.connect?.())
+}
 import Lenis from 'lenis'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'

@@ -50,7 +50,7 @@ export default function Footer() {
 
           {/* LEFT: logo + tagline */}
           <div style={{ flex: '0 0 auto' }}>
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+            <Link to="/" aria-label="Esports Elite home" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
               <img src="/hero-art.png" alt="Esports Elite" style={{ width: 44, height: 44, objectFit: 'contain', display: 'block' }} />
               <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 18, color: '#111827', letterSpacing: '0.06em' }}>ESPORTS ELITE</div>
             </Link>
@@ -60,7 +60,7 @@ export default function Footer() {
           </div>
 
           {/* CENTER: nav links */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }} className="footer-nav">
+          <nav aria-label="Footer navigation" style={{ display: 'flex', flexDirection: 'column', gap: 10 }} className="footer-nav">
             <p style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.25em', color: '#536174', textTransform: 'uppercase', margin: '0 0 4px' }}>
               NAVIGATE
             </p>

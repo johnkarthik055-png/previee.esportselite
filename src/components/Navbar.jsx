@@ -13,6 +13,7 @@ function NavLink({ link, activePage }) {
   return (
     <a
       href={href}
+      aria-current={isActive ? 'page' : undefined}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
@@ -96,7 +97,7 @@ export default function Navbar({ activePage }) {
           className="nav-inner"
         >
           {/* Logo */}
-          <a href="/" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+          <a href="/" aria-label="Esports Elite home" style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <img src="/hero-art.png" alt="Esports Elite" style={{ width: 44, height: 44, objectFit: 'contain' }} />
             <div>
               <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 20, color: '#111827', letterSpacing: '0.06em' }}>ESPORTS </span>
@@ -105,7 +106,7 @@ export default function Navbar({ activePage }) {
           </a>
 
           {/* Center links */}
-          <nav className="nav-links" style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
+          <nav className="nav-links" aria-label="Main navigation" style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
             {LINKS.map(link => <NavLink key={link} link={link} activePage={activePage} />)}
           </nav>
 
@@ -114,6 +115,7 @@ export default function Navbar({ activePage }) {
             <div className="nav-cta">
               <motion.a
                 href="/pricing"
+                aria-label="Join Waitlist"
                 whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
                 whileTap={{ scale: 0.97 }}
                 style={{
@@ -133,6 +135,8 @@ export default function Navbar({ activePage }) {
               className="hamburger"
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
               style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#111827', display: 'none' }}
             >
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -142,7 +146,10 @@ export default function Navbar({ activePage }) {
       </motion.header>
 
       {/* Mobile menu */}
-      <motion.div
+      <motion.nav
+        id="mobile-menu"
+        aria-label="Mobile navigation"
+        aria-hidden={!menuOpen}
         initial={false}
         animate={menuOpen ? { opacity: 1, pointerEvents: 'auto' } : { opacity: 0, pointerEvents: 'none' }}
         transition={{ duration: 0.25 }}
@@ -159,6 +166,7 @@ export default function Navbar({ activePage }) {
             key={link}
             href={link === 'Home' ? '/' : `/${link.toLowerCase()}`}
             onClick={() => setMenuOpen(false)}
+            aria-current={activePage && PAGE_MAP[link] === activePage ? 'page' : undefined}
             initial={{ y: 16, opacity: 0 }}
             animate={menuOpen ? { y: 0, opacity: 1 } : { y: 16, opacity: 0 }}
             transition={{ delay: menuOpen ? i * 0.06 : 0, duration: 0.25 }}
@@ -182,6 +190,7 @@ export default function Navbar({ activePage }) {
         >
           <motion.a
             href="/pricing"
+            aria-label="Join Waitlist"
             whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
             whileTap={{ scale: 0.97 }}
             style={{
@@ -194,7 +203,7 @@ export default function Navbar({ activePage }) {
             JOIN WAITLIST →
           </motion.a>
         </motion.div>
-      </motion.div>
+      </motion.nav>
 
       <style>{`
         @media (max-width: 767px) {

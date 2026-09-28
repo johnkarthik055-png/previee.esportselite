@@ -69,6 +69,9 @@ function StageCard({ s, idx, isActive, onToggle, fromLeft }) {
       viewport={{ once:true }}
       transition={{ duration:0.55, ease:E, delay:idx * 0.06 }}
       whileHover={{ y:-3, borderColor:s.color, boxShadow:'0 8px 30px rgba(7,17,31,0.08)' }}
+      role="button"
+      aria-expanded={isActive}
+      aria-label={`${s.label}: ${s.name}`}
       onClick={onToggle}
       style={{ background:'#FFFFFF', border:'1px solid #DCE4EF', borderRadius:12, padding:20, cursor:'pointer', maxWidth:380, width:'100%', transition:'border-color 0.2s,box-shadow 0.25s', boxSizing:'border-box' }}
     >
@@ -111,7 +114,7 @@ export default function Roadmap() {
       {/* ══════════════════════════════════════════
           SECTION 1 — HERO
       ══════════════════════════════════════════ */}
-      <section style={{ position:'relative', overflow:'hidden', minHeight:'75vh', background:'#FFFFFF', display:'flex', alignItems:'center', paddingTop:64 }}>
+      <section aria-label="Hero" style={{ position:'relative', overflow:'hidden', minHeight:'75vh', background:'#FFFFFF', display:'flex', alignItems:'center', paddingTop:64 }}>
         {/* Glows */}
         <div style={{ position:'absolute', left:-200, top:-200, width:700, height:700, borderRadius:'50%', background:'radial-gradient(circle,rgba(23,105,255,0.09) 0%,transparent 60%)', pointerEvents:'none' }} />
         <div style={{ position:'absolute', right:-200, bottom:-100, width:600, height:600, borderRadius:'50%', background:'radial-gradient(circle,rgba(255,24,56,0.07) 0%,transparent 60%)', pointerEvents:'none' }} />
@@ -162,7 +165,7 @@ export default function Roadmap() {
                 START YOUR JOURNEY <ArrowRight size={15} strokeWidth={2.5} />
               </RadialRevealButton>
             </Link>
-            <button style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'14px 32px', borderRadius:8, background:'#FFFFFF', border:'1.5px solid #DCE4EF', fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:15, color:'#111827', cursor:'pointer', whiteSpace:'nowrap' }}>
+            <button aria-label="Watch how it works" style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'14px 32px', borderRadius:8, background:'#FFFFFF', border:'1.5px solid #DCE4EF', fontFamily:'Inter,sans-serif', fontWeight:600, fontSize:15, color:'#111827', cursor:'pointer', whiteSpace:'nowrap' }}>
               ▶ WATCH HOW IT WORKS
             </button>
           </motion.div>
@@ -172,7 +175,7 @@ export default function Roadmap() {
       {/* ══════════════════════════════════════════
           SECTION 2 — PLAYER PROGRESSION
       ══════════════════════════════════════════ */}
-      <section style={{ background:'#F7F9FC', borderTop:'1px solid #DCE4EF', borderBottom:'1px solid #DCE4EF', padding:'96px 0' }}>
+      <section aria-label="Player progression" style={{ background:'#F7F9FC', borderTop:'1px solid #DCE4EF', borderBottom:'1px solid #DCE4EF', padding:'96px 0' }}>
         <div className="rm-inner">
           {/* Heading */}
           <motion.div initial={{ opacity:0, transform:'translateY(30px)' }} whileInView={{ opacity:1, transform:'translateY(0px)' }} viewport={{ once:true }} transition={{ duration:0.6, ease:E }} style={{ textAlign:'center', marginBottom:56 }}>
@@ -225,7 +228,7 @@ export default function Roadmap() {
       {/* ══════════════════════════════════════════
           SECTION 3 — BUILD THE FOUNDATION FIRST
       ══════════════════════════════════════════ */}
-      <section style={{ background:'#FFFFFF', padding:'96px 0' }}>
+      <section aria-label="Foundation prerequisites" style={{ background:'#FFFFFF', padding:'96px 0' }}>
         <div className="rm-inner">
           {/* Heading */}
           <motion.div initial={{ opacity:0, transform:'translateY(30px)' }} whileInView={{ opacity:1, transform:'translateY(0px)' }} viewport={{ once:true }} transition={{ duration:0.6, ease:E }} style={{ textAlign:'center', marginBottom:56 }}>
@@ -285,7 +288,7 @@ export default function Roadmap() {
       {/* ══════════════════════════════════════════
           SECTION 4 — 10 STAGES VERTICAL TIMELINE
       ══════════════════════════════════════════ */}
-      <section style={{ background:'#F7F9FC', borderTop:'1px solid #DCE4EF', padding:'96px 0' }}>
+      <section aria-label="10-stage training timeline" style={{ background:'#F7F9FC', borderTop:'1px solid #DCE4EF', padding:'96px 0' }}>
         <div className="rm-inner">
           {/* Heading */}
           <motion.div initial={{ opacity:0, transform:'translateY(30px)' }} whileInView={{ opacity:1, transform:'translateY(0px)' }} viewport={{ once:true }} transition={{ duration:0.6, ease:E }} style={{ textAlign:'center', marginBottom:64 }}>
@@ -325,6 +328,9 @@ export default function Roadmap() {
                       whileHover={{ scale:1.15 }}
                       animate={isAct ? { scale:1.15, boxShadow:`0 0 30px ${s.color}66` } : { scale:1, boxShadow:`0 0 20px ${s.color}33` }}
                       transition={{ duration:0.2, ease:E }}
+                      role="button"
+                      aria-expanded={isAct}
+                      aria-label={`${s.label}: ${s.name}, click to expand`}
                       onClick={() => toggleStage(idx)}
                       style={{ width:48, height:48, borderRadius:'50%', border:`2px solid ${s.color}`, background:s.bgLight, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0 }}
                     >
@@ -350,7 +356,7 @@ export default function Roadmap() {
       {/* ══════════════════════════════════════════
           SECTION 5 — DEVELOPMENT LOOP
       ══════════════════════════════════════════ */}
-      <section style={{ background:'#FFFFFF', borderTop:'1px solid #DCE4EF', padding:'96px 0' }}>
+      <section aria-label="Development loop" style={{ background:'#FFFFFF', borderTop:'1px solid #DCE4EF', padding:'96px 0' }}>
         <div className="rm-inner">
           {/* Heading */}
           <motion.div initial={{ opacity:0, transform:'translateY(30px)' }} whileInView={{ opacity:1, transform:'translateY(0px)' }} viewport={{ once:true }} transition={{ duration:0.6, ease:E }} style={{ textAlign:'center', marginBottom:56 }}>
@@ -424,7 +430,7 @@ export default function Roadmap() {
       {/* ══════════════════════════════════════════
           SECTION 6 — CTA
       ══════════════════════════════════════════ */}
-      <section style={{ background:'#07111F', padding:'160px 0', position:'relative', overflow:'hidden' }}>
+      <section aria-label="Join Esports Elite" style={{ background:'#07111F', padding:'160px 0', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', bottom:-100, left:-100, width:600, height:600, borderRadius:'50%', background:'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents:'none' }} />
         <div style={{ position:'absolute', top:-100, right:-100, width:600, height:600, borderRadius:'50%', background:'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents:'none' }} />
 
