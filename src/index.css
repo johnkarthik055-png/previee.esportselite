@@ -362,6 +362,14 @@ h1, h2, h3, h4, h5, h6 {
   .form-2col       { grid-template-columns: 1fr; }
 }
 
+/* ── Navbar responsive ── */
+.mobile-hamburger { display: none; }
+@media (max-width: 768px) {
+  .desktop-nav { display: none !important; }
+  .desktop-cta { display: none !important; }
+  .mobile-hamburger { display: flex !important; }
+}
+
 /* ── FAQ ── */
 .faq-answer { overflow: hidden; max-height: 0; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
 .faq-answer.open { max-height: 500px; }
