@@ -286,7 +286,7 @@ export default function About() {
             </div>
 
             {/* CTA */}
-            <Link to="/pricing" style={{ textDecoration: 'none' }}>
+            <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <RadialRevealButton
                 label="JOIN THE PLATFORM →"
                 padding="14px 32px"
@@ -295,7 +295,7 @@ export default function About() {
                 colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
                 border={{ borderWidth: 0 }}
               />
-            </Link>
+            </a>
           </motion.div>
         </div>
       </section>
@@ -439,7 +439,7 @@ export default function About() {
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 8 }}>Launching soon · Join the waitlist</p>
 
             <div style={{ marginTop: 32 }}>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="START TRAINING →"
                   padding="18px 56px"
@@ -448,7 +448,7 @@ export default function About() {
                   colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
                 />
-              </Link>
+              </a>
             </div>
 
             <p style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 11, letterSpacing: '0.3em', color: '#4A5568', marginTop: 24, textTransform: 'uppercase' }}>

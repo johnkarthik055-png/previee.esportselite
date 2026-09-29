@@ -260,7 +260,7 @@ export default function Home() {
               className="hero-btns"
               style={{ display: 'flex', gap: 16, marginTop: 32, flexWrap: 'wrap' }}
             >
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="JOIN NOW — ₹149/MONTH →"
                   padding="14px 32px"
@@ -270,7 +270,7 @@ export default function Home() {
                   border={{ borderWidth: 0 }}
                   aria-label="Join Esports Elite"
                 />
-              </Link>
+              </a>
 
               <Link to="/features" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
@@ -630,7 +630,7 @@ export default function Home() {
             </p>
 
             <div style={{ marginTop: 40 }}>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="JOIN NOW — ₹149/MONTH →"
                   padding="18px 56px"
@@ -640,7 +640,7 @@ export default function Home() {
                   border={{ borderWidth: 0 }}
                   aria-label="Join Esports Elite for ₹149 per month"
                 />
-              </Link>
+              </a>
             </div>
 
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>

@@ -160,7 +160,7 @@ export default function Roadmap() {
 
           {/* Buttons */}
           <motion.div initial={{ opacity:0, transform:'translateY(20px)' }} animate={{ opacity:1, transform:'translateY(0px)' }} transition={{ duration:0.6, ease:E, delay:0.5 }} className="rm-btns">
-            <Link to="/pricing" style={{ textDecoration:'none' }}>
+            <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration:'none' }}>
               <RadialRevealButton
                 label="START YOUR JOURNEY →"
                 padding="14px 32px"
@@ -169,7 +169,7 @@ export default function Roadmap() {
                 colors={{ fill:'#0B1220', textColor:'#FFFFFF', hoverFill:'#1769FF', hoverTextColor:'#FFFFFF' }}
                 border={{ borderWidth:0 }}
               />
-            </Link>
+            </a>
             <RadialRevealButton
               label="▶ WATCH HOW IT WORKS"
               padding="14px 32px"
@@ -437,7 +437,7 @@ export default function Roadmap() {
               Master the fundamentals. Build your mechanics. Understand the game. Execute under pressure.
             </p>
             <div style={{ marginTop:40 }}>
-              <Link to="/pricing" style={{ textDecoration:'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration:'none' }}>
                 <RadialRevealButton
                   label="JOIN NOW — ₹149/MONTH →"
                   padding="18px 56px"
@@ -446,7 +446,7 @@ export default function Roadmap() {
                   colors={{ fill:'#FFFFFF', textColor:'#0B1220', hoverFill:'#1769FF', hoverTextColor:'#FFFFFF' }}
                   border={{ borderWidth:0 }}
                 />
-              </Link>
+              </a>
             </div>
             <p style={{ fontFamily:'Inter,sans-serif', fontSize:13, color:'#6B7B8D', marginTop:16 }}>GST inclusive · Cancel anytime</p>
           </motion.div>

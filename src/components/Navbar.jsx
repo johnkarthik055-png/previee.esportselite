@@ -103,7 +103,7 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="desktop-cta">
-            <Link to="/pricing" onClick={scrollTop} aria-label="Join Waitlist" style={{ textDecoration: 'none' }}>
+            <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" aria-label="Join Waitlist" style={{ textDecoration: 'none' }}>
               <motion.button
                 whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(23,105,255,0.3)' }}
                 whileTap={{ scale: 0.97 }}
@@ -116,7 +116,7 @@ export default function Navbar() {
               >
                 JOIN WAITLIST →
               </motion.button>
-            </Link>
+            </a>
           </div>
 
           {/* Hamburger button (mobile only) */}
@@ -205,7 +205,7 @@ export default function Navbar() {
               transition={{ delay: 0.35, duration: 0.4 }}
               style={{ marginTop: 48 }}
             >
-              <Link to="/pricing" onClick={() => { setMenuOpen(false); scrollTop() }} aria-label="Join Waitlist" style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} aria-label="Join Waitlist" style={{ textDecoration: 'none' }}>
                 <button
                   style={{
                     background: 'linear-gradient(90deg,#1769FF,#FF1838)',
@@ -222,7 +222,7 @@ export default function Navbar() {
                 >
                   JOIN WAITLIST →
                 </button>
-              </Link>
+              </a>
             </motion.div>
 
             {/* Bottom tagline */}

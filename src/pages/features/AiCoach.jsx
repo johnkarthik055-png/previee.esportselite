@@ -127,7 +127,7 @@ export default function AiCoach() {
             transition={{ duration: 0.6, ease, delay: 0.4 }}
             style={{ display: 'flex', gap: 16, marginTop: 32, flexWrap: 'wrap' }}
           >
-            <Link to="/pricing" onClick={scrollTop} style={{ textDecoration: 'none' }}>
+            <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <RadialRevealButton
                 label="GET STARTED →"
                 padding="14px 32px" rounded={8}
@@ -135,7 +135,7 @@ export default function AiCoach() {
                 colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: accent, hoverTextColor: '#FFFFFF' }}
                 border={{ borderWidth: 0 }}
               />
-            </Link>
+            </a>
             <Link to="/features" onClick={scrollTop} style={{ textDecoration: 'none' }}>
               <RadialRevealButton
                 label="← ALL FEATURES"
@@ -279,7 +279,7 @@ export default function AiCoach() {
               Stop guessing. Start training with data that actually tells you what to fix.
             </p>
             <div style={{ marginTop: 40 }}>
-              <Link to="/pricing" onClick={scrollTop} style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="GET AI COACHING →"
                   padding="18px 48px" rounded={8}
@@ -287,7 +287,7 @@ export default function AiCoach() {
                   colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: accent, hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
                 />
-              </Link>
+              </a>
             </div>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>Included in ₹149/month · Cancel anytime</p>
           </motion.div>

@@ -120,7 +120,7 @@ export default function MatchLogger() {
             transition={{ duration: 0.6, ease, delay: 0.4 }}
             style={{ display: 'flex', gap: 16, marginTop: 32, flexWrap: 'wrap' }}
           >
-            <Link to="/pricing" onClick={scrollTop} style={{ textDecoration: 'none' }}>
+            <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <RadialRevealButton
                 label="GET STARTED →"
                 padding="14px 32px" rounded={8}
@@ -128,7 +128,7 @@ export default function MatchLogger() {
                 colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: accent, hoverTextColor: '#FFFFFF' }}
                 border={{ borderWidth: 0 }}
               />
-            </Link>
+            </a>
             <Link to="/features" onClick={scrollTop} style={{ textDecoration: 'none' }}>
               <RadialRevealButton
                 label="← ALL FEATURES"
@@ -263,7 +263,7 @@ export default function MatchLogger() {
               Stop guessing how you're doing. Start measuring every match, every session, every improvement.
             </p>
             <div style={{ marginTop: 40 }}>
-              <Link to="/pricing" onClick={scrollTop} style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="START LOGGING →"
                   padding="18px 48px" rounded={8}
@@ -271,7 +271,7 @@ export default function MatchLogger() {
                   colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: accent, hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
                 />
-              </Link>
+              </a>
             </div>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>Included in ₹149/month · Cancel anytime</p>
           </motion.div>

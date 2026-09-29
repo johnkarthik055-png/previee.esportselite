@@ -785,7 +785,7 @@ export default function Features() {
                 <tr>
                   <td style={{ padding: '24px 20px' }} />
                   <td style={{ padding: '24px 20px', textAlign: 'center', background: 'rgba(23,105,255,0.03)' }}>
-                    <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                    <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                       <RadialRevealButton
                         label="GET ESPORTS ELITE →"
                         padding="10px 22px"
@@ -794,7 +794,7 @@ export default function Features() {
                         colors={{ fill: '#0B1220', textColor: '#FFFFFF', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
                         border={{ borderWidth: 0 }}
                       />
-                    </Link>
+                    </a>
                   </td>
                   <td /><td />
                 </tr>
@@ -845,7 +845,7 @@ export default function Features() {
               Join thousands of BGMI and PUBG players already training smarter. Free to start. No credit card needed.
             </p>
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="START FREE TODAY →"
                   padding="15px 36px"
@@ -854,7 +854,7 @@ export default function Features() {
                   colors={{ fill: '#1769FF', textColor: '#FFFFFF', hoverFill: '#0E54CC', hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
                 />
-              </Link>
+              </a>
               <Link to="/roadmap" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="VIEW ROADMAP →"

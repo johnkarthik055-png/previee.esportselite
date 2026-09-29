@@ -286,9 +286,9 @@ export default function Pricing() {
                 ))}
               </div>
 
-              <Link to="/pricing" style={{ textDecoration: 'none', display: 'block' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'block' }}>
                 <RadialRevealButton
-                  label="GET STARTED →"
+                  label="START ON APP →"
                   padding="15px 32px"
                   rounded={8}
                   font={{ fontFamily: 'Barlow Condensed', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em' }}
@@ -296,8 +296,9 @@ export default function Pricing() {
                   border={{ borderWidth: 0 }}
                   style={{ width: '100%', justifyContent: 'center' }}
                 />
-              </Link>
+              </a>
               <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#9BAABB', textAlign: 'center', marginTop: 12 }}>GST inclusive</div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#9BAABB', textAlign: 'center', marginTop: 8 }}>Payment and account setup happens on the Esports Elite app</div>
             </motion.div>
 
             {/* CARD 2 — Squad */}
@@ -387,9 +388,9 @@ export default function Pricing() {
                 ))}
               </div>
 
-              <Link to="/pricing" style={{ textDecoration: 'none', display: 'block' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'block' }}>
                 <RadialRevealButton
-                  label="START YOUR SQUAD →"
+                  label="START ON APP →"
                   padding="15px 32px"
                   rounded={8}
                   font={{ fontFamily: 'Barlow Condensed', fontWeight: 700, fontSize: 16, letterSpacing: '0.06em' }}
@@ -397,8 +398,9 @@ export default function Pricing() {
                   border={{ borderWidth: 0 }}
                   style={{ width: '100%', justifyContent: 'center' }}
                 />
-              </Link>
+              </a>
               <div style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#6B7B8D', textAlign: 'center', marginTop: 12 }}>All prices GST inclusive</div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#9BAABB', textAlign: 'center', marginTop: 8 }}>Payment and account setup happens on the Esports Elite app</div>
             </motion.div>
           </div>
         </div>
@@ -474,7 +476,7 @@ export default function Pricing() {
               Join India's most serious BGMI training platform.
             </p>
             <div style={{ marginTop: 40 }}>
-              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+              <a href="https://app.esportselite.in" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <RadialRevealButton
                   label="START FOR ₹149/MONTH →"
                   padding="18px 48px"
@@ -483,7 +485,7 @@ export default function Pricing() {
                   colors={{ fill: '#FFFFFF', textColor: '#0B1220', hoverFill: '#1769FF', hoverTextColor: '#FFFFFF' }}
                   border={{ borderWidth: 0 }}
                 />
-              </Link>
+              </a>
             </div>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#6B7B8D', marginTop: 16 }}>GST inclusive · Cancel anytime</p>
           </motion.div>
