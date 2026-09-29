@@ -145,48 +145,31 @@ function ToolButton({ Icon }) {
 
 /* ─── Premium CSS-only visuals ─── */
 const mapData = [
-  {
-    name: 'erangel',
-    file: '/maps/erangel.jpg',
-    label: 'ERANGEL',
-    zones: [
-      { name: 'POCHINKI',      top: '45%', left: '40%', color: '#FF1838' },
-      { name: 'MILITARY BASE', top: '20%', left: '65%', color: '#1769FF' },
-      { name: 'SCHOOL',        top: '35%', left: '22%', color: '#7137FF' },
-      { name: 'GEORGOPOL',     top: '65%', left: '55%', color: '#00C48C' },
-      { name: 'SOSNOVKA',      top: '70%', left: '30%', color: '#FF1838' },
-    ],
-  },
-  {
-    name: 'miramar',
-    file: '/maps/miramar.jpg',
-    label: 'MIRAMAR',
-    zones: [
-      { name: 'LOS LEONES',      top: '45%', left: '40%', color: '#FF1838' },
-      { name: 'HACIENDA',        top: '20%', left: '65%', color: '#1769FF' },
-      { name: 'EL POZO',         top: '35%', left: '22%', color: '#7137FF' },
-      { name: 'WATER TREATMENT', top: '65%', left: '55%', color: '#00C48C' },
-      { name: 'IMPALA',          top: '70%', left: '30%', color: '#FF1838' },
-    ],
-  },
-  {
-    name: 'rondo',
-    file: '/maps/rondo.jpg',
-    label: 'RONDO',
-    zones: [
-      { name: 'HOT ZONE', top: '45%', left: '40%', color: '#FF1838' },
-      { name: 'CONTROL',  top: '20%', left: '65%', color: '#1769FF' },
-      { name: 'ROTATE',   top: '35%', left: '22%', color: '#7137FF' },
-      { name: 'SAFE',     top: '65%', left: '55%', color: '#00C48C' },
-      { name: 'LOOT',     top: '70%', left: '30%', color: '#FF1838' },
-    ],
-  },
+  { name: 'erangel', file: '/maps/erangel.jpg', label: 'ERANGEL' },
+  { name: 'miramar', file: '/maps/miramar.jpg', label: 'MIRAMAR' },
+  { name: 'rondo',   file: '/maps/rondo.jpg',   label: 'RONDO' },
+]
+
+const zones = [
+  { type: 'hot',     color: '#FF1838', icon: '🔥', top: '45%', left: '40%' },
+  { type: 'control', color: '#1769FF', icon: '⚔',  top: '20%', left: '65%' },
+  { type: 'rotate',  color: '#7137FF', icon: '↻',  top: '35%', left: '22%' },
+  { type: 'safe',    color: '#00C48C', icon: '🛡', top: '65%', left: '55%' },
+  { type: 'loot',    color: '#FFB800', icon: '◆',  top: '70%', left: '30%' },
 ]
 
 const MAP_LEGEND = [
-  { color: '#FF1838', label: 'HOT ZONE' },
+  { color: '#FF1838', label: 'HOT DROP' },
   { color: '#1769FF', label: 'CONTROL' },
-  { color: '#00C48C', label: 'SAFE' },
+  { color: '#7137FF', label: 'ROTATION' },
+  { color: '#00C48C', label: 'SAFE ZONE' },
+  { color: '#FFB800', label: 'LOOT' },
+]
+
+const zoneByType = Object.fromEntries(zones.map(z => [z.type, z]))
+const TACTICAL_LINES = [
+  { from: zoneByType.hot,    to: zoneByType.control, color: '#1769FF', delay: 0 },
+  { from: zoneByType.rotate, to: zoneByType.safe,    color: '#7137FF', delay: 0.5 },
 ]
 
 function MapVisual() {
@@ -290,31 +273,39 @@ function MapVisual() {
           }}
         />
 
+        {/* Tactical lines between markers */}
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: 0.2 }} aria-hidden="true">
+          {TACTICAL_LINES.map((ln, i) => (
+            <motion.line
+              key={i}
+              x1={ln.from.left} y1={ln.from.top} x2={ln.to.left} y2={ln.to.top}
+              stroke={ln.color} strokeWidth="1" strokeDasharray="6,4"
+              animate={{ strokeDashoffset: [0, -20] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear', delay: ln.delay }}
+            />
+          ))}
+        </svg>
+
         {/* Zone markers */}
         <AnimatePresence>
-          {active.zones.map((zone, index) => (
+          {zones.map((zone, index) => (
             <motion.div
-              key={zone.name + activeMap}
+              key={zone.type + activeMap}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: index * 0.08 }}
               style={{ position: 'absolute', top: zone.top, left: zone.left, transform: 'translate(-50%,-50%)' }}
             >
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                <div style={{ position: 'relative', width: 36, height: 36 }}>
-                  <motion.div
-                    animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
-                    transition={{ duration: 2 + index * 0.3, repeat: Infinity, ease: 'easeInOut' }}
-                    style={{ position: 'absolute', inset: -8, borderRadius: '50%', border: `1px solid ${zone.color}` }}
-                  />
-                  <div style={{ position: 'absolute', inset: -3, borderRadius: '50%', border: `1px solid ${zone.color}`, opacity: 0.6 }} />
-                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: `${zone.color}33`, border: `2px solid ${zone.color}`, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: zone.color, boxShadow: `0 0 8px ${zone.color}` }} />
-                  </div>
-                </div>
-                <div style={{ background: 'rgba(7,17,31,0.85)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: `1px solid ${zone.color}4D`, padding: '3px 8px', borderRadius: 4 }}>
-                  <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, color: zone.color, letterSpacing: '0.15em', whiteSpace: 'nowrap' }}>{zone.name}</span>
+              <div style={{ position: 'relative', width: 44, height: 44 }}>
+                <motion.div
+                  animate={{ scale: [1, 1.6, 1], opacity: [0.3, 0, 0.3] }}
+                  transition={{ duration: 2 + index * 0.4, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 44, height: 44, borderRadius: '50%', border: `1.5px solid ${zone.color}` }}
+                />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 32, height: 32, borderRadius: '50%', border: `1px solid ${zone.color}`, opacity: 0.5 }} />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 22, height: 22, borderRadius: '50%', background: `${zone.color}26`, border: `1.5px solid ${zone.color}`, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: 10, lineHeight: 1, filter: `drop-shadow(0 0 4px ${zone.color})` }}>{zone.icon}</span>
                 </div>
               </div>
             </motion.div>
@@ -347,15 +338,18 @@ function MapVisual() {
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}
       >
-        <div style={{ display: 'flex', gap: 16 }}>
-          {MAP_LEGEND.map(l => (
-            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', background: l.color }} />
-              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.1em', color: '#AAB8C8' }}>{l.label}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'wrap' }}>
+          {MAP_LEGEND.map((l, i) => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center' }}>
+              {i > 0 && <div style={{ width: 1, height: 12, background: 'rgba(255,255,255,0.06)', margin: '0 12px' }} />}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color }} />
+                <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.12em', color: '#AAB8C8' }}>{l.label}</span>
+              </div>
             </div>
           ))}
         </div>
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174', letterSpacing: '0.1em' }}>{active.zones.length} ZONES MAPPED</span>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174', letterSpacing: '0.1em' }}>{zones.length} ZONES MAPPED</span>
       </div>
     </motion.div>
   )
