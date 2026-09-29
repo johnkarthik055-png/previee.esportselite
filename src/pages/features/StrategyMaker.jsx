@@ -126,10 +126,19 @@ function StrategyBoardVisual() {
 
       {/* Map board */}
       <div style={{ position: 'relative', height: 260, background: '#0A1628', overflow: 'hidden' }}>
+        <img
+          src="/maps/erangel.jpg"
+          alt="Erangel tactical map"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+        />
+
+        {/* Dark overlay for readability */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(7,17,31,0.5) 0%, rgba(7,17,31,0.35) 40%, rgba(7,17,31,0.6) 100%)' }} />
+
         <div
           style={{
             position: 'absolute', inset: 0,
-            backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,24,56,0.04) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(255,24,56,0.04) 0, transparent 1px, transparent 60px)',
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,24,56,0.06) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(255,24,56,0.06) 0, transparent 1px, transparent 60px)',
             backgroundSize: '60px 60px',
           }}
         />
@@ -144,9 +153,7 @@ function StrategyBoardVisual() {
             </marker>
           </defs>
 
-          <polygon points="8%,10% 22%,8% 25%,22% 10%,26%" fill="rgba(255,24,56,0.04)" stroke="rgba(255,24,56,0.08)" strokeWidth="0.8" />
-          <polygon points="70%,10% 90%,14% 84%,30% 66%,26%" fill="rgba(255,24,56,0.04)" stroke="rgba(255,24,56,0.08)" strokeWidth="0.8" />
-          <rect x="42%" y="38%" width="18%" height="16%" rx="4" fill="rgba(255,24,56,0.06)" stroke="rgba(255,24,56,0.2)" strokeWidth="1" />
+          <rect x="42%" y="38%" width="18%" height="16%" rx="4" fill="rgba(255,24,56,0.1)" stroke="rgba(255,24,56,0.3)" strokeWidth="1" />
 
           <motion.path
             d="M 30% 70% Q 45% 50% 55% 35%"
