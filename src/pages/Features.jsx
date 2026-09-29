@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Map, Brain, BarChart2, PenTool,
-  Check, ChevronRight,
+  Check, ChevronRight, ArrowRight,
+  Pencil, ArrowUpRight, Circle, Square, Trash2,
   Zap, Target, Shield, Users, Clock, TrendingUp, Eye, Layers,
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
@@ -97,118 +98,387 @@ const FAQS = [
   },
 ]
 
-/* ─── Mockup components ─── */
-function MapMockup({ accent }) {
-  const cells = Array.from({ length: 24 })
-  const markers = [
-    { top: '28%', left: '22%', label: 'HOT' },
-    { top: '55%', left: '60%', label: 'MED' },
-    { top: '72%', left: '35%', label: 'LOW' },
-  ]
+/* ─── Shared bits for the premium visuals ─── */
+function TrafficDots() {
   return (
-    <div style={{ width: '100%', height: '100%', background: '#F0F5FF', borderRadius: 12, overflow: 'hidden', position: 'relative', padding: 16 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridTemplateRows: 'repeat(4, 1fr)', gap: 4, height: '85%' }}>
-        {cells.map((_, i) => (
-          <div key={i} style={{ background: `rgba(23,105,255,${0.03 + (i % 3) * 0.02})`, borderRadius: 4, border: '1px solid rgba(23,105,255,0.08)' }} />
-        ))}
-      </div>
-      {markers.map((m) => (
-        <div key={m.label} style={{ position: 'absolute', top: m.top, left: m.left, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-          <div style={{ width: 28, height: 28, borderRadius: '50%', background: accent, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'map-pulse 2s ease-in-out infinite', boxShadow: `0 0 0 0 ${accent}66` }}>
-            <Target size={12} color="#fff" strokeWidth={2.5} />
-          </div>
-          <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.1em', color: accent, background: '#fff', padding: '1px 5px', borderRadius: 3, border: `1px solid ${accent}33` }}>{m.label}</span>
-        </div>
-      ))}
-      <div style={{ position: 'absolute', bottom: 10, left: 0, right: 0, textAlign: 'center', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.25em', color: '#9BAABB' }}>ERANGEL · MIRAMAR · RONDO</div>
+    <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF5F57' }} />
+      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFBD2E' }} />
+      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#28CA41' }} />
     </div>
   )
 }
 
-function AIChatMockup({ accent }) {
+function ThinkingDots({ color, size = 4 }) {
   return (
-    <div style={{ width: '100%', height: '100%', background: '#F7F4FF', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ alignSelf: 'flex-end', background: '#fff', border: '1px solid #DCE4EF', borderRadius: '12px 12px 4px 12px', padding: '10px 14px', maxWidth: '80%' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174', margin: 0 }}>My K/D dropped to 1.8 this week. What's wrong?</p>
+    <div style={{ display: 'flex', gap: 3 }}>
+      {[0, 1, 2].map(i => (
+        <motion.div
+          key={i}
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
+          style={{ width: size, height: size, borderRadius: '50%', background: color }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function ToolButton({ Icon }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: 32, height: 32, borderRadius: '50%',
+        background: hover ? '#1769FF' : '#07111F',
+        border: `1px solid ${hover ? '#1769FF' : 'rgba(255,255,255,0.1)'}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', transition: 'background 0.2s ease, border-color 0.2s ease',
+      }}
+    >
+      <Icon size={14} color={hover ? '#fff' : '#AAB8C8'} />
+    </div>
+  )
+}
+
+/* ─── Premium CSS-only visuals ─── */
+function MapVisual() {
+  const [activeMap, setActiveMap] = useState(0)
+  const zones = [
+    { top: '45%', left: '40%', color: '#FF1838', label: 'POCHINKI' },
+    { top: '15%', left: '70%', color: '#1769FF', label: 'MILITARY BASE' },
+    { top: '30%', left: '25%', color: '#7137FF', label: 'SCHOOL' },
+    { top: '60%', left: '15%', color: '#00C48C', label: 'GEORGOPOL' },
+    { top: '75%', left: '60%', color: '#FF1838', label: 'SOSNOVKA' },
+  ]
+  const maps = ['ERANGEL', 'MIRAMAR', 'RONDO']
+  const legend = [
+    { color: '#FF1838', label: 'HOT DROP' },
+    { color: '#1769FF', label: 'ROTATION' },
+    { color: '#00C48C', label: 'SAFE ZONE' },
+  ]
+
+  return (
+    <motion.div
+      animate={{ y: [-4, 4, -4] }}
+      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      style={{
+        background: '#07111F', borderRadius: 20, padding: 0, overflow: 'hidden',
+        border: '1px solid rgba(23,105,255,0.2)', boxShadow: '0 20px 60px rgba(23,105,255,0.15)',
+        position: 'relative',
+      }}
+    >
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <TrafficDots />
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>ERANGEL · TACTICAL VIEW</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>LIVE</span>
+        </div>
       </div>
-      <div style={{ alignSelf: 'flex-start', background: accent, borderRadius: '12px 12px 12px 4px', padding: '10px 14px', maxWidth: '85%' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#fff', margin: 0, lineHeight: 1.5 }}>Your early-game aggression timing has shifted — you're engaging at 180m+ range before looting. Try holding for sub-100m engagements in the first ring.</p>
+
+      {/* Map area */}
+      <div style={{ position: 'relative', height: 320, background: '#0A1628', overflow: 'hidden' }}>
+        <div
+          style={{
+            position: 'absolute', width: '100%', height: '100%',
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.05) 0px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(23,105,255,0.05) 0px, transparent 1px, transparent 40px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        {/* Rotation arrow */}
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} aria-hidden="true">
+          <defs>
+            <marker id="mk-arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill="#1769FF" opacity="0.6" />
+            </marker>
+          </defs>
+          <line x1="40%" y1="45%" x2="70%" y2="15%" stroke="#1769FF" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.4" markerEnd="url(#mk-arrowhead)" />
+        </svg>
+
+        {zones.map((z) => (
+          <div key={z.label} style={{ position: 'absolute', top: z.top, left: z.left, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', border: `2px solid ${z.color}`, background: `${z.color}1A`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ position: 'absolute', inset: -6, border: `1px solid ${z.color}66`, borderRadius: '50%', animation: 'zonePulse 2s infinite' }} />
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: z.color }} />
+            </div>
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, color: z.color, letterSpacing: '0.1em', marginTop: 4, whiteSpace: 'nowrap' }}>{z.label}</span>
+          </div>
+        ))}
+
+        <span style={{ position: 'absolute', top: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>A1</span>
+        <span style={{ position: 'absolute', top: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>H1</span>
+        <span style={{ position: 'absolute', bottom: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>A8</span>
+        <span style={{ position: 'absolute', bottom: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>H8</span>
       </div>
-      <div style={{ alignSelf: 'flex-end', background: '#fff', border: '1px solid #DCE4EF', borderRadius: '12px 12px 4px 12px', padding: '10px 14px' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174', margin: 0 }}>What drill should I run?</p>
+
+      {/* Map tabs */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', gap: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        {maps.map((m, i) => (
+          <motion.button
+            key={m}
+            onClick={() => setActiveMap(i)}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0, paddingBottom: 2,
+              fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.15em',
+              color: activeMap === i ? '#1769FF' : '#536174',
+              borderBottom: activeMap === i ? '2px solid #1769FF' : '2px solid transparent',
+            }}
+          >
+            {m}
+          </motion.button>
+        ))}
       </div>
-      <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 8, background: accent, borderRadius: '12px 12px 12px 4px', padding: '10px 16px' }}>
-        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em' }}>ANALYZING YOUR MATCH</span>
-        <div style={{ display: 'flex', gap: 3 }}>
-          {[0, 1, 2].map(i => (
-            <div key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: '#fff', opacity: 0.7, animation: `typing-dot 1.2s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }} />
+
+      {/* Legend */}
+      <div style={{ background: '#07111F', padding: '10px 20px', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        {legend.map(l => (
+          <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color }} />
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, letterSpacing: '0.1em', color: l.color }}>{l.label}</span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
+function AICoachVisual() {
+  return (
+    <div style={{ background: '#07111F', borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(113,55,255,0.2)', boxShadow: '0 20px 60px rgba(113,55,255,0.15)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <TrafficDots />
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>AI COACH · ANALYZING</span>
+        <ThinkingDots color="#7137FF" />
+      </div>
+
+      {/* Chat area */}
+      <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12, minHeight: 280 }}>
+        <p style={{ textAlign: 'center', fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.15em', color: '#536174', margin: '0 0 4px' }}>Match #247 uploaded</p>
+
+        <div style={{ alignSelf: 'flex-end', maxWidth: '75%', background: '#1A2840', borderRadius: '12px 12px 0 12px', padding: '12px 16px' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#AAB8C8', margin: 0 }}>K/D: 1.8 | Damage: 312 | Placement: #4</p>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: '#536174', margin: 0, marginTop: 4, textAlign: 'right' }}>10:32 AM</p>
+        </div>
+
+        <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: '#7137FF', borderRadius: '0 12px 12px 12px', padding: '12px 16px' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#fff', lineHeight: 1.5, margin: 0 }}>Your damage output is strong but Placement #4 suggests rotation timing issues.</p>
+        </div>
+
+        <div style={{ alignSelf: 'flex-start', maxWidth: '85%', marginTop: -4, background: '#7137FF', borderRadius: '0 12px 12px 12px', padding: '12px 16px' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#fff', margin: 0 }}>Focus area: Zone rotation — you are entering circles 15-20 seconds late on average.</p>
+        </div>
+
+        <div style={{ background: '#0D1F35', borderRadius: 10, padding: 12, marginTop: 4 }}>
+          <p style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#7137FF', letterSpacing: '0.15em', margin: '0 0 6px' }}>THIS WEEK'S FOCUS</p>
+          <div style={{ background: '#1A2840', borderRadius: 4, height: 6, overflow: 'hidden' }}>
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: '68%' }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, delay: 0.5 }}
+              style={{ height: '100%', background: '#7137FF', borderRadius: 4 }}
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#AAB8C8' }}>Rotation Timing</span>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#7137FF' }}>IMPROVING</span>
+          </div>
+        </div>
+
+        <div style={{ alignSelf: 'flex-start', background: '#0D1526', borderRadius: '0 10px 10px 10px', padding: '10px 14px' }}>
+          <ThinkingDots color="#7137FF" size={6} />
+        </div>
+      </div>
+
+      {/* Input bar */}
+      <div style={{ background: '#0D1526', padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ flex: 1, background: '#1A2840', borderRadius: 8, padding: '8px 12px' }}>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174' }}>Upload match screenshot...</span>
+        </div>
+        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#7137FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <ArrowRight size={14} color="#fff" strokeWidth={2.5} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MatchLoggerVisual() {
+  const bars = [
+    { d: 'M', h: '55%' }, { d: 'T', h: '40%' }, { d: 'W', h: '70%' }, { d: 'T', h: '45%' },
+    { d: 'F', h: '80%' }, { d: 'S', h: '60%' }, { d: 'S', h: '90%' },
+  ]
+  const stats = [{ v: '2.4', l: 'K/D RATIO' }, { v: '312', l: 'AVG DAMAGE' }, { v: '#6', l: 'AVG PLACE' }]
+  const lastMatch = [{ v: '3', l: 'KILLS' }, { v: '287', l: 'DMG' }, { v: '#8', l: 'PLACE' }]
+
+  return (
+    <div style={{ background: '#07111F', borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(0,196,140,0.2)', boxShadow: '0 20px 60px rgba(0,196,140,0.1)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <TrafficDots />
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>MATCH LOGGER · SEASON STATS</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>SYNCED</span>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ background: '#0D1526', padding: '16px 20px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        {stats.map((s, i) => (
+          <div key={s.l} style={{ textAlign: 'center', padding: '0 12px', borderRight: i < stats.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+            <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 28, color: '#fff' }}>{s.v}</div>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, letterSpacing: '0.15em', color: '#536174', marginTop: 2 }}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Chart */}
+      <div style={{ padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#AAB8C8', letterSpacing: '0.15em' }}>K/D TREND — LAST 7 DAYS</span>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, color: '#00C48C' }}>↑ 12%</span>
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end', height: 100 }}>
+          {bars.map((b, i) => (
+            <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'flex-end', background: '#0D1526', borderRadius: '4px 4px 0 0', overflow: 'hidden' }}>
+                <motion.div
+                  initial={{ height: 0 }}
+                  whileInView={{ height: b.h }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: i * 0.08 }}
+                  style={{ width: '100%', background: 'linear-gradient(to top, #00C48C, rgba(0,196,140,0.3))', borderRadius: '4px 4px 0 0' }}
+                />
+              </div>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 8, color: '#536174', marginTop: 4 }}>{b.d}</span>
+            </div>
           ))}
         </div>
-      </div>
-    </div>
-  )
-}
 
-function BarChartMockup({ accent }) {
-  const bars = [
-    { label: 'MON', h: '65%' }, { label: 'TUE', h: '40%' },
-    { label: 'WED', h: '80%' }, { label: 'THU', h: '55%' }, { label: 'FRI', h: '90%' },
-  ]
-  return (
-    <div style={{ width: '100%', height: '100%', background: '#F0FFF8', borderRadius: 12, padding: 20, display: 'flex', flexDirection: 'column' }}>
-      <div style={{ marginBottom: 16 }}>
-        <p style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 22, color: '#111827', margin: 0, letterSpacing: '0.03em' }}>K/D RATIO <span style={{ color: accent }}>2.4 ↑12%</span></p>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#9BAABB', margin: 0, marginTop: 2, letterSpacing: '0.1em' }}>LAST 5 SESSIONS</p>
-      </div>
-      <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-        {bars.map((b, idx) => (
-          <div key={b.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end' }}>
-            <motion.div
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: idx * 0.08 }}
-              style={{ width: '100%', height: b.h, background: `linear-gradient(to top, ${accent}, ${accent}88)`, borderRadius: '4px 4px 0 0', transformOrigin: 'bottom' }}
-            />
-            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, color: '#9BAABB', fontWeight: 600, letterSpacing: '0.05em' }}>{b.label}</span>
+        {/* Last match card */}
+        <div style={{ background: '#0D1526', borderRadius: 10, padding: 12, marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: '#536174', letterSpacing: '0.15em' }}>LAST MATCH</div>
+            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#AAB8C8', marginTop: 2 }}>Erangel · Squad · 23 mins ago</div>
           </div>
-        ))}
+          <div style={{ display: 'flex', gap: 12 }}>
+            {lastMatch.map(s => (
+              <div key={s.l} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 16, color: '#fff' }}>{s.v}</span>
+                <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 8, color: '#536174' }}>{s.l}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom */}
+      <div style={{ background: '#07111F', padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174' }}>47 matches logged</span>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C', letterSpacing: '0.1em', cursor: 'pointer' }}>IMPORT SCREENSHOT →</span>
       </div>
     </div>
   )
 }
 
-function StrategyMockup({ accent }) {
+function StrategyVisual() {
   const players = [
-    { color: '#1769FF', label: 'IGL',     pos0: { top: '18%', left: '15%' }, pos1: { top: '35%', left: '55%' } },
-    { color: '#FF1838', label: 'Sniper',  pos0: { top: '30%', left: '70%' }, pos1: { top: '15%', left: '30%' } },
-    { color: '#00C48C', label: 'Fragger', pos0: { top: '65%', left: '40%' }, pos1: { top: '60%', left: '20%' } },
-    { color: accent,    label: 'Support', pos0: { top: '75%', left: '75%' }, pos1: { top: '80%', left: '55%' } },
+    { id: 'P1', top: '65%', left: '42%', color: '#1769FF', label: 'ENTRY',   anim: { x: [0, 3, 0], y: [0, -3, 0] }, dur: 3 },
+    { id: 'P2', top: '50%', left: '28%', color: '#7137FF', label: 'SUPPORT', anim: { x: [0, -3, 0] },               dur: 3.5 },
+    { id: 'P3', top: '75%', left: '58%', color: '#FF1838', label: 'FLANK',   anim: { x: [0, 4, 0], y: [0, 2, 0] },  dur: 2.8 },
+    { id: 'P4', top: '40%', left: '52%', color: '#00C48C', label: 'COVER',   anim: { y: [0, -4, 0] },               dur: 4 },
   ]
-  const cells = Array.from({ length: 24 })
+  const lines = [
+    { x1: '42%', y1: '65%', x2: '28%', y2: '50%' },
+    { x1: '28%', y1: '50%', x2: '52%', y2: '40%' },
+    { x1: '52%', y1: '40%', x2: '58%', y2: '75%' },
+  ]
+  const tools = [Pencil, ArrowUpRight, Circle, Square, Trash2]
+
   return (
-    <div style={{ width: '100%', height: '100%', background: '#FFF5F6', borderRadius: 12, padding: 16, position: 'relative', overflow: 'hidden' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridTemplateRows: 'repeat(4, 1fr)', gap: 3, height: '85%' }}>
-        {cells.map((_, i) => (
-          <div key={i} style={{ background: `rgba(255,24,56,${0.02 + (i % 4) * 0.01})`, borderRadius: 3, border: '1px solid rgba(255,24,56,0.06)' }} />
+    <div style={{ background: '#07111F', borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,24,56,0.2)', boxShadow: '0 20px 60px rgba(255,24,56,0.1)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <TrafficDots />
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>STRATEGY MAKER · ALPHA PUSH</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Check size={12} color="#00C48C" strokeWidth={3} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>SAVED</span>
+        </div>
+      </div>
+
+      {/* Strategy name row */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff' }}>ERANGEL — POCHINKI PUSH</span>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174' }}>Squad · 4 Players</span>
+      </div>
+
+      {/* Map board */}
+      <div style={{ position: 'relative', height: 280, background: '#0A1628', overflow: 'hidden' }}>
+        <div
+          style={{
+            position: 'absolute', width: '100%', height: '100%',
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,24,56,0.04) 0px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(255,24,56,0.04) 0px, transparent 1px, transparent 40px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
+          {lines.map((ln, i) => (
+            <motion.line
+              key={i}
+              x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2}
+              stroke="#1769FF" strokeWidth="1" strokeDasharray="5,5" opacity="0.5"
+              animate={{ strokeDashoffset: [0, -20] }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+          ))}
+        </svg>
+
+        {players.map(p => (
+          <motion.div
+            key={p.id}
+            animate={p.anim}
+            transition={{ duration: p.dur, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ position: 'absolute', top: p.top, left: p.left, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
+          >
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: p.color, border: '2px solid white', boxShadow: `0 0 12px ${p.color}99`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 10, color: '#fff', lineHeight: '24px' }}>{p.id}</span>
+            </div>
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 8, color: p.color, marginTop: 2 }}>{p.label}</span>
+          </motion.div>
+        ))}
+
+        <div style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(255,24,56,0.15)', border: '1px solid rgba(255,24,56,0.3)', borderRadius: 8, padding: '6px 10px' }}>
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, color: '#FF1838', letterSpacing: '0.15em' }}>HOT DROP</span>
+        </div>
+      </div>
+
+      {/* Tools row */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: 12 }}>
+        {tools.map((ToolIcon, i) => (
+          <ToolButton key={i} Icon={ToolIcon} />
         ))}
       </div>
-      {players.map((p) => (
-        <motion.div
-          key={p.label}
-          animate={{ top: [p.pos0.top, p.pos1.top, p.pos0.top], left: [p.pos0.left, p.pos1.left, p.pos0.left] }}
-          transition={{ duration: 3, ease: 'easeInOut', repeat: Infinity, delay: players.indexOf(p) * 0.5 }}
-          style={{ position: 'absolute', width: 28, height: 28, borderRadius: '50%', background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 10px ${p.color}66`, zIndex: 2 }}
-        >
-          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 7, color: '#fff', fontWeight: 800 }}>{p.label.slice(0, 3).toUpperCase()}</span>
-        </motion.div>
-      ))}
-      <div style={{ position: 'absolute', bottom: 10, left: 0, right: 0, textAlign: 'center', fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.25em', color: accent }}>STRATEGY: ALPHA PUSH</div>
+
+      {/* Bottom */}
+      <div style={{ padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174' }}>3 strategies saved</span>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#FF1838', letterSpacing: '0.1em', cursor: 'pointer' }}>SHARE WITH SQUAD →</span>
+      </div>
     </div>
   )
 }
 
-const MOCKUPS = [MapMockup, AIChatMockup, BarChartMockup, StrategyMockup]
+const MOCKUPS = [MapVisual, AICoachVisual, MatchLoggerVisual, StrategyVisual]
 
 function FaqItem({ q, a, open, onToggle }) {
   return (
@@ -321,9 +591,7 @@ export default function Features() {
                   >
                     {/* Visual */}
                     <div style={{ order: visualLeft ? 0 : 1 }} className="feat-vis">
-                      <div style={{ background: '#fff', border: `2px solid ${tab.accent}22`, borderRadius: 20, padding: 24, height: 380, boxShadow: `0 20px 60px ${tab.accent}14` }}>
-                        <MockupComp accent={tab.accent} />
-                      </div>
+                      <MockupComp />
                     </div>
 
                     {/* Text */}
@@ -493,14 +761,6 @@ export default function Features() {
       <Footer />
 
       <style>{`
-        @keyframes map-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(23,105,255,0.4); }
-          50%       { box-shadow: 0 0 0 8px rgba(23,105,255,0); }
-        }
-        @keyframes typing-dot {
-          0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-          30%            { opacity: 1;   transform: translateY(-4px); }
-        }
         @media (max-width: 900px) {
           .feat-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .feat-vis  { order: 0 !important; }
