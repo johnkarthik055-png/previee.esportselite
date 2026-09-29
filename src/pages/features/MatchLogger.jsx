@@ -60,20 +60,23 @@ export default function MatchLogger() {
         <div style={{ position: 'absolute', bottom: 0, right: 0, width: 500, height: 400, background: 'radial-gradient(circle,rgba(255,24,56,0.06) 0%,transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,#DCE4EF 1.5px,transparent 1.5px)', backgroundSize: '28px 28px', opacity: 0.5, pointerEvents: 'none' }} />
 
-        <div style={{ position: 'absolute', top: 100, left: 64 }} className="ml-back-link">
-          <Link to="/features" onClick={scrollTop} style={{ textDecoration: 'none' }}>
+        <div className="ml-hero-inner">
+          {/* Back link */}
+          <Link
+            to="/features"
+            onClick={scrollTop}
+            style={{ textDecoration: 'none' }}
+          >
             <motion.div
               whileHover={{ x: -3 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#536174', cursor: 'pointer' }}
+              transition={{ duration: 0.2 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'Inter', fontSize: 14, color: '#536174', cursor: 'pointer', marginBottom: 32 }}
             >
-              <ArrowLeft size={16} strokeWidth={2} />
+              <ArrowLeft size={16} />
               Back to Features
             </motion.div>
           </Link>
-        </div>
 
-        <div className="ml-hero-inner">
           <motion.div
             initial={{ opacity: 0, transform: 'translateY(30px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }}
             transition={{ duration: 0.6, ease }}
@@ -287,7 +290,6 @@ export default function MatchLogger() {
         .ml-cta-h2     { font-size:clamp(48px,7vw,88px); }
         .ml-cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
         .ml-how-grid   { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
-        .ml-back-link  { position:absolute; top:100px; left:64px; }
 
         @media (max-width:900px) {
           .ml-hero-inner { padding:96px 20px !important; }
@@ -295,7 +297,6 @@ export default function MatchLogger() {
           .ml-desc       { font-size:16px !important; }
           .ml-cards-grid { grid-template-columns:1fr !important; }
           .ml-how-grid   { grid-template-columns:1fr !important; gap:48px !important; }
-          .ml-back-link  { top:80px !important; left:20px !important; }
         }
         @media (prefers-reduced-motion:reduce) {
           * { animation:none !important; transition:none !important; }

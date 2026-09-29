@@ -107,20 +107,6 @@ export default function RefundPolicy() {
           }}
         />
 
-        <Link
-          to="/"
-          onClick={scrollTop}
-          className="legal-back-link"
-          style={{
-            position: 'absolute', top: 100, left: 64,
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14,
-            color: '#536174', textDecoration: 'none', zIndex: 1,
-          }}
-        >
-          <ArrowLeft size={16} /> Home
-        </Link>
-
         <motion.div
           initial="hidden"
           animate="visible"
@@ -128,6 +114,21 @@ export default function RefundPolicy() {
           className="legal-hero-inner"
           style={{ maxWidth: 1280, margin: '0 auto', padding: '96px 64px', position: 'relative', zIndex: 1, width: '100%' }}
         >
+          <Link
+            to="/"
+            onClick={scrollTop}
+            style={{ textDecoration: 'none' }}
+          >
+            <motion.div
+              whileHover={{ x: -3 }}
+              transition={{ duration: 0.2 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'Inter', fontSize: 14, color: '#536174', cursor: 'pointer', marginBottom: 32 }}
+            >
+              <ArrowLeft size={16} />
+              Back to Home
+            </motion.div>
+          </Link>
+
           <motion.p
             variants={{ hidden: { y: 30, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease } } }}
             style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.35em', color: '#1769FF', marginBottom: 16 }}
@@ -194,7 +195,6 @@ export default function RefundPolicy() {
       <style>{`
         @media (max-width: 767px) {
           .legal-hero-inner { padding: 40px 20px !important; }
-          .legal-back-link { position: static !important; margin-bottom: 24px !important; }
           .legal-h1 { font-size: 44px !important; }
           .legal-desc { font-size: 16px !important; }
           .legal-content { padding: 40px 20px 0 !important; }

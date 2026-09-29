@@ -93,9 +93,6 @@ function Layout() {
           <Route path="/help"      element={<Help />} />
           <Route path="/faq"       element={<FAQ />} />
           <Route path="/receipt-preview" element={<ReceiptPreview />} />
-          <Route path="/privacy"        element={<PrivacyPolicy />} />
-          <Route path="/terms"          element={<TermsOfService />} />
-          <Route path="/refunds"        element={<RefundPolicy />} />
           <Route path="/cookies"        element={<Cookies />} />
           <Route path="*"          element={<NotFound />} />
         </Routes>
@@ -124,6 +121,9 @@ export default function App() {
             <Route path="/roadmap"  element={<Roadmap />} />
             <Route path="/pricing"  element={<Pricing />} />
             <Route path="/about"    element={<About />} />
+            <Route path="/privacy"  element={<PrivacyPolicy />} />
+            <Route path="/terms"    element={<TermsOfService />} />
+            <Route path="/refunds"  element={<RefundPolicy />} />
             <Route path="/*"        element={<Layout />} />
           </Routes>
         </BrowserRouter>
