@@ -151,11 +151,11 @@ const mapData = [
 ]
 
 const zones = [
-  { type: 'hot',     color: '#FF1838', icon: '🔥', top: '45%', left: '40%' },
-  { type: 'control', color: '#1769FF', icon: '⚔',  top: '20%', left: '65%' },
-  { type: 'rotate',  color: '#7137FF', icon: '↻',  top: '35%', left: '22%' },
-  { type: 'safe',    color: '#00C48C', icon: '🛡', top: '65%', left: '55%' },
-  { type: 'loot',    color: '#FFB800', icon: '◆',  top: '70%', left: '30%' },
+  { color: '#FF1838', top: '45%', left: '40%', delay: 0 },
+  { color: '#1769FF', top: '20%', left: '65%', delay: 0.3 },
+  { color: '#7137FF', top: '35%', left: '22%', delay: 0.6 },
+  { color: '#00C48C', top: '65%', left: '55%', delay: 0.9 },
+  { color: '#FFB800', top: '72%', left: '30%', delay: 1.2 },
 ]
 
 const MAP_LEGEND = [
@@ -166,10 +166,9 @@ const MAP_LEGEND = [
   { color: '#FFB800', label: 'LOOT' },
 ]
 
-const zoneByType = Object.fromEntries(zones.map(z => [z.type, z]))
 const TACTICAL_LINES = [
-  { from: zoneByType.hot,    to: zoneByType.control, color: '#1769FF', delay: 0 },
-  { from: zoneByType.rotate, to: zoneByType.safe,    color: '#7137FF', delay: 0.5 },
+  { from: zones[0], to: zones[1], color: '#1769FF', delay: 0 },
+  { from: zones[2], to: zones[3], color: '#7137FF', delay: 0.5 },
 ]
 
 function MapVisual() {
@@ -274,7 +273,7 @@ function MapVisual() {
         />
 
         {/* Tactical lines between markers */}
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: 0.2 }} aria-hidden="true">
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: 0.15 }} aria-hidden="true">
           {TACTICAL_LINES.map((ln, i) => (
             <motion.line
               key={i}
@@ -286,28 +285,35 @@ function MapVisual() {
           ))}
         </svg>
 
-        {/* Zone markers */}
+        {/* Zone markers — pure geometric rings */}
         <AnimatePresence>
           {zones.map((zone, index) => (
             <motion.div
-              key={zone.type + activeMap}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0 }}
+              key={index + activeMap}
+              initial={{ opacity: 0, scale: 0, x: '-50%', y: '-50%' }}
+              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, scale: 0, x: '-50%', y: '-50%' }}
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: index * 0.08 }}
-              style={{ position: 'absolute', top: zone.top, left: zone.left, transform: 'translate(-50%,-50%)' }}
+              style={{
+                position: 'absolute', top: zone.top, left: zone.left,
+                width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                pointerEvents: 'none',
+              }}
             >
-              <div style={{ position: 'relative', width: 44, height: 44 }}>
-                <motion.div
-                  animate={{ scale: [1, 1.6, 1], opacity: [0.3, 0, 0.3] }}
-                  transition={{ duration: 2 + index * 0.4, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 44, height: 44, borderRadius: '50%', border: `1.5px solid ${zone.color}` }}
-                />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 32, height: 32, borderRadius: '50%', border: `1px solid ${zone.color}`, opacity: 0.5 }} />
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 22, height: 22, borderRadius: '50%', background: `${zone.color}26`, border: `1.5px solid ${zone.color}`, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: 10, lineHeight: 1, filter: `drop-shadow(0 0 4px ${zone.color})` }}>{zone.icon}</span>
-                </div>
-              </div>
+              {/* Outer pulse ring */}
+              <div
+                style={{
+                  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+                  width: 44, height: 44, borderRadius: '50%', border: `1px solid ${zone.color}`, opacity: 0.25,
+                  animation: 'ringPulse 2.5s ease-out infinite', animationDelay: `${zone.delay}s`,
+                }}
+              />
+              {/* Middle ring — static */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', border: `1.5px solid ${zone.color}`, opacity: 0.5 }} />
+              {/* Inner circle */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 16, height: 16, borderRadius: '50%', background: `${zone.color}26`, border: `1.5px solid ${zone.color}`, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }} />
+              {/* Center dot */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 6, height: 6, borderRadius: '50%', background: zone.color, boxShadow: `0 0 8px ${zone.color}, 0 0 16px ${zone.color}66` }} />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -338,14 +344,13 @@ function MapVisual() {
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'wrap' }}>
-          {MAP_LEGEND.map((l, i) => (
-            <div key={l.label} style={{ display: 'flex', alignItems: 'center' }}>
-              {i > 0 && <div style={{ width: 1, height: 12, background: 'rgba(255,255,255,0.06)', margin: '0 12px' }} />}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color }} />
-                <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, letterSpacing: '0.12em', color: '#AAB8C8' }}>{l.label}</span>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 20, flexWrap: 'wrap' }}>
+          {MAP_LEGEND.map((l) => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', border: `1.5px solid ${l.color}`, position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 4, height: 4, borderRadius: '50%', background: l.color }} />
               </div>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.12em', color: '#AAB8C8' }}>{l.label}</span>
             </div>
           ))}
         </div>
