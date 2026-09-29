@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Check, ArrowLeft, PenTool, BookOpen, Share2 } from 'lucide-react'
+import { Check, ArrowLeft, PenTool, BookOpen, Share2, Pencil, Move, Circle, Square, Minus, Undo2, Trash2 } from 'lucide-react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import RadialRevealButton from '../../components/ui/RadialRevealButton'
@@ -43,12 +44,166 @@ const HOW_BULLETS = [
   'Share the plan so everyone is on the same page',
 ]
 
-const PLAYERS = [
-  { id: 'P1', color: '#1769FF', label: 'ENTRY',   row: 0, col: 1, animY: [-6, 2, -6], animX: [0, 3, 0] },
-  { id: 'P2', color: '#7137FF', label: 'SUPPORT',  row: 1, col: 4, animY: [2, -6, 2], animX: [3, -2, 3] },
-  { id: 'P3', color: '#FF1838', label: 'FLANK',    row: 2, col: 2, animY: [-4, 4, -4], animX: [-3, 2, -3] },
-  { id: 'P4', color: '#00C48C', label: 'COVER',   row: 3, col: 5, animY: [4, -4, 4], animX: [2, -3, 2] },
+const BOARD_PLAYERS = [
+  { id: 'P1', top: '62%', left: '28%', label: 'ENTRY',   grad: 'linear-gradient(135deg,#1769FF,#1040AA)', color: '#1769FF', anim: { x: [0, 3, 0], y: [0, -3, 0] }, dur: 3 },
+  { id: 'P2', top: '48%', left: '18%', label: 'SUPPORT', grad: 'linear-gradient(135deg,#7137FF,#4A1D9C)', color: '#7137FF', anim: { x: [0, -3, 0] }, dur: 3.5 },
+  { id: 'P3', top: '72%', left: '55%', label: 'FLANK',   grad: 'linear-gradient(135deg,#FF1838,#AA0F24)', color: '#FF1838', anim: { x: [0, 4, 0], y: [0, 2, 0] }, dur: 2.8 },
+  { id: 'P4', top: '38%', left: '50%', label: 'COVER',   grad: 'linear-gradient(135deg,#00C48C,#007A58)', color: '#00C48C', anim: { y: [0, -4, 0] }, dur: 4 },
 ]
+
+const TOOLS = [Pencil, Move, Circle, Square, Minus, Undo2, Trash2]
+const SAVED_STRATEGIES = ['Alpha Push', 'Beta Flank', 'Safe Circle']
+
+function TrafficDots() {
+  return (
+    <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF5F57' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFBD2E' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#28CA41' }} />
+    </div>
+  )
+}
+
+function ToolButton({ Icon }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: 32, height: 32, borderRadius: '50%',
+        background: hover ? '#FF1838' : '#07111F',
+        border: `1px solid ${hover ? '#FF1838' : 'rgba(255,255,255,0.08)'}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', transition: 'background 0.2s ease, border-color 0.2s ease, transform 0.2s ease',
+        transform: hover ? 'scale(1.1)' : 'scale(1)',
+      }}
+    >
+      <Icon size={14} color={hover ? '#fff' : '#AAB8C8'} />
+    </div>
+  )
+}
+
+function StrategyPill({ label }) {
+  const [hover, setHover] = useState(false)
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        background: '#0D1526', border: `1px solid ${hover ? '#FF1838' : 'rgba(255,255,255,0.08)'}`,
+        padding: '6px 12px', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
+        fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: hover ? '#FF1838' : '#AAB8C8',
+        transition: 'border-color 0.2s ease, color 0.2s ease',
+      }}
+    >
+      {label}
+    </div>
+  )
+}
+
+function StrategyBoardVisual() {
+  return (
+    <div style={{ background: '#07111F', borderRadius: 24, overflow: 'hidden', border: '1px solid rgba(255,24,56,0.2)', boxShadow: '0 30px 80px rgba(255,24,56,0.1)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrafficDots />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 8px' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>STRATEGY MAKER</span>
+        </div>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>● SAVED</span>
+      </div>
+
+      {/* Strategy name row */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff' }}>ERANGEL — POCHINKI PUSH</div>
+          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#536174', marginTop: 2 }}>Squad · 4 Players · Modified 2m ago</div>
+        </div>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#FF1838', letterSpacing: '0.1em', cursor: 'pointer' }}>SHARE →</span>
+      </div>
+
+      {/* Map board */}
+      <div style={{ position: 'relative', height: 260, background: '#0A1628', overflow: 'hidden' }}>
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,24,56,0.04) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(255,24,56,0.04) 0, transparent 1px, transparent 60px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
+
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
+          <defs>
+            <marker id="sm-arrow-blue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill="#1769FF" />
+            </marker>
+            <marker id="sm-arrow-purple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill="#7137FF" />
+            </marker>
+          </defs>
+
+          <polygon points="8%,10% 22%,8% 25%,22% 10%,26%" fill="rgba(255,24,56,0.04)" stroke="rgba(255,24,56,0.08)" strokeWidth="0.8" />
+          <polygon points="70%,10% 90%,14% 84%,30% 66%,26%" fill="rgba(255,24,56,0.04)" stroke="rgba(255,24,56,0.08)" strokeWidth="0.8" />
+          <rect x="42%" y="38%" width="18%" height="16%" rx="4" fill="rgba(255,24,56,0.06)" stroke="rgba(255,24,56,0.2)" strokeWidth="1" />
+
+          <motion.path
+            d="M 30% 70% Q 45% 50% 55% 35%"
+            stroke="#1769FF" strokeWidth="1.5" strokeDasharray="8,4" fill="none" opacity="0.6"
+            markerEnd="url(#sm-arrow-blue)"
+            animate={{ strokeDashoffset: [0, -24] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.path
+            d="M 70% 65% Q 60% 45% 55% 35%"
+            stroke="#7137FF" strokeWidth="1.5" strokeDasharray="8,4" fill="none" opacity="0.6"
+            markerEnd="url(#sm-arrow-purple)"
+            animate={{ strokeDashoffset: [0, -24] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear', delay: 0.3 }}
+          />
+        </svg>
+
+        {BOARD_PLAYERS.map(p => (
+          <motion.div
+            key={p.id}
+            animate={p.anim}
+            transition={{ duration: p.dur, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ position: 'absolute', top: p.top, left: p.left, transform: 'translate(-50%,-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
+          >
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: p.grad, border: '2px solid white', boxShadow: `0 0 16px ${p.color}80, 0 4px 8px rgba(0,0,0,0.3)`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 13, color: '#fff', lineHeight: '36px', textAlign: 'center' }}>{p.id}</span>
+            </div>
+            <div style={{ background: 'rgba(7,17,31,0.8)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', border: `1px solid ${p.color}4D`, padding: '2px 6px', borderRadius: 4 }}>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 8, color: p.color }}>{p.label}</span>
+            </div>
+          </motion.div>
+        ))}
+
+        <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,24,56,0.15)', border: '1px solid rgba(255,24,56,0.3)', borderRadius: 8, padding: '6px 12px' }}>
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, color: '#FF1838', letterSpacing: '0.15em' }}>⚡ HOT DROP</span>
+        </div>
+      </div>
+
+      {/* Tools row */}
+      <div style={{ background: '#0D1526', padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 8 }}>
+        {TOOLS.map((ToolIcon, i) => (
+          <ToolButton key={i} Icon={ToolIcon} />
+        ))}
+        <div style={{ width: 1, height: 32, background: 'rgba(255,255,255,0.06)', margin: '0 8px', alignSelf: 'center' }} />
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#FF1838', letterSpacing: '0.1em' }}>DRAW</span>
+      </div>
+
+      {/* Saved strategies row */}
+      <div style={{ padding: '12px 20px', display: 'flex', gap: 8, overflowX: 'auto', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: '#536174', letterSpacing: '0.15em', marginRight: 4, flexShrink: 0 }}>SAVED</span>
+        {SAVED_STRATEGIES.map(label => (
+          <StrategyPill key={label} label={label} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function StrategyMaker() {
   return (
@@ -209,62 +364,12 @@ export default function StrategyMaker() {
               </div>
             </motion.div>
 
-            {/* RIGHT — Squad map mockup */}
+            {/* RIGHT — Strategy board */}
             <motion.div
               initial={{ opacity: 0, transform: 'translateX(40px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
               viewport={{ once: true }} transition={{ duration: 0.7, ease, delay: 0.15 }}
             >
-              <motion.div
-                animate={{ y: [-4, 4, -4] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 20, padding: 28, boxShadow: '0 20px 60px rgba(7,17,31,0.06)' }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                  <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 16, color: '#111827' }}>SQUAD STRATEGY</span>
-                  <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.1em', color: accent }}>ERANGEL</span>
-                </div>
-
-                {/* 6×4 grid */}
-                <div style={{ position: 'relative' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 4 }}>
-                    {Array.from({ length: 24 }).map((_, i) => (
-                      <div key={i} style={{ background: '#FFF8F8', borderRadius: 2, height: 28 }} />
-                    ))}
-                  </div>
-
-                  {/* Player dots */}
-                  {PLAYERS.map((p, i) => (
-                    <motion.div
-                      key={p.id}
-                      animate={{ y: p.animY, x: p.animX }}
-                      transition={{ duration: 3 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
-                      style={{
-                        position: 'absolute',
-                        top: p.row * 32 + 6,
-                        left: p.col * (100 / 6) + '%',
-                        width: 18, height: 18,
-                        borderRadius: '50%',
-                        background: p.color,
-                        border: '2px solid #FFFFFF',
-                        boxShadow: `0 2px 8px ${p.color}66`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                    >
-                      <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 800, fontSize: 7, color: '#FFFFFF' }}>{p.id}</span>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Player labels */}
-                <div style={{ borderTop: '1px solid #DCE4EF', marginTop: 16, paddingTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {PLAYERS.map(p => (
-                    <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-                      <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 10, color: '#536174', letterSpacing: '0.05em' }}>{p.id} {p.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+              <StrategyBoardVisual />
             </motion.div>
           </div>
         </div>

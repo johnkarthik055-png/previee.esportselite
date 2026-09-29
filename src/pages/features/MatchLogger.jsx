@@ -43,8 +43,131 @@ const HOW_BULLETS = [
   'Build a full history of your BGMI performance',
 ]
 
-const BAR_HEIGHTS = ['60%', '45%', '75%', '50%', '85%']
-const BAR_LABELS  = ['MON', 'TUE', 'WED', 'THU', 'FRI']
+const ML_BARS = [
+  { d: 'M', h: 55 }, { d: 'T', h: 42 }, { d: 'W', h: 70 }, { d: 'T', h: 48 },
+  { d: 'F', h: 78 }, { d: 'S', h: 62 }, { d: 'S', h: 88 },
+]
+const ML_STATS = [{ v: '2.4', l: 'K/D RATIO' }, { v: '312', l: 'AVG DMG' }, { v: '#6', l: 'AVG PLACE' }]
+const ML_SESSIONS = [
+  { num: '#47', map: 'Erangel · Squad · 24 min ago', kills: '3', dmg: '287', place: '#8', recent: true },
+  { num: '#46', map: 'Miramar · Duo · Yesterday', kills: '5', dmg: '410', place: '#3', recent: false },
+]
+
+function TrafficDots() {
+  return (
+    <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF5F57' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFBD2E' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#28CA41' }} />
+    </div>
+  )
+}
+
+function MatchLoggerVisual() {
+  return (
+    <div style={{ background: '#07111F', borderRadius: 24, overflow: 'hidden', border: '1px solid rgba(0,196,140,0.2)', boxShadow: '0 30px 80px rgba(0,196,140,0.1)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrafficDots />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 8px' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>MATCH LOGGER</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C', animation: 'radarPulse 2s infinite' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>SYNCED</span>
+        </div>
+      </div>
+
+      {/* Stats grid */}
+      <div style={{ background: '#0D1526', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        {ML_STATS.map((s, i) => (
+          <motion.div
+            key={s.l}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.1 }}
+            style={{ borderRight: i < ML_STATS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none', padding: '16px 20px', textAlign: 'center' }}
+          >
+            <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 800, fontSize: 32, color: '#fff' }}>{s.v}</div>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, letterSpacing: '0.15em', color: '#536174', marginTop: 4 }}>{s.l}</div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Chart */}
+      <div style={{ padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#AAB8C8', letterSpacing: '0.12em' }}>K/D TREND — LAST 7 SESSIONS</span>
+          <div style={{ background: 'rgba(0,196,140,0.1)', border: '1px solid rgba(0,196,140,0.2)', padding: '3px 8px', borderRadius: 20 }}>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, color: '#00C48C' }}>↑ 12%</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', height: 120 }}>
+          {ML_BARS.map((b, i) => {
+            const isLast = i === ML_BARS.length - 1
+            return (
+              <div key={i} style={{ flex: 1, position: 'relative' }}>
+                <div style={{ background: '#0D1526', borderRadius: '6px 6px 0 0', height: '100%', display: 'flex', alignItems: 'flex-end', overflow: 'hidden' }}>
+                  <motion.div
+                    initial={{ height: 0 }}
+                    whileInView={{ height: `${b.h}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: i * 0.1, ease: [0.23, 1, 0.32, 1] }}
+                    style={{
+                      width: '100%', background: 'linear-gradient(to top,#00C48C,rgba(0,196,140,0.4))', borderRadius: '6px 6px 0 0',
+                      boxShadow: isLast ? '0 0 12px rgba(0,196,140,0.3)' : 'none',
+                    }}
+                  />
+                </div>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: '#536174', textAlign: 'center', marginTop: 4 }}>{b.d}</div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Session cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 16 }}>
+          {ML_SESSIONS.map(s => (
+            <div
+              key={s.num}
+              style={{
+                background: '#0D1526', borderRadius: 10, padding: '10px 14px',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                borderLeft: `2px solid ${s.recent ? '#00C48C' : 'rgba(255,255,255,0.06)'}`,
+              }}
+            >
+              <div>
+                <div style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff' }}>Session {s.num}</div>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#536174', marginTop: 2 }}>{s.map}</div>
+              </div>
+              <div style={{ display: 'flex', gap: 12 }}>
+                {[{ v: s.kills, l: 'KILLS' }, { v: s.dmg, l: 'DMG' }, { v: s.place, l: 'PLACE' }].map(stat => (
+                  <div key={stat.l} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 16, color: '#fff' }}>{stat.v}</span>
+                    <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 8, color: '#536174' }}>{stat.l}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div style={{ background: '#07111F', padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174' }}>47 matches logged</span>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C', letterSpacing: '0.1em' }}
+        >
+          IMPORT SCREENSHOT →
+        </motion.button>
+      </div>
+    </div>
+  )
+}
 
 export default function MatchLogger() {
   return (
@@ -205,42 +328,12 @@ export default function MatchLogger() {
               </div>
             </motion.div>
 
-            {/* RIGHT — Bar chart mockup */}
+            {/* RIGHT — Stats dashboard */}
             <motion.div
               initial={{ opacity: 0, transform: 'translateX(40px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
               viewport={{ once: true }} transition={{ duration: 0.7, ease, delay: 0.15 }}
             >
-              <motion.div
-                animate={{ y: [-4, 4, -4] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 20, padding: 32, boxShadow: '0 20px 60px rgba(7,17,31,0.06)' }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                  <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 16, color: '#111827' }}>MATCH LOGGER</span>
-                  <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.1em', color: accent }}>THIS WEEK</span>
-                </div>
-
-                {/* Bar chart */}
-                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', height: 120 }}>
-                  {BAR_HEIGHTS.map((h, i) => (
-                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end' }}>
-                      <motion.div
-                        initial={{ scaleY: 0 }}
-                        whileInView={{ scaleY: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: i * 0.08 }}
-                        style={{ width: '100%', height: h, background: `linear-gradient(to top, ${accent}, ${accent}88)`, borderRadius: '4px 4px 0 0', transformOrigin: 'bottom' }}
-                      />
-                      <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, color: '#9BAABB', letterSpacing: '0.05em' }}>{BAR_LABELS[i]}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div style={{ borderTop: '1px solid #DCE4EF', marginTop: 16, paddingTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 11, color: accent, letterSpacing: '0.1em', textTransform: 'uppercase' }}>K/D THIS WEEK</span>
-                  <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 32, ...G }}>2.4</span>
-                </div>
-              </motion.div>
+              <MatchLoggerVisual />
             </motion.div>
           </div>
         </div>

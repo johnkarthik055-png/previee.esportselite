@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Check, ArrowLeft, Brain, MessageSquare, TrendingUp } from 'lucide-react'
+import { Check, ArrowLeft, ArrowRight, Brain, MessageSquare, TrendingUp } from 'lucide-react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import RadialRevealButton from '../../components/ui/RadialRevealButton'
@@ -43,13 +44,127 @@ const HOW_BULLETS = [
   'Compare your stats against your own baseline',
 ]
 
-function TypingDot({ delay }) {
+function TypingDot({ delay, size = 6, color = '#FFFFFF' }) {
   return (
     <motion.div
       animate={{ opacity: [0.3, 1, 0.3] }}
       transition={{ duration: 1.2, repeat: Infinity, delay, ease: 'easeInOut' }}
-      style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFFFFF' }}
+      style={{ width: size, height: size, borderRadius: '50%', background: color }}
     />
+  )
+}
+
+function TrafficDots() {
+  return (
+    <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF5F57' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFBD2E' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#28CA41' }} />
+    </div>
+  )
+}
+
+const FOCUS_BARS = [
+  { label: 'Rotation Timing', pct: 68 },
+  { label: 'Zone Awareness', pct: 74 },
+  { label: 'Late Game', pct: 52 },
+]
+
+function AICoachVisual() {
+  const [sendHover, setSendHover] = useState(false)
+
+  return (
+    <div style={{ background: '#07111F', borderRadius: 24, overflow: 'hidden', border: '1px solid rgba(113,55,255,0.2)', boxShadow: '0 30px 80px rgba(113,55,255,0.15)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrafficDots />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 8px' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>AI COACH</span>
+        </div>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <TypingDot delay={0} size={5} color="#7137FF" />
+          <TypingDot delay={0.2} size={5} color="#7137FF" />
+          <TypingDot delay={0.4} size={5} color="#7137FF" />
+        </div>
+      </div>
+
+      {/* Chat messages */}
+      <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12, minHeight: 300, background: '#07111F', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ background: 'rgba(113,55,255,0.08)', border: '1px solid rgba(113,55,255,0.15)', borderRadius: 20, padding: '6px 14px', display: 'inline-block' }}>
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#7137FF', letterSpacing: '0.15em' }}>Match #247 analyzed</span>
+          </div>
+        </div>
+
+        <div style={{ alignSelf: 'flex-end', maxWidth: '80%' }}>
+          <div style={{ background: '#1A2840', borderRadius: '16px 16px 4px 16px', padding: '14px 16px' }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#AAB8C8', lineHeight: 1.5, margin: 0 }}>K/D: 1.8 · Damage: 312 · Placement: #4 · Survival: 18 min</p>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6 }}>
+            <div style={{ background: 'rgba(113,55,255,0.1)', border: '1px solid rgba(113,55,255,0.2)', padding: '4px 10px', borderRadius: 12 }}>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#7137FF' }}>screenshot.jpg</span>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ alignSelf: 'flex-start', maxWidth: '85%', background: 'linear-gradient(135deg,#4A2D9C,#6B3DBC)', borderRadius: '4px 16px 16px 16px', padding: '14px 16px', boxShadow: '0 8px 24px rgba(113,55,255,0.3)' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#fff', lineHeight: 1.6, margin: 0 }}>Your damage output is strong but Placement #4 suggests rotation timing issues — entering zones 15-20s late on average.</p>
+        </div>
+
+        <div style={{ alignSelf: 'flex-start', maxWidth: '85%', marginTop: -4, background: 'linear-gradient(135deg,#4A2D9C,#6B3DBC)', borderRadius: '4px 16px 16px 16px', padding: '14px 16px', boxShadow: '0 8px 24px rgba(113,55,255,0.3)' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#fff', lineHeight: 1.6, margin: 0 }}>This week focus on: zone rotation timing and pre-planning safe rotation paths before final circles.</p>
+        </div>
+
+        <div style={{ background: '#0D1F35', borderRadius: 12, padding: 16, border: '1px solid rgba(113,55,255,0.15)', marginTop: 4 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#7137FF', letterSpacing: '0.15em' }}>THIS WEEK'S FOCUS</span>
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174' }}>Session 12</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
+            {FOCUS_BARS.map((b, i) => (
+              <div key={b.label}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, color: '#AAB8C8' }}>{b.label}</span>
+                  <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 11, color: '#7137FF' }}>{b.pct}%</span>
+                </div>
+                <div style={{ background: '#1A2840', borderRadius: 4, height: 6, overflow: 'hidden' }}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${b.pct}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 + i * 0.15, ease: [0.23, 1, 0.32, 1] }}
+                    style={{ height: '100%', background: 'linear-gradient(90deg,#7137FF,#C62DCE)', borderRadius: 4 }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ alignSelf: 'flex-start', background: '#0D1526', borderRadius: '4px 12px 12px 12px', padding: '10px 14px', display: 'flex', gap: 4 }}>
+          <TypingDot delay={0} color="#7137FF" />
+          <TypingDot delay={0.2} color="#7137FF" />
+          <TypingDot delay={0.4} color="#7137FF" />
+        </div>
+      </div>
+
+      {/* Input bar */}
+      <div style={{ background: '#0D1526', padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ flex: 1, background: '#1A2840', borderRadius: 10, padding: '10px 14px', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#536174' }}>Upload match screenshot or type a question...</span>
+        </div>
+        <motion.div
+          onHoverStart={() => setSendHover(true)}
+          onHoverEnd={() => setSendHover(false)}
+          animate={{ scale: sendHover ? 1.1 : 1, background: sendHover ? '#8B4FFF' : '#7137FF' }}
+          transition={{ duration: 0.2 }}
+          style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}
+        >
+          <ArrowRight size={16} color="#fff" strokeWidth={2.5} />
+        </motion.div>
+      </div>
+    </div>
   )
 }
 
@@ -215,48 +330,12 @@ export default function AiCoach() {
               </div>
             </motion.div>
 
-            {/* RIGHT — Chat mockup */}
+            {/* RIGHT — AI chat interface */}
             <motion.div
               initial={{ opacity: 0, transform: 'translateX(40px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
               viewport={{ once: true }} transition={{ duration: 0.7, ease, delay: 0.15 }}
             >
-              <motion.div
-                animate={{ y: [-4, 4, -4] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 20, padding: 32, boxShadow: '0 20px 60px rgba(7,17,31,0.06)' }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                  <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 16, color: '#111827' }}>AI COACH</span>
-                  <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.1em', color: accent }}>ANALYZING...</span>
-                </div>
-
-                {/* User bubble */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
-                  <div style={{ background: '#F7F9FC', border: '1px solid #DCE4EF', borderRadius: '12px 12px 0 12px', padding: '10px 14px', maxWidth: '85%' }}>
-                    <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#536174', margin: 0 }}>
-                      Match uploaded — K/D 1.2, Damage 245, Placement 8
-                    </p>
-                  </div>
-                </div>
-
-                {/* AI bubble */}
-                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 8 }}>
-                  <div style={{ background: accent, borderRadius: '0 12px 12px 12px', padding: '10px 14px', maxWidth: '90%' }}>
-                    <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#FFFFFF', margin: 0, lineHeight: 1.5 }}>
-                      Your damage is solid but placement suggests early rotation issues. Focus on reading the second circle before committing to fights.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Typing indicator */}
-                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 8 }}>
-                  <div style={{ background: `${accent}22`, borderRadius: '0 12px 12px 12px', padding: '12px 16px', display: 'flex', gap: 4, alignItems: 'center' }}>
-                    <TypingDot delay={0} />
-                    <TypingDot delay={0.2} />
-                    <TypingDot delay={0.4} />
-                  </div>
-                </div>
-              </motion.div>
+              <AICoachVisual />
             </motion.div>
           </div>
         </div>

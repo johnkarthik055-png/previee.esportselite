@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Check, ArrowLeft, Map, Route, Target } from 'lucide-react'
 import Navbar from '../../components/Navbar'
@@ -60,6 +61,181 @@ const HOW_BULLETS = [
   'Understand compound control and entry angles',
   'Predict final zones and position early',
 ]
+
+/* ─── Tactical map viewer illustration ─── */
+const MAP_TABS = [
+  { label: 'ERANGEL', badge: 'ERANGEL · 8×8 KM', fill: 'rgba(23,105,255,0.08)', stroke: 'rgba(23,105,255,0.15)', water: 'rgba(23,105,255,0.05)', waterStroke: 'rgba(23,105,255,0.1)' },
+  { label: 'MIRAMAR', badge: 'MIRAMAR · 8×8 KM', fill: 'rgba(255,184,0,0.06)', stroke: 'rgba(255,184,0,0.15)', water: 'rgba(255,184,0,0.04)', waterStroke: 'rgba(255,184,0,0.1)' },
+  { label: 'RONDO', badge: 'RONDO · 6×6 KM', fill: 'rgba(113,55,255,0.08)', stroke: 'rgba(113,55,255,0.15)', water: 'rgba(113,55,255,0.05)', waterStroke: 'rgba(113,55,255,0.1)' },
+]
+
+const ZONE_COLORS = ['#FF1838', '#1769FF', '#7137FF', '#00C48C', '#FFB800']
+
+const ZONE_POSITIONS = [
+  [{ top: '45%', left: '40%' }, { top: '18%', left: '68%' }, { top: '32%', left: '22%' }, { top: '68%', left: '58%' }, { top: '75%', left: '32%' }],
+  [{ top: '40%', left: '35%' }, { top: '22%', left: '62%' }, { top: '55%', left: '25%' }, { top: '72%', left: '65%' }, { top: '30%', left: '72%' }],
+  [{ top: '38%', left: '45%' }, { top: '20%', left: '70%' }, { top: '60%', left: '28%' }, { top: '65%', left: '60%' }, { top: '78%', left: '38%' }],
+]
+
+const MK_LEGEND = [
+  { color: '#FF1838', label: 'HOT DROP' },
+  { color: '#1769FF', label: 'CONTROL' },
+  { color: '#7137FF', label: 'ROTATION' },
+  { color: '#00C48C', label: 'SAFE' },
+  { color: '#FFB800', label: 'LOOT' },
+]
+
+function TrafficDots() {
+  return (
+    <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF5F57' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFBD2E' }} />
+      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#28CA41' }} />
+    </div>
+  )
+}
+
+function TacticalMapVisual() {
+  const [activeMap, setActiveMap] = useState(0)
+  const t = MAP_TABS[activeMap]
+  const zones = ZONE_POSITIONS[activeMap].map((pos, i) => ({ ...pos, color: ZONE_COLORS[i] }))
+
+  return (
+    <div style={{ background: '#07111F', borderRadius: 24, overflow: 'hidden', border: '1px solid rgba(23,105,255,0.2)', boxShadow: '0 30px 80px rgba(23,105,255,0.15)' }}>
+      {/* Top bar */}
+      <div style={{ background: '#0D1526', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrafficDots />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 8px' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>TACTICAL OVERVIEW</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C', animation: 'radarPulse 2s infinite' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>LIVE</span>
+        </div>
+      </div>
+
+      {/* Map tabs */}
+      <div style={{ background: '#0D1526', padding: '0 20px', display: 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        {MAP_TABS.map((m, i) => (
+          <button
+            key={m.label}
+            onClick={() => setActiveMap(i)}
+            style={{
+              position: 'relative', padding: '12px 20px',
+              fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.15em',
+              color: activeMap === i ? '#1769FF' : '#536174',
+              background: 'transparent', border: 'none', cursor: 'pointer',
+            }}
+          >
+            {m.label}
+            {activeMap === i && (
+              <motion.div
+                layoutId="mapTab"
+                style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg,#1769FF,#7137FF)' }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Map area */}
+      <div style={{ position: 'relative', height: 320, background: '#0A1628', overflow: 'hidden' }}>
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.05) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(23,105,255,0.05) 0, transparent 1px, transparent 60px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeMap}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{ position: 'absolute', inset: 0 }}
+          >
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
+              <polygon points="10%,15% 25%,10% 30%,25% 15%,30%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
+              <polygon points="58%,8% 78%,12% 72%,28% 52%,22%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
+              <polygon points="15%,55% 35%,50% 38%,74% 12%,80%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
+              <polygon points="60%,62% 84%,56% 88%,82% 64%,86%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
+              <ellipse cx="50%" cy="46%" rx="16%" ry="11%" fill={t.water} stroke={t.waterStroke} strokeWidth="1" />
+              <line x1="4%" y1="40%" x2="96%" y2="45%" stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="8,4" />
+              <line x1="28%" y1="4%" x2="44%" y2="96%" stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="8,4" />
+
+              {/* Dashed connectors between markers */}
+              <line x1={zones[0].left} y1={zones[0].top} x2={zones[1].left} y2={zones[1].top} stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" strokeDasharray="4,4" />
+              <line x1={zones[2].left} y1={zones[2].top} x2={zones[3].left} y2={zones[3].top} stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" strokeDasharray="4,4" />
+            </svg>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Zone markers */}
+        <AnimatePresence>
+          {zones.map((zone, i) => (
+            <motion.div
+              key={i + activeMap}
+              initial={{ opacity: 0, scale: 0, x: '-50%', y: '-50%' }}
+              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, scale: 0, x: '-50%', y: '-50%' }}
+              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: i * 0.08 }}
+              style={{ position: 'absolute', top: zone.top, left: zone.left, width: 44, height: 44, pointerEvents: 'none' }}
+            >
+              <div
+                style={{
+                  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+                  width: 44, height: 44, borderRadius: '50%', border: `1px solid ${zone.color}`, opacity: 0.25,
+                  animation: 'ringPulse 2.5s infinite', animationDelay: `${i * 0.15}s`,
+                }}
+              />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', border: `1.5px solid ${zone.color}`, opacity: 0.5 }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 16, height: 16, borderRadius: '50%', background: `${zone.color}26`, border: `1.5px solid ${zone.color}`, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 6, height: 6, borderRadius: '50%', background: zone.color, boxShadow: `0 0 10px ${zone.color}` }} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Coordinate corners */}
+        <span style={{ position: 'absolute', top: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.12)' }}>A1</span>
+        <span style={{ position: 'absolute', top: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.12)' }}>H1</span>
+        <span style={{ position: 'absolute', bottom: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.12)' }}>A8</span>
+        <span style={{ position: 'absolute', bottom: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.12)' }}>H8</span>
+
+        {/* Map name badge */}
+        <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(7,17,31,0.8)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '8px 14px' }}>
+          <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 13, color: '#fff' }}>{t.badge}</span>
+        </div>
+
+        {/* Scan lines */}
+        <div
+          style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.3,
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)',
+          }}
+        />
+      </div>
+
+      {/* Bottom bar */}
+      <div style={{ background: '#07111F', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          {MK_LEGEND.map(l => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', border: `1.5px solid ${l.color}`, position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 4, height: 4, borderRadius: '50%', background: l.color }} />
+              </div>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, letterSpacing: '0.1em', color: '#AAB8C8' }}>{l.label}</span>
+            </div>
+          ))}
+        </div>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174' }}>5 ZONES MAPPED</span>
+      </div>
+    </div>
+  )
+}
 
 export default function MapKnowledge() {
   return (
@@ -274,46 +450,12 @@ export default function MapKnowledge() {
               </div>
             </motion.div>
 
-            {/* RIGHT — CSS mockup */}
+            {/* RIGHT — Tactical map viewer */}
             <motion.div
               initial={{ opacity: 0, transform: 'translateX(40px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }}
               viewport={{ once: true }} transition={{ duration: 0.7, ease, delay: 0.15 }}
             >
-              <motion.div
-                animate={{ y: [-4, 4, -4] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ background: '#FFFFFF', border: '1px solid #DCE4EF', borderRadius: 20, padding: 32, boxShadow: '0 20px 60px rgba(7,17,31,0.06)' }}
-              >
-                {/* Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                  <span style={{ fontFamily: 'Barlow Condensed,sans-serif', fontWeight: 800, fontSize: 16, color: '#111827' }}>MAP KNOWLEDGE</span>
-                  <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.1em', color: accent }}>ERANGEL</span>
-                </div>
-                {/* Mini grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 4 }}>
-                  {Array.from({ length: 24 }).map((_, idx) => {
-                    const isHot = [4, 9, 16].includes(idx)
-                    return (
-                      <div key={idx} style={{ height: 32, borderRadius: 3, background: isHot ? `${accent}40` : '#F7F9FC', position: 'relative' }}>
-                        {isHot && (
-                          <div style={{ position: 'absolute', bottom: '110%', left: '50%', transform: 'translateX(-50%)', background: '#fff', border: `1px solid ${accent}33`, padding: '2px 6px', borderRadius: 4, whiteSpace: 'nowrap', pointerEvents: 'none' }}>
-                            <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 700, fontSize: 9, color: accent }}>HOT</span>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-                {/* Legend */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16, flexWrap: 'wrap', gap: 8 }}>
-                  {[{ color: '#1769FF', label: 'HOT DROP' }, { color: '#7137FF', label: 'ROTATION' }, { color: '#00C48C', label: 'SAFE' }].map(l => (
-                    <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color, flexShrink: 0 }} />
-                      <span style={{ fontFamily: 'Rajdhani,sans-serif', fontWeight: 600, fontSize: 10, color: '#536174', letterSpacing: '0.05em' }}>{l.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+              <TacticalMapVisual />
             </motion.div>
           </div>
         </div>
