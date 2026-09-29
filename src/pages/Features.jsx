@@ -153,7 +153,8 @@ function MapVisual() {
     { top: '60%', left: '15%', color: '#00C48C', label: 'GEORGOPOL' },
     { top: '75%', left: '60%', color: '#FF1838', label: 'SOSNOVKA' },
   ]
-  const maps = ['ERANGEL', 'MIRAMAR', 'RONDO']
+  const mapFiles = ['erangel', 'miramar', 'rondo']
+  const mapLabels = ['ERANGEL', 'MIRAMAR', 'RONDO']
   const legend = [
     { color: '#FF1838', label: 'HOT DROP' },
     { color: '#1769FF', label: 'ROTATION' },
@@ -173,7 +174,7 @@ function MapVisual() {
       {/* Top bar */}
       <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <TrafficDots />
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>ERANGEL · TACTICAL VIEW</span>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>{mapLabels[activeMap]} · TACTICAL VIEW</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C' }} />
           <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>LIVE</span>
@@ -181,11 +182,33 @@ function MapVisual() {
       </div>
 
       {/* Map area */}
-      <div style={{ position: 'relative', height: 320, background: '#0A1628', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', height: 320, overflow: 'hidden' }}>
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={activeMap}
+            src={`/maps/${mapFiles[activeMap]}.jpg`}
+            alt={`${mapLabels[activeMap]} tactical map`}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', position: 'absolute', top: 0, left: 0 }}
+          />
+        </AnimatePresence>
+
+        {/* Dark overlay */}
         <div
           style={{
-            position: 'absolute', width: '100%', height: '100%',
-            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.05) 0px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(23,105,255,0.05) 0px, transparent 1px, transparent 40px)',
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, rgba(7,17,31,0.3) 0%, transparent 40%, rgba(7,17,31,0.5) 100%)',
+          }}
+        />
+
+        {/* Grid overlay */}
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.08) 0px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(23,105,255,0.08) 0px, transparent 1px, transparent 40px)',
             backgroundSize: '40px 40px',
           }}
         />
@@ -218,7 +241,7 @@ function MapVisual() {
 
       {/* Map tabs */}
       <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', gap: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        {maps.map((m, i) => (
+        {mapLabels.map((m, i) => (
           <motion.button
             key={m}
             onClick={() => setActiveMap(i)}
