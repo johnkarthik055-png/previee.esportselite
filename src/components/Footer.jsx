@@ -17,6 +17,12 @@ const NAV_LINKS = [
   { label: 'About',    to: '/about'   },
 ]
 
+const LEGAL_LINKS = [
+  { label: 'Privacy Policy',    to: '/privacy' },
+  { label: 'Terms of Service',  to: '/terms'   },
+  { label: 'Refund Policy',     to: '/refunds' },
+]
+
 function SocialIcon({ Icon, label, href }) {
   const [hov, setHov] = useState(false)
   return (
@@ -100,9 +106,40 @@ export default function Footer() {
           <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, color: '#9BAABB', margin: 0 }}>
             © {new Date().getFullYear()} Esports Elite. Operated by Guruswamy Reddy Sai Karthik Reddy.
           </p>
+          <a
+            href="mailto:support@esportselite.in"
+            style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#9BAABB', textDecoration: 'none' }}
+          >
+            support@esportselite.in
+          </a>
           <p style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.25em', color: '#9BAABB', textTransform: 'uppercase', margin: 0 }}>
             PLAY A BETTER YOU.
           </p>
+        </div>
+
+        {/* Legal links row */}
+        <div
+          className="footer-legal-row"
+          style={{
+            borderTop: '1px solid #DCE4EF', marginTop: 16, paddingTop: 16,
+            display: 'flex', justifyContent: 'center', gap: 24, flexWrap: 'wrap',
+          }}
+        >
+          {LEGAL_LINKS.map(({ label, to }) => (
+            <Link
+              key={label}
+              to={to}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+              style={{
+                fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#9BAABB',
+                textDecoration: 'none', transition: 'color 0.2s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#536174'}
+              onMouseLeave={e => e.currentTarget.style.color = '#9BAABB'}
+            >
+              {label}
+            </Link>
+          ))}
         </div>
       </div>
 

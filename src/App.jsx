@@ -6,6 +6,7 @@ import Navbar     from './components/Navbar'
 import Footer     from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import CookieConsent from './components/CookieConsent'
+import ErrorBoundary from './components/ErrorBoundary'
 
 import Home       from './pages/Home'
 import Features   from './pages/Features'
@@ -24,9 +25,9 @@ import Help       from './pages/Help'
 import FAQ        from './pages/FAQ'
 import Pricing    from './pages/Pricing'
 import ReceiptPreview from './pages/ReceiptPreview'
-import Privacy      from './pages/Privacy'
-import Terms        from './pages/Terms'
-import RefundPolicy from './pages/RefundPolicy'
+import PrivacyPolicy   from './pages/legal/PrivacyPolicy'
+import TermsOfService  from './pages/legal/TermsOfService'
+import RefundPolicy    from './pages/legal/RefundPolicy'
 import Cookies      from './pages/Cookies'
 import NotFound     from './pages/NotFound'
 
@@ -92,9 +93,9 @@ function Layout() {
           <Route path="/help"      element={<Help />} />
           <Route path="/faq"       element={<FAQ />} />
           <Route path="/receipt-preview" element={<ReceiptPreview />} />
-          <Route path="/privacy"        element={<Privacy />} />
-          <Route path="/terms"          element={<Terms />} />
-          <Route path="/refund-policy"  element={<RefundPolicy />} />
+          <Route path="/privacy"        element={<PrivacyPolicy />} />
+          <Route path="/terms"          element={<TermsOfService />} />
+          <Route path="/refunds"        element={<RefundPolicy />} />
           <Route path="/cookies"        element={<Cookies />} />
           <Route path="*"          element={<NotFound />} />
         </Routes>
@@ -107,24 +108,26 @@ function Layout() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <ScrollProgress />
-      <CursorGlow />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/"         element={<Home />} />
-          <Route path="/home"     element={<Home />} />
-          <Route path="/features/map-knowledge" element={<MapKnowledge />} />
-          <Route path="/features/ai-coach"      element={<AiCoach />} />
-          <Route path="/features/match-logger"  element={<MatchLogger />} />
-          <Route path="/features/strategy-maker" element={<StrategyMaker />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/roadmap"  element={<Roadmap />} />
-          <Route path="/pricing"  element={<Pricing />} />
-          <Route path="/about"    element={<About />} />
-          <Route path="/*"        element={<Layout />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ScrollProgress />
+        <CursorGlow />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/"         element={<Home />} />
+            <Route path="/home"     element={<Home />} />
+            <Route path="/features/map-knowledge" element={<MapKnowledge />} />
+            <Route path="/features/ai-coach"      element={<AiCoach />} />
+            <Route path="/features/match-logger"  element={<MatchLogger />} />
+            <Route path="/features/strategy-maker" element={<StrategyMaker />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/roadmap"  element={<Roadmap />} />
+            <Route path="/pricing"  element={<Pricing />} />
+            <Route path="/about"    element={<About />} />
+            <Route path="/*"        element={<Layout />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
