@@ -32,6 +32,18 @@ img {
   display: block;
 }
 
+/* ── Custom cursor ── */
+@media (hover: hover) and (pointer: fine) {
+  * { cursor: none !important; }
+  a, button, [role="button"] { cursor: none !important; }
+  input[type="text"], input[type="email"], input[type="password"],
+  input[type="search"], input[type="tel"], input[type="url"], input[type="number"],
+  textarea, [contenteditable="true"] { cursor: text !important; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor { display: none !important; }
+}
+
 /* ── Base ── */
 html {
   scroll-behavior: smooth;
