@@ -144,128 +144,218 @@ function ToolButton({ Icon }) {
 }
 
 /* ─── Premium CSS-only visuals ─── */
+const mapData = [
+  {
+    name: 'erangel',
+    file: '/maps/erangel.jpg',
+    label: 'ERANGEL',
+    zones: [
+      { name: 'POCHINKI',      top: '45%', left: '40%', color: '#FF1838' },
+      { name: 'MILITARY BASE', top: '20%', left: '65%', color: '#1769FF' },
+      { name: 'SCHOOL',        top: '35%', left: '22%', color: '#7137FF' },
+      { name: 'GEORGOPOL',     top: '65%', left: '55%', color: '#00C48C' },
+      { name: 'SOSNOVKA',      top: '70%', left: '30%', color: '#FF1838' },
+    ],
+  },
+  {
+    name: 'miramar',
+    file: '/maps/miramar.jpg',
+    label: 'MIRAMAR',
+    zones: [
+      { name: 'LOS LEONES',      top: '45%', left: '40%', color: '#FF1838' },
+      { name: 'HACIENDA',        top: '20%', left: '65%', color: '#1769FF' },
+      { name: 'EL POZO',         top: '35%', left: '22%', color: '#7137FF' },
+      { name: 'WATER TREATMENT', top: '65%', left: '55%', color: '#00C48C' },
+      { name: 'IMPALA',          top: '70%', left: '30%', color: '#FF1838' },
+    ],
+  },
+  {
+    name: 'rondo',
+    file: '/maps/rondo.jpg',
+    label: 'RONDO',
+    zones: [
+      { name: 'HOT ZONE', top: '45%', left: '40%', color: '#FF1838' },
+      { name: 'CONTROL',  top: '20%', left: '65%', color: '#1769FF' },
+      { name: 'ROTATE',   top: '35%', left: '22%', color: '#7137FF' },
+      { name: 'SAFE',     top: '65%', left: '55%', color: '#00C48C' },
+      { name: 'LOOT',     top: '70%', left: '30%', color: '#FF1838' },
+    ],
+  },
+]
+
+const MAP_LEGEND = [
+  { color: '#FF1838', label: 'HOT ZONE' },
+  { color: '#1769FF', label: 'CONTROL' },
+  { color: '#00C48C', label: 'SAFE' },
+]
+
 function MapVisual() {
   const [activeMap, setActiveMap] = useState(0)
-  const zones = [
-    { top: '45%', left: '40%', color: '#FF1838', label: 'POCHINKI' },
-    { top: '15%', left: '70%', color: '#1769FF', label: 'MILITARY BASE' },
-    { top: '30%', left: '25%', color: '#7137FF', label: 'SCHOOL' },
-    { top: '60%', left: '15%', color: '#00C48C', label: 'GEORGOPOL' },
-    { top: '75%', left: '60%', color: '#FF1838', label: 'SOSNOVKA' },
-  ]
-  const mapFiles = ['erangel', 'miramar', 'rondo']
-  const mapLabels = ['ERANGEL', 'MIRAMAR', 'RONDO']
-  const legend = [
-    { color: '#FF1838', label: 'HOT DROP' },
-    { color: '#1769FF', label: 'ROTATION' },
-    { color: '#00C48C', label: 'SAFE ZONE' },
-  ]
+  const active = mapData[activeMap]
 
   return (
     <motion.div
-      animate={{ y: [-4, 4, -4] }}
-      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      whileHover={{ boxShadow: '0 40px 100px rgba(23,105,255,0.2)' }}
       style={{
-        background: '#07111F', borderRadius: 20, padding: 0, overflow: 'hidden',
-        border: '1px solid rgba(23,105,255,0.2)', boxShadow: '0 20px 60px rgba(23,105,255,0.15)',
-        position: 'relative',
+        position: 'relative', borderRadius: 24, overflow: 'hidden',
+        boxShadow: '0 30px 80px rgba(7,17,31,0.4), 0 0 0 1px rgba(23,105,255,0.15)',
       }}
     >
-      {/* Top bar */}
-      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <TrafficDots />
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>{mapLabels[activeMap]} · TACTICAL VIEW</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C' }} />
-          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C' }}>LIVE</span>
+      {/* Top header bar */}
+      <div
+        style={{
+          background: 'rgba(7,17,31,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrafficDots />
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 8px' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.2em', color: '#AAB8C8' }}>TACTICAL OVERVIEW</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00C48C', animation: 'radarPulse 2s infinite' }} />
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 10, color: '#00C48C', letterSpacing: '0.15em' }}>LIVE</span>
         </div>
       </div>
 
-      {/* Map area */}
-      <div style={{ position: 'relative', height: 320, overflow: 'hidden' }}>
+      {/* Map tabs */}
+      <div
+        style={{
+          background: 'rgba(13,21,38,0.95)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          padding: '0 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: 0,
+        }}
+      >
+        {mapData.map((map, i) => (
+          <motion.button
+            key={map.name}
+            onClick={() => setActiveMap(i)}
+            style={{
+              padding: '12px 20px', position: 'relative',
+              fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 12, letterSpacing: '0.2em',
+              color: activeMap === i ? '#FFFFFF' : '#536174',
+              background: 'transparent', border: 'none', cursor: 'pointer', transition: 'color 0.2s',
+            }}
+          >
+            {map.label}
+            {activeMap === i && (
+              <motion.div
+                layoutId="mapTab"
+                style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg,#1769FF,#7137FF)', borderRadius: 2 }}
+              />
+            )}
+          </motion.button>
+        ))}
+      </div>
+
+      {/* Map image area */}
+      <div style={{ position: 'relative', height: 360, overflow: 'hidden', background: '#07111F' }}>
         <AnimatePresence mode="wait">
           <motion.img
             key={activeMap}
-            src={`/maps/${mapFiles[activeMap]}.jpg`}
-            alt={`${mapLabels[activeMap]} tactical map`}
-            initial={{ opacity: 0, scale: 1.05 }}
+            src={active.file}
+            alt={`${active.label} tactical map`}
+            initial={{ opacity: 0, scale: 1.08 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', position: 'absolute', top: 0, left: 0 }}
           />
         </AnimatePresence>
 
-        {/* Dark overlay */}
+        {/* Vignette */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse at center, transparent 40%, rgba(7,17,31,0.7) 100%)' }} />
+
+        {/* Dark gradient top */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 80, pointerEvents: 'none', background: 'linear-gradient(to bottom, rgba(7,17,31,0.6) 0%, transparent 100%)' }} />
+
+        {/* Dark gradient bottom */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 100, pointerEvents: 'none', background: 'linear-gradient(to top, rgba(7,17,31,0.8) 0%, transparent 100%)' }} />
+
+        {/* Scan lines */}
         <div
           style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to bottom, rgba(7,17,31,0.3) 0%, transparent 40%, rgba(7,17,31,0.5) 100%)',
+            position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.5,
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)',
           }}
         />
 
         {/* Grid overlay */}
         <div
           style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.08) 0px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(23,105,255,0.08) 0px, transparent 1px, transparent 40px)',
-            backgroundSize: '40px 40px',
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.04) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(23,105,255,0.04) 0, transparent 1px, transparent 60px)',
+            backgroundSize: '60px 60px',
           }}
         />
 
-        {/* Rotation arrow */}
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} aria-hidden="true">
-          <defs>
-            <marker id="mk-arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <polygon points="0 0, 6 3, 0 6" fill="#1769FF" opacity="0.6" />
-            </marker>
-          </defs>
-          <line x1="40%" y1="45%" x2="70%" y2="15%" stroke="#1769FF" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.4" markerEnd="url(#mk-arrowhead)" />
-        </svg>
+        {/* Zone markers */}
+        <AnimatePresence>
+          {active.zones.map((zone, index) => (
+            <motion.div
+              key={zone.name + activeMap}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: index * 0.08 }}
+              style={{ position: 'absolute', top: zone.top, left: zone.left, transform: 'translate(-50%,-50%)' }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <div style={{ position: 'relative', width: 36, height: 36 }}>
+                  <motion.div
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
+                    transition={{ duration: 2 + index * 0.3, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ position: 'absolute', inset: -8, borderRadius: '50%', border: `1px solid ${zone.color}` }}
+                  />
+                  <div style={{ position: 'absolute', inset: -3, borderRadius: '50%', border: `1px solid ${zone.color}`, opacity: 0.6 }} />
+                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: `${zone.color}33`, border: `2px solid ${zone.color}`, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: zone.color, boxShadow: `0 0 8px ${zone.color}` }} />
+                  </div>
+                </div>
+                <div style={{ background: 'rgba(7,17,31,0.85)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: `1px solid ${zone.color}4D`, padding: '3px 8px', borderRadius: 4 }}>
+                  <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, color: zone.color, letterSpacing: '0.15em', whiteSpace: 'nowrap' }}>{zone.name}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
-        {zones.map((z) => (
-          <div key={z.label} style={{ position: 'absolute', top: z.top, left: z.left, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ width: 40, height: 40, borderRadius: '50%', border: `2px solid ${z.color}`, background: `${z.color}1A`, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ position: 'absolute', inset: -6, border: `1px solid ${z.color}66`, borderRadius: '50%', animation: 'zonePulse 2s infinite' }} />
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: z.color }} />
+        {/* Coordinate corners */}
+        <span style={{ position: 'absolute', top: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.15)' }}>A1</span>
+        <span style={{ position: 'absolute', top: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.15)' }}>H1</span>
+        <span style={{ position: 'absolute', bottom: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.15)' }}>A8</span>
+        <span style={{ position: 'absolute', bottom: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.15)' }}>H8</span>
+
+        {/* Map name badge */}
+        <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(7,17,31,0.8)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '8px 14px' }}>
+          <span style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 700, fontSize: 14, color: '#fff', letterSpacing: '0.05em' }}>{active.label}</span>
+        </div>
+
+        {/* Crosshair center */}
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none', opacity: 0.15 }}>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', width: 40, height: 1, background: '#fff', transform: 'translate(-50%,-50%)' }} />
+          <div style={{ position: 'absolute', top: '50%', left: '50%', width: 1, height: 40, background: '#fff', transform: 'translate(-50%,-50%)' }} />
+        </div>
+      </div>
+
+      {/* Bottom info bar */}
+      <div
+        style={{
+          background: 'rgba(7,17,31,0.95)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          padding: '14px 20px', borderTop: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', gap: 16 }}>
+          {MAP_LEGEND.map(l => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: l.color }} />
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, letterSpacing: '0.1em', color: '#AAB8C8' }}>{l.label}</span>
             </div>
-            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 9, color: z.color, letterSpacing: '0.1em', marginTop: 4, whiteSpace: 'nowrap' }}>{z.label}</span>
-          </div>
-        ))}
-
-        <span style={{ position: 'absolute', top: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>A1</span>
-        <span style={{ position: 'absolute', top: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>H1</span>
-        <span style={{ position: 'absolute', bottom: 8, left: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>A8</span>
-        <span style={{ position: 'absolute', bottom: 8, right: 10, fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>H8</span>
-      </div>
-
-      {/* Map tabs */}
-      <div style={{ background: '#0D1526', padding: '12px 20px', display: 'flex', gap: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        {mapLabels.map((m, i) => (
-          <motion.button
-            key={m}
-            onClick={() => setActiveMap(i)}
-            whileTap={{ scale: 0.96 }}
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer', padding: 0, paddingBottom: 2,
-              fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: 11, letterSpacing: '0.15em',
-              color: activeMap === i ? '#1769FF' : '#536174',
-              borderBottom: activeMap === i ? '2px solid #1769FF' : '2px solid transparent',
-            }}
-          >
-            {m}
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Legend */}
-      <div style={{ background: '#07111F', padding: '10px 20px', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        {legend.map(l => (
-          <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color }} />
-            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 9, letterSpacing: '0.1em', color: l.color }}>{l.label}</span>
-          </div>
-        ))}
+          ))}
+        </div>
+        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: 10, color: '#536174', letterSpacing: '0.1em' }}>{active.zones.length} ZONES MAPPED</span>
       </div>
     </motion.div>
   )
