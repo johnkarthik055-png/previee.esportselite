@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Map, Brain, BarChart2, PenTool,
@@ -20,7 +20,7 @@ const G = {
 const innerStyle = { maxWidth: 1280, margin: '0 auto', padding: '0 clamp(20px, 5vw, 64px)' }
 const faqInnerStyle = { maxWidth: 800, margin: '0 auto', padding: '0 clamp(20px, 5vw, 64px)' }
 
-const SECTION_IDS = ['feature-map', 'feature-ai', 'feature-logger', 'feature-strategy']
+const FEATURE_KEYS = ['map', 'ai', 'logger', 'strategy']
 
 const TABS = [
   {
@@ -233,27 +233,8 @@ function FaqItem({ q, a, open, onToggle }) {
 }
 
 export default function Features() {
-  const [activeSection, setActiveSection] = useState(0)
+  const [activeFeature, setActiveFeature] = useState(0)
   const [openFaq, setOpenFaq]     = useState(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const idx = SECTION_IDS.indexOf(entry.target.id)
-            if (idx !== -1) setActiveSection(idx)
-          }
-        })
-      },
-      { threshold: 0.35, rootMargin: '-80px 0px -200px 0px' }
-    )
-    SECTION_IDS.forEach(id => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
 
   return (
     <>
@@ -281,22 +262,22 @@ export default function Features() {
             Four tools — maps, AI coaching, stat tracking, and strategy building — designed around how the top 1% of BGMI and PUBG players actually improve.
           </motion.p>
 
-          {/* Pills — scroll anchors */}
+          {/* Pills — tab filter */}
           <motion.div initial={{ opacity: 0, transform: 'translateY(20px)' }} animate={{ opacity: 1, transform: 'translateY(0px)' }} transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.3 }} style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             {TABS.map((t) => {
               const Icon = t.icon
-              const active = activeSection === t.id
+              const active = activeFeature === t.id
               return (
                 <button
                   key={t.id}
                   role="tab"
                   aria-selected={active}
-                  onClick={() => document.getElementById(SECTION_IDS[t.id])?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  onClick={() => setActiveFeature(t.id)}
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     padding: '10px 18px', borderRadius: 50,
-                    background: active ? t.accent : '#F7F9FC',
-                    border: `1.5px solid ${active ? t.accent : '#DCE4EF'}`,
+                    background: active ? '#1769FF' : '#F7F9FC',
+                    border: `1.5px solid ${active ? '#1769FF' : '#DCE4EF'}`,
                     cursor: 'pointer', transition: 'background 0.2s ease, color 0.2s ease, border-color 0.2s ease',
                     fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 14,
                     color: active ? '#fff' : '#536174',
@@ -310,73 +291,82 @@ export default function Features() {
         </div>
       </section>
 
-      {/* ── Feature sections (all 4 visible, scroll-based) ── */}
-      {TABS.map((tab, idx) => {
-        const MockupComp = MOCKUPS[idx]
-        const visualLeft = idx % 2 === 0
-        const bg = idx % 2 === 0 ? '#F7F9FC' : '#FFFFFF'
-        return (
-          <section
-            key={tab.id}
-            id={SECTION_IDS[idx]}
-            aria-label={tab.label}
-            style={{ background: bg, padding: '96px 0', borderBottom: '1px solid #DCE4EF' }}
-          >
-            <div style={innerStyle}>
-              <motion.div
-                initial={{ opacity: 0, transform: 'translateY(24px)' }}
-                whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}
-                className="feat-grid"
+      {/* ── Feature sections (pill-filtered, one shown at a time) ── */}
+      <AnimatePresence mode="wait">
+        {TABS.filter(tab => tab.id === activeFeature).map((tab) => {
+          const idx = tab.id
+          const MockupComp = MOCKUPS[idx]
+          const visualLeft = idx % 2 === 0
+          const bg = idx % 2 === 0 ? '#F7F9FC' : '#FFFFFF'
+          return (
+            <motion.div
+              key={FEATURE_KEYS[idx]}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+            >
+              <section
+                aria-label={tab.label}
+                style={{ background: bg, padding: '96px 0', borderBottom: '1px solid #DCE4EF' }}
               >
-                {/* Visual */}
-                <div style={{ order: visualLeft ? 0 : 1 }} className="feat-vis">
-                  <div style={{ background: '#fff', border: `2px solid ${tab.accent}22`, borderRadius: 20, padding: 24, height: 380, boxShadow: `0 20px 60px ${tab.accent}14` }}>
-                    <MockupComp accent={tab.accent} />
-                  </div>
+                <div style={innerStyle}>
+                  <motion.div
+                    initial={{ opacity: 0, transform: 'translateY(24px)' }}
+                    whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}
+                    className="feat-grid"
+                  >
+                    {/* Visual */}
+                    <div style={{ order: visualLeft ? 0 : 1 }} className="feat-vis">
+                      <div style={{ background: '#fff', border: `2px solid ${tab.accent}22`, borderRadius: 20, padding: 24, height: 380, boxShadow: `0 20px 60px ${tab.accent}14` }}>
+                        <MockupComp accent={tab.accent} />
+                      </div>
+                    </div>
+
+                    {/* Text */}
+                    <div style={{ order: visualLeft ? 1 : 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                        <div style={{ width: 32, height: 2, background: tab.accent, borderRadius: 1 }} />
+                        <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.16em', color: tab.accent, textTransform: 'uppercase' }}>{tab.eyebrow}</span>
+                      </div>
+                      <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(38px, 4vw, 58px)', lineHeight: 0.95, letterSpacing: '0.01em', color: '#111827', whiteSpace: 'pre-line', marginBottom: 20 }}>{tab.title}</h2>
+                      <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginBottom: 32 }}>{tab.desc}</p>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
+                        {tab.bullets.map((b, i) => {
+                          const BIcon = b.icon
+                          return (
+                            <motion.div key={i} initial={{ opacity: 0, transform: 'translateX(-16px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }} viewport={{ once: true }} transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.1 + i * 0.07 }} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                              <div style={{ width: 32, height: 32, borderRadius: 8, background: `${tab.accent}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <BIcon size={15} color={tab.accent} strokeWidth={2} />
+                              </div>
+                              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#111827', fontWeight: 500 }}>{b.text}</span>
+                            </motion.div>
+                          )
+                        })}
+                      </div>
+
+                      <Link to={tab.detailPath} onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })} style={{ textDecoration: 'none' }}>
+                        <RadialRevealButton
+                          label="EXPLORE FEATURE →"
+                          padding="13px 28px"
+                          rounded={8}
+                          font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.1em' }}
+                          colors={{ fill: '#F7F9FC', textColor: '#111827', hoverFill: '#0B1220', hoverTextColor: '#FFFFFF' }}
+                          border={{ borderWidth: 1, borderColor: '#DCE4EF' }}
+                        />
+                      </Link>
+                    </div>
+                  </motion.div>
                 </div>
-
-                {/* Text */}
-                <div style={{ order: visualLeft ? 1 : 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                    <div style={{ width: 32, height: 2, background: tab.accent, borderRadius: 1 }} />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 12, letterSpacing: '0.16em', color: tab.accent, textTransform: 'uppercase' }}>{tab.eyebrow}</span>
-                  </div>
-                  <h2 style={{ fontFamily: 'Barlow Condensed, sans-serif', fontWeight: 900, fontSize: 'clamp(38px, 4vw, 58px)', lineHeight: 0.95, letterSpacing: '0.01em', color: '#111827', whiteSpace: 'pre-line', marginBottom: 20 }}>{tab.title}</h2>
-                  <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 17, color: '#536174', lineHeight: 1.7, marginBottom: 32 }}>{tab.desc}</p>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
-                    {tab.bullets.map((b, i) => {
-                      const BIcon = b.icon
-                      return (
-                        <motion.div key={i} initial={{ opacity: 0, transform: 'translateX(-16px)' }} whileInView={{ opacity: 1, transform: 'translateX(0px)' }} viewport={{ once: true }} transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.1 + i * 0.07 }} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          <div style={{ width: 32, height: 32, borderRadius: 8, background: `${tab.accent}12`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <BIcon size={15} color={tab.accent} strokeWidth={2} />
-                          </div>
-                          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#111827', fontWeight: 500 }}>{b.text}</span>
-                        </motion.div>
-                      )
-                    })}
-                  </div>
-
-                  <Link to={tab.detailPath} onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })} style={{ textDecoration: 'none' }}>
-                    <RadialRevealButton
-                      label="EXPLORE FEATURE →"
-                      padding="13px 28px"
-                      rounded={8}
-                      font={{ fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14, letterSpacing: '0.1em' }}
-                      colors={{ fill: '#F7F9FC', textColor: '#111827', hoverFill: '#0B1220', hoverTextColor: '#FFFFFF' }}
-                      border={{ borderWidth: 1, borderColor: '#DCE4EF' }}
-                    />
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
-          </section>
-        )
-      })}
+              </section>
+            </motion.div>
+          )
+        })}
+      </AnimatePresence>
 
       {/* ── Comparison Table ── */}
       <section aria-label="Feature comparison" style={{ background: '#fff', padding: '100px 0' }}>
