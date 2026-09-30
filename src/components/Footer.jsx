@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const SOCIALS = [
-  { Icon: Camera,        label: 'Instagram', href: '#' },
-  { Icon: PlayCircle,    label: 'YouTube',   href: '#' },
-  { Icon: MessageCircle, label: 'Discord',   href: '#' },
-  { Icon: Send,          label: 'Twitter',   href: '#' },
+  { Icon: Camera,        label: 'Instagram', href: 'https://www.instagram.com/esportselite.in', aria: 'Follow Esports Elite on Instagram' },
+  { Icon: PlayCircle,    label: 'YouTube',   href: 'https://www.youtube.com/@esportselite',      aria: 'Subscribe to Esports Elite on YouTube' },
+  { Icon: MessageCircle, label: 'Discord',   href: 'https://discord.gg/esportselite',             aria: 'Join Esports Elite Discord' },
+  { Icon: Send,          label: 'Telegram',  href: 'https://t.me/esportselite',                   aria: 'Join Esports Elite on Telegram' },
 ]
 
 const NAV_LINKS = [
@@ -23,14 +23,14 @@ const LEGAL_LINKS = [
   { label: 'Refund Policy',     to: '/refunds' },
 ]
 
-function SocialIcon({ Icon, label, href }) {
+function SocialIcon({ Icon, label, href, aria }) {
   const [hov, setHov] = useState(false)
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={label}
+      aria-label={aria || label}
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{

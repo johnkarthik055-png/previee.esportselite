@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import RadialRevealButton from '../components/ui/RadialRevealButton'
 
 const ease = [0.23, 1, 0.32, 1]
@@ -16,8 +14,6 @@ const G = {
 export default function NotFound() {
   return (
     <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
-      <Navbar />
-
       <section style={{
         minHeight: '80vh',
         display: 'flex',
@@ -111,8 +107,6 @@ export default function NotFound() {
           </div>
         </motion.div>
       </section>
-
-      <Footer />
     </div>
   )
 }
