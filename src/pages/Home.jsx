@@ -111,7 +111,6 @@ export default function Home() {
           .road-wrap  { padding: 80px 20px !important; }
           .road-card-inner { flex-direction: column !important; gap: 16px !important; }
           .road-card-watermark { display: none !important; }
-          .cta-sect   { padding: 80px 0 !important; }
           .cta-h      { font-size: 48px !important; }
           .feat-wrap .section-heading { font-size: 48px !important; }
           .road-wrap .section-heading { font-size: 44px !important; }
@@ -600,7 +599,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 5 — FINAL CTA
       ══════════════════════════════════════════════ */}
-      <section aria-label="Join Esports Elite" className="cta-sect" style={{ background: '#07111F', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" className="cta-sect py-16" style={{ background: '#07111F', position: 'relative', overflow: 'hidden' }}>
 
         {/* Glows */}
         <div aria-hidden="true" style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
