@@ -64,9 +64,9 @@ const HOW_BULLETS = [
 
 /* ─── Tactical map viewer illustration ─── */
 const MAP_TABS = [
-  { label: 'ERANGEL', badge: 'ERANGEL · 8×8 KM', fill: 'rgba(23,105,255,0.08)', stroke: 'rgba(23,105,255,0.15)', water: 'rgba(23,105,255,0.05)', waterStroke: 'rgba(23,105,255,0.1)' },
-  { label: 'MIRAMAR', badge: 'MIRAMAR · 8×8 KM', fill: 'rgba(255,184,0,0.06)', stroke: 'rgba(255,184,0,0.15)', water: 'rgba(255,184,0,0.04)', waterStroke: 'rgba(255,184,0,0.1)' },
-  { label: 'RONDO', badge: 'RONDO · 6×6 KM', fill: 'rgba(113,55,255,0.08)', stroke: 'rgba(113,55,255,0.15)', water: 'rgba(113,55,255,0.05)', waterStroke: 'rgba(113,55,255,0.1)' },
+  { label: 'ERANGEL', file: '/maps/erangel.jpg', badge: 'ERANGEL · 8×8 KM' },
+  { label: 'MIRAMAR', file: '/maps/miramar.jpg', badge: 'MIRAMAR · 8×8 KM' },
+  { label: 'RONDO',   file: '/maps/rondo.jpg',   badge: 'RONDO · 6×6 KM' },
 ]
 
 const ZONE_COLORS = ['#FF1838', '#1769FF', '#7137FF', '#00C48C', '#FFB800']
@@ -141,38 +141,37 @@ function TacticalMapVisual() {
 
       {/* Map area */}
       <div style={{ position: 'relative', height: 320, background: '#0A1628', overflow: 'hidden' }}>
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={activeMap}
+            src={t.file}
+            alt={`${t.label} tactical map`}
+            loading="eager"
+            onError={(e) => { e.target.style.opacity = '0' }}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+          />
+        </AnimatePresence>
+
+        {/* Dark overlay for readability */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(7,17,31,0.5) 0%, rgba(7,17,31,0.3) 40%, rgba(7,17,31,0.6) 100%)' }} />
+
         <div
           style={{
             position: 'absolute', inset: 0,
-            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.05) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(23,105,255,0.05) 0, transparent 1px, transparent 60px)',
+            backgroundImage: 'repeating-linear-gradient(0deg, rgba(23,105,255,0.08) 0, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(23,105,255,0.08) 0, transparent 1px, transparent 60px)',
             backgroundSize: '60px 60px',
           }}
         />
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeMap}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            style={{ position: 'absolute', inset: 0 }}
-          >
-            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
-              <polygon points="10%,15% 25%,10% 30%,25% 15%,30%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
-              <polygon points="58%,8% 78%,12% 72%,28% 52%,22%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
-              <polygon points="15%,55% 35%,50% 38%,74% 12%,80%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
-              <polygon points="60%,62% 84%,56% 88%,82% 64%,86%" fill={t.fill} stroke={t.stroke} strokeWidth="1" />
-              <ellipse cx="50%" cy="46%" rx="16%" ry="11%" fill={t.water} stroke={t.waterStroke} strokeWidth="1" />
-              <line x1="4%" y1="40%" x2="96%" y2="45%" stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="8,4" />
-              <line x1="28%" y1="4%" x2="44%" y2="96%" stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="8,4" />
-
-              {/* Dashed connectors between markers */}
-              <line x1={zones[0].left} y1={zones[0].top} x2={zones[1].left} y2={zones[1].top} stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" strokeDasharray="4,4" />
-              <line x1={zones[2].left} y1={zones[2].top} x2={zones[3].left} y2={zones[3].top} stroke="rgba(255,255,255,0.1)" strokeWidth="0.8" strokeDasharray="4,4" />
-            </svg>
-          </motion.div>
-        </AnimatePresence>
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
+          {/* Dashed connectors between markers */}
+          <line x1={zones[0].left} y1={zones[0].top} x2={zones[1].left} y2={zones[1].top} stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" strokeDasharray="4,4" />
+          <line x1={zones[2].left} y1={zones[2].top} x2={zones[3].left} y2={zones[3].top} stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" strokeDasharray="4,4" />
+        </svg>
 
         {/* Zone markers */}
         <AnimatePresence>
