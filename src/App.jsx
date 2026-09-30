@@ -180,7 +180,6 @@ function Layout() {
         </Routes>
       </main>
       <Footer />
-      <CookieConsent />
     </>
   )
 }
@@ -208,6 +207,7 @@ export default function App() {
             <Route path="/refunds"  element={<RefundPolicy />} />
             <Route path="/*"        element={<Layout />} />
           </Routes>
+          <CookieConsent />
         </BrowserRouter>
       </AuthProvider>
     </ErrorBoundary>
