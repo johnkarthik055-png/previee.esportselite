@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { motion, useScroll, useSpring, useMotionValue } from 'framer-motion'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Navbar     from './components/Navbar'
@@ -49,116 +48,6 @@ function ScrollProgress() {
   )
 }
 
-function CustomCursor() {
-  const mouseX = useMotionValue(-400)
-  const mouseY = useMotionValue(-400)
-  const [isHovering, setIsHovering] = useState(false)
-  const [clicked, setClicked] = useState(false)
-
-  const springConfig = { stiffness: 200, damping: 20, mass: 0.5 }
-  const springX = useSpring(mouseX, springConfig)
-  const springY = useSpring(mouseY, springConfig)
-
-  useEffect(() => {
-    const move = (e) => {
-      mouseX.set(e.clientX)
-      mouseY.set(e.clientY)
-      const target = e.target
-      const isClickable = target.closest('a, button, [role="button"], [tabindex="0"]')
-      setIsHovering(!!isClickable)
-    }
-    const click = () => {
-      setClicked(true)
-      setTimeout(() => setClicked(false), 600)
-    }
-    window.addEventListener('mousemove', move)
-    window.addEventListener('click', click)
-    return () => {
-      window.removeEventListener('mousemove', move)
-      window.removeEventListener('click', click)
-    }
-  }, [])
-
-  return (
-    <>
-      {/* Outer ring — follows with spring lag */}
-      <motion.div
-        aria-hidden="true"
-        className="custom-cursor"
-        style={{
-          position: 'fixed',
-          left: springX,
-          top: springY,
-          width: isHovering ? 48 : 32,
-          height: isHovering ? 48 : 32,
-          borderRadius: '50%',
-          border: `1.5px solid ${isHovering ? '#FF1838' : '#1769FF'}`,
-          pointerEvents: 'none',
-          zIndex: 9998,
-          mixBlendMode: 'normal',
-          transition: 'width 0.2s ease, height 0.2s ease, border-color 0.2s ease',
-        }}
-        animate={{
-          x: '-50%',
-          y: '-50%',
-          scale: clicked ? [1, 1.8, 1] : 1,
-          opacity: clicked ? [0.7, 0.3, 0.7] : 0.7,
-        }}
-        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-      />
-
-      {/* Inner dot — follows mouse directly, no spring */}
-      <motion.div
-        aria-hidden="true"
-        className="custom-cursor"
-        style={{
-          position: 'fixed',
-          left: mouseX,
-          top: mouseY,
-          width: isHovering ? 6 : 4,
-          height: isHovering ? 6 : 4,
-          borderRadius: '50%',
-          background: isHovering ? '#FF1838' : '#1769FF',
-          pointerEvents: 'none',
-          zIndex: 9999,
-          boxShadow: isHovering
-            ? '0 0 10px rgba(255,24,56,0.8), 0 0 20px rgba(255,24,56,0.4)'
-            : '0 0 10px rgba(23,105,255,0.8), 0 0 20px rgba(23,105,255,0.4)',
-          transition: 'width 0.15s ease, height 0.15s ease, background 0.2s ease, box-shadow 0.2s ease',
-        }}
-        animate={{
-          x: '-50%',
-          y: '-50%',
-          scale: clicked ? [1, 2.5, 0] : 1,
-          opacity: clicked ? [1, 0.8, 0] : 1,
-        }}
-        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-      />
-
-      {/* Click ripple — only shows on click */}
-      {clicked && (
-        <motion.div
-          aria-hidden="true"
-          className="custom-cursor"
-          style={{
-            position: 'fixed',
-            left: mouseX,
-            top: mouseY,
-            width: 60,
-            height: 60,
-            borderRadius: '50%',
-            border: '1px solid #1769FF',
-            pointerEvents: 'none',
-            zIndex: 9997,
-          }}
-          initial={{ x: '-50%', y: '-50%', scale: 0.3, opacity: 0.8 }}
-          animate={{ x: '-50%', y: '-50%', scale: 2.5, opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-        />
-      )}
-    </>
-  )
-}
 
 function Layout() {
   return (
@@ -189,7 +78,6 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <ScrollProgress />
-        <CustomCursor />
         <BrowserRouter>
           <Routes>
             <Route path="/"         element={<Home />} />
