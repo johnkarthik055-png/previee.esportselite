@@ -461,7 +461,7 @@ export default function MapKnowledge() {
       </section>
 
       {/* ── SECTION 5 — CTA ── */}
-      <section aria-label="Get Map Knowledge" style={{ background: '#07111F', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Get Map Knowledge" style={{ background: '#07111F', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(23,105,255,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', top: -100, right: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,24,56,0.18) 0%,transparent 70%)', pointerEvents: 'none' }} />
 

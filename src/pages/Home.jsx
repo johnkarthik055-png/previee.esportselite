@@ -600,7 +600,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           SECTION 5 — FINAL CTA
       ══════════════════════════════════════════════ */}
-      <section aria-label="Join Esports Elite" className="cta-sect" style={{ background: '#07111F', padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" className="cta-sect" style={{ background: '#07111F', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
 
         {/* Glows */}
         <div aria-hidden="true" style={{ position: 'absolute', bottom: -100, left: -100, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />

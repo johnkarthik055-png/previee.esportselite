@@ -827,7 +827,7 @@ export default function Features() {
       </section>
 
       {/* ── CTA ── */}
-      <section aria-label="Join Esports Elite" style={{ background: '#07111F', padding: '100px 0', position: 'relative', overflow: 'hidden' }}>
+      <section aria-label="Join Esports Elite" style={{ background: '#07111F', padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
         <div aria-hidden="true" style={{ position: 'absolute', top: '-20%', left: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(23,105,255,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div aria-hidden="true" style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,24,56,0.09) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
